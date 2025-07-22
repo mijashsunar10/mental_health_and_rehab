@@ -22,7 +22,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 <section id="header">
- {{-- @include('layouts.header') --}}
+ @include('layouts.header')
 </section>
   <section id="pagecontent" class="">
     @yield('pagecontent')
