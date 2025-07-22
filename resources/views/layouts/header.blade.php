@@ -133,10 +133,10 @@
 @props(['courses' => []]) 
 
 <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 ">
-    <div class="mx-auto px-0 xl:px-8">
+    <div class="mx-auto  px-4 sm:px-6 lg:px-8 w-full ">
         <div class="flex justify-between h-18  items-center">
             <!-- Logo and Name -->
-            <div class="flex items-center">
+            <div class="flex-shrink-0 flex items-center ">
                 <img src="{{asset('bakery/images/logo.png')}}" alt="Logo" class="logo-img  xl:h-24 xl:w-48 h-full w-full sm:ml-10 mr-3 transition-all duration-300">
                 <div id="logoName" style="font-family: 'Rubik Doodle Shadow', cursive;"></div>
             </div>
