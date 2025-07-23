@@ -6,6 +6,7 @@ use Livewire\Volt\Volt;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('frontend.home.index');
@@ -67,5 +68,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/responses', [ResponseController::class, 'store'])->name('responses.store');
     Route::get('/assessment/{category}/result', [ResponseController::class, 'result'])->name('assessment.result');
 });
+Route::get('/contact',[ContactController::class,'contact'])->name('contact');
+Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->name('contact.send');
+
+
+
 
 require __DIR__.'/auth.php';
