@@ -24,7 +24,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::view('admin/dashboard', 'admin.dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified','admin'])
     ->name('admin.dashboard');
 
 
