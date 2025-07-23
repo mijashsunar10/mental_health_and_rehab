@@ -1,48 +1,44 @@
 <?php
 
 namespace App\Livewire;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use Livewire\WithFileUploads;
 use Livewire\Component;
+use App\Models\User;
 
 class AdminRegister extends Component
 {
-    public $name, $email, $password, $password_confirmation;
+    use WithFileUploads;
+
+    public $name, $email, $password, $password_confirmation, $photo;
 
     public function register()
     {
-        // Validate inputs
-        $this->validate([
+        $validated = $this->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users|max:255',
+            'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|min:8|confirmed',
-            
+            'photo' => 'nullable|image|max:1024', // Optional image
         ]);
 
-        // Create admin user
-        $user = User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => Hash::make($this->password),
-            'role' => 'admin',
-        ]);
+        // If photo is uploaded, store it
+        if ($this->photo) {
+            $validated['photo'] = $this->photo->store('photos', 'public');
+        }
 
-        // // Log in the new admin
-        // Auth::login($user);
+        // Add role and hashed password
+        $validated['role'] = 'admin';
+        $validated['password'] = Hash::make($validated['password']);
 
-        // // Redirect with success message
-        // return redirect('/admin/dashboard')->with('success', 'Admin registered successfully!');
+        // Create the user
+        User::create($validated);
 
-        // Clear form
-        $this->reset(['name', 'email', 'password', 'password_confirmation']);
+        // Reset form fields
+        $this->reset(['name', 'email', 'password', 'password_confirmation', 'photo']);
 
-        // Show success message and stay on same page
+        // Redirect to dashboard with success message
         return redirect()->route('admin.dashboard')->with('success', 'New admin registered successfully!');
-    
-    
-    }   
+    }
 
     public function render()
     {

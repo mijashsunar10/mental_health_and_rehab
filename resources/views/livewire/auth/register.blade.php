@@ -7,12 +7,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Livewire\WithFileUploads;
+
 
 new #[Layout('components.layouts.auth')] class extends Component {
+    use WithFileUploads;
     public string $name = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
+    public $photo;
 
     /**
      * Handle an incoming registration request.
@@ -21,11 +25,16 @@ new #[Layout('components.layouts.auth')] class extends Component {
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
+            'photo' => ['image','nullable'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+
+         if ($this->photo) {
+            $validated['photo'] = $this->photo->store("photos", "public");
+        }
 
         event(new Registered(($user = User::create($validated))));
 
@@ -62,6 +71,22 @@ new #[Layout('components.layouts.auth')] class extends Component {
             autocomplete="email"
             placeholder="email@example.com"
         />
+          <flux:input
+            wire:model="photo"
+            id="photo"
+            :label="__('Choose a photo(Optional)')"
+            type="file"
+            name="photo" 
+        />
+
+        @if($photo)
+
+        <img src="{{$photo->temporaryUrl()}}" class="h-16 w-16 object-cover rounded-full" alt="" width="80px">
+        {{-- IN livewire when user uploaded a file then it is not immediately stored in the sever instead temporaryUrl() creates the temporary previrew of the url so we can review before getting uploaded.. --}}
+
+        @endif
+
+      
 
         <!-- Password -->
         <flux:input

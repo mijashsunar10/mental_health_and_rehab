@@ -25,7 +25,7 @@
                         @endif
 
                         <div class="p-8">
-                            <form class="space-y-6" wire:submit.prevent="register">
+                            <form class="space-y-6" wire:submit.prevent="register" enctype="multipart/form-data">
                                 <div>
                                     <label for="name" class="block text-lg font-medium text-gray-800 mb-1">Full Name</label>
                                     <input id="name" name="name" type="text" wire:model="name" required
@@ -55,6 +55,49 @@
                                         </p>
                                     @enderror
                                 </div>
+
+                                {{-- <input type="file" wire:model="photo"> --}}
+
+                                <div>
+                                    <label for="photo" class="block text-lg font-semibold text-gray-800 mb-1">
+                                        Upload Profile Photo
+                                    </label>
+
+                                    <p class="text-sm text-gray-500 mb-2">Please select a clear image (Max: 1MB, JPEG/PNG).</p>
+
+                                    <label for="photo" class="flex items-center justify-center w-full px-4 py-3 bg-white border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                        <svg class="w-6 h-6 text-gray-500 mr-2" fill="none" stroke="currentColor" stroke-width="2"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3 16l4-4a4 4 0 015.657 0l1.586 1.586a2 2 0 002.828 0L21 7M13 5h7a2 2 0 012 2v7" />
+                                        </svg>
+                                        <span class="text-gray-600 font-medium">Choose an image...</span>
+                                        <input id="photo" name="photo" type="file" wire:model="photo" accept="image/*"
+                                            class="hidden">
+                                    </label>
+
+                                    {{-- Live Preview of Image --}}
+                                    @if ($photo)
+                                        <div class="mt-4">
+                                            <p class="text-sm text-gray-700 mb-1 font-medium">Image Preview:</p>
+                                            <img src="{{ $photo->temporaryUrl() }}" alt="Preview"
+                                                class="w-32 h-32 object-cover rounded-md shadow-md border border-gray-200">
+                                        </div>
+                                    @endif
+
+                                    @error('photo')
+                                        <p class="mt-2 text-red-600 flex items-center text-sm">
+                                            <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+
 
                                 <div>
                                     <label for="password" class="block text-lg font-medium text-gray-800 mb-1">Password</label>
@@ -92,6 +135,9 @@
                                         class="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder-gray-500"
                                         placeholder="••••••••">
                                 </div>
+
+
+
 
                                 <div>
                                     <button type="submit"
