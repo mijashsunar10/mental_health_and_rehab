@@ -8,6 +8,7 @@ use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
 use App\Livewire\AdminRegister;
+use App\Livewire\DoctorRegister;
 
 Route::get('/', function () {
     return view('frontend.home.index');
@@ -38,6 +39,11 @@ Route::view('admin/dashboard', 'admin.dashboard')
     Route::middleware(['auth','admin'])->group(function()
     {
         Route::get('/admin/register',AdminRegister::class)->name('admin.register');
+    });
+
+     Route::middleware(['auth','admin'])->group(function()
+    {
+        Route::get('/doctor/register',DoctorRegister::class)->name('doctor.register');
     });
 
 

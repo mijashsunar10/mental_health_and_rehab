@@ -7,5 +7,11 @@
     </div>
 
         <p>Hi I m doctor</p>
+
+
+    @if(session('success'))
+        <div style="color: green;">{{ session('success') }}</div>
+    @endif
+    
     </div>
 </x-layouts.app>

@@ -40,6 +40,10 @@
                 {{ __('Register New Admin') }}
                 </flux:navlist.item>
 
+                <flux:navlist.item icon="book-open-text" href="{{route('doctor.register')}}" target="_blank" class="mt-2 font-bold text-3xl">
+                {{ __('Register New Doctor') }}
+                </flux:navlist.item>
+
                 </flux:navlist.group>
             </flux:navlist>
             @endauth
