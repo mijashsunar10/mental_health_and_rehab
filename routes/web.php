@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AssessmentController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 
 Route::get('/', function () {
@@ -56,5 +58,14 @@ Route::prefix('ourteam')->group(function () {
 });
 // Abou
 Route::get('/team', [TeamMemberController::class, 'index'])->name('team.index');
+
+Route::get('/assessment', [AssessmentController::class, 'index'])
+    ->name('assessment.index')->middleware('auth');
+    
+Route::middleware(['auth'])->group(function () {
+    Route::get('/assessment/{category}', [AssessmentController::class, 'show'])->name('assessment.show');
+    Route::post('/responses', [ResponseController::class, 'store'])->name('responses.store');
+    Route::get('/assessment/{category}/result', [ResponseController::class, 'result'])->name('assessment.result');
+});
 
 require __DIR__.'/auth.php';
