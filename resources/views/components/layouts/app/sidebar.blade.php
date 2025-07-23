@@ -15,14 +15,25 @@
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     {{-- <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item> --}}
 
-                    <flux:navlist.item
-                        icon="home"
-                        :href="auth()->user()->role === \App\Enums\UserRole::Admin ? route('admin.dashboard') : route('dashboard')"
-                        :current="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard')"
-                        wire:navigate
-                    >
-                        {{ __('Dashboard') }}
-                    </flux:navlist.item>
+                  <flux:navlist.item
+                    icon="home"
+                    :href="
+                        auth()->user()->role === \App\Enums\UserRole::Admin 
+                            ? route('admin.dashboard') 
+                            : (auth()->user()->role === \App\Enums\UserRole::Doctor 
+                                ? route('doctor.dashboard') 
+                                : route('dashboard'))
+                    "
+                    :current="
+                        request()->routeIs('dashboard') || 
+                        request()->routeIs('admin.dashboard') || 
+                        request()->routeIs('doctor.dashboard')
+                    "
+                    wire:navigate
+                >
+                    {{ __('Dashboard') }}
+                </flux:navlist.item>
+
                 </flux:navlist.group>
             </flux:navlist>
 

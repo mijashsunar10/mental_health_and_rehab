@@ -29,7 +29,7 @@ Route::view('admin/dashboard', 'admin.dashboard')
 
 
     Route::view('doctor/dashboard', 'doctor.dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified','doctor'])
     ->name('doctor.dashboard');
 
 
