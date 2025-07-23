@@ -186,6 +186,14 @@
                 </li>
 
                 <li class="relative group">
+                    <a href="{{route('team.index')}}">
+                        <button class="flex items-center font-semibold px-3 focus:outline-none transition-colors duration-300">
+                            Team
+                        </button>
+                    </a>
+                </li>
+
+                <li class="relative group">
                     <a href="#">
                         <button class="flex items-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
                             Alumini

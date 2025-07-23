@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\TeamMemberController;
 
 Route::get('/', function () {
     return view('frontend.home.index');
@@ -33,5 +34,17 @@ Route::controller(FaqController::class)->group(function () {
         Route::delete('faqs/{faq:slug}', 'destroy')->name('faqs.destroy');
     });
 });
+
+
+Route::prefix('ourteam')->group(function () {
+    
+    Route::get('/create', [TeamMemberController::class, 'create'])->name('ourteam.create');
+    Route::post('/store', [TeamMemberController::class, 'store'])->name('ourteam.store');
+    Route::get('/{teamMember}/edit', [TeamMemberController::class, 'edit'])->name('ourteam.edit');
+    Route::put('/{teamMember}', [TeamMemberController::class, 'update'])->name('ourteam.update');
+    Route::delete('/{teamMember}', [TeamMemberController::class, 'destroy'])->name('ourteam.destroy');
+});
+// Abou
+Route::get('/team', [TeamMemberController::class, 'index'])->name('team.index');
 
 require __DIR__.'/auth.php';
