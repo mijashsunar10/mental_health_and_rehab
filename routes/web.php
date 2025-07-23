@@ -7,6 +7,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
+use App\Livewire\AdminRegister;
 
 Route::get('/', function () {
     return view('frontend.home.index');
@@ -34,6 +35,12 @@ Route::view('admin/dashboard', 'admin.dashboard')
     ->name('doctor.dashboard');
 
 
+    Route::middleware(['auth','admin'])->group(function()
+    {
+        Route::get('/admin/register',AdminRegister::class)->name('admin.register');
+    });
+
+
 Route::controller(FaqController::class)->group(function () {
     // Publicly accessible route
     Route::get('faqs', 'index')->name('faqs.index');
@@ -51,7 +58,8 @@ Route::controller(FaqController::class)->group(function () {
 
 Route::prefix('ourteam')->group(function () {
     
-    Route::get('/create', [TeamMemberController::class, 'create'])->name('ourteam.create');
+    Route::get('/create', [TeamMemberController::class, 'cr
+eate'])->name('ourteam.create');
     Route::post('/store', [TeamMemberController::class, 'store'])->name('ourteam.store');
     Route::get('/{teamMember}/edit', [TeamMemberController::class, 'edit'])->name('ourteam.edit');
     Route::put('/{teamMember}', [TeamMemberController::class, 'update'])->name('ourteam.update');

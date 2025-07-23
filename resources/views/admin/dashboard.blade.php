@@ -6,6 +6,11 @@
         <flux:separator variant="subtle" />
     </div>
 
+     @if(session('success'))
+        <div style="color: green;">{{ session('success') }}</div>
+    @endif
+
+
         <p>Hi I m admin</p>
     </div>
 </x-layouts.app>
