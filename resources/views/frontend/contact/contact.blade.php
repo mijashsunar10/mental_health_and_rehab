@@ -162,8 +162,10 @@
                             </div>
                             <div class="ml-6">
                                 <h4 class="text-xl font-semibold text-blue-800 mb-2">Call Us</h4>
-                                <p class="text-blue-700">(123) 456-7890</p>
-                                <a href="tel:+11234567890" class="text-blue-600 hover:text-blue-800 text-sm font-medium mt-1 inline-block transition-colors">
+                                <p class="text-blue-700">(061) 456-7890</p>
+                                <p class="text-blue-700">(977) 9846577522</p>
+                                <p class="text-blue-700">(977) 9826115361</p>
+                                <a href="tel:+977982615361" class="text-blue-600 hover:text-blue-800 text-sm font-medium mt-1 inline-block transition-colors">
                                     Click to call →
                                 </a>
                             </div>
@@ -195,16 +197,16 @@
                     
                     <div class="p-8">
                         <div class="flex justify-center space-x-6">
-                            <a href="#" class="text-blue-600 hover:text-blue-800 text-2xl transition-colors" style="animation-delay: 0.3s">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 text-4xl transition-colors" style="animation-delay: 0.3s">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="#" class="text-blue-600 hover:text-blue-800 text-2xl transition-colors" style="animation-delay: 0.4s">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 text-4xl transition-colors" style="animation-delay: 0.4s">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="#" class="text-blue-600 hover:text-blue-800 text-2xl transition-colors" style="animation-delay: 0.5s">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 text-4xl transition-colors" style="animation-delay: 0.5s">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="#" class="text-blue-600 hover:text-blue-800 text-2xl transition-colors" style="animation-delay: 0.6s">
+                            <a href="#" class="text-blue-600 hover:text-blue-800 text-4xl transition-colors" style="animation-delay: 0.6s">
                                 <i class="fab fa-youtube"></i>
                             </a>
                         </div>
