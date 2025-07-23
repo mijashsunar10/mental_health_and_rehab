@@ -77,6 +77,7 @@ Route::get('/team', [TeamMemberController::class, 'index'])->name('team.index');
 Route::get('/assessment', [AssessmentController::class, 'index'])
     ->name('assessment.index')->middleware('auth');
     
+    
 Route::middleware(['auth'])->group(function () {
     Route::get('/assessment/{category}', [AssessmentController::class, 'show'])->name('assessment.show');
     Route::post('/responses', [ResponseController::class, 'store'])->name('responses.store');
@@ -85,7 +86,9 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/contact',[ContactController::class,'contact'])->name('contact');
 Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->name('contact.send');
 
-
+Route::get('/anxiety', function () {
+    return view('anxiety.index');
+});
 
 
 require __DIR__.'/auth.php';
