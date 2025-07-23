@@ -10,6 +10,8 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
+ use App\Enums\UserRole;
+
 
 new #[Layout('components.layouts.auth')] class extends Component {
     #[Validate('required|string|email')]
@@ -23,7 +25,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     /**
      * Handle an incoming authentication request.
      */
-    public function login(): void
+    public function login()
     {
         $this->validate();
 
@@ -40,7 +42,20 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+         if(auth()->user()->role === UserRole::Admin){
+            return redirect()->route('admin.dashboard')->with("success","log in sucessfull");
+        }
+
+         elseif(auth()->user()->role === UserRole::Doctor){
+            return redirect()->route('doctor.dashboard')->with("success","log in sucessfull");
+        }
+        else {
+            # code...\
+             $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        }
+
+
+       
     }
 
     /**

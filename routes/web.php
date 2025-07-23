@@ -21,6 +21,16 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 
+Route::view('admin/dashboard', 'admin.dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('admin.dashboard');
+
+
+    Route::view('doctor/dashboard', 'doctor.dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('doctor.dashboard');
+
+
 Route::controller(FaqController::class)->group(function () {
     // Publicly accessible route
     Route::get('faqs', 'index')->name('faqs.index');
