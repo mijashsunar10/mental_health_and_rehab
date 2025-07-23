@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('frontend.home.index');
@@ -33,5 +34,11 @@ Route::controller(FaqController::class)->group(function () {
         Route::delete('faqs/{faq:slug}', 'destroy')->name('faqs.destroy');
     });
 });
+
+Route::get('/contact',[ContactController::class,'contact'])->name('contact');
+Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->name('contact.send');
+
+
+
 
 require __DIR__.'/auth.php';
