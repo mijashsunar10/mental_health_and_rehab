@@ -8,6 +8,7 @@ use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
 use App\Livewire\AdminRegister;
+use App\Livewire\Chat;
 use App\Livewire\DoctorList;
 use App\Livewire\DoctorRegister;
 use App\Livewire\UserList;
@@ -105,6 +106,8 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/contact',[ContactController::class,'contact'])->name('contact');
 Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->name('contact.send');
 
+
+Route::get('chat',Chat::class)->name('chat');
 
 
 
