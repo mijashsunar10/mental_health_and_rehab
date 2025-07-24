@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+
 use App\Enums\UserRole;
 
 class User extends Authenticatable
@@ -61,10 +62,10 @@ class User extends Authenticatable
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
-     public function suspend()
+    public function suspend()
     {
         $this->suspended_at = now();
         $this->save();
@@ -72,31 +73,34 @@ class User extends Authenticatable
 
     public function isSuspended()
     {
-        return $this->suspended_at ? true : false ;
-
+        return $this->suspended_at ? true : false;
     }
 
     public function unsuspended()
     {
         $this->suspended_at = NULL;
         $this->save();
-        
     }
 
-     public function unreadMessages()
-        {
-            return $this->hasMany(ChatMessage::class, 'sender_id')
-                ->where('receiver_id', auth()->id())
-                ->whereNull('read_at');
-        }
+    public function doctorProfile()
+    {
+        return $this->hasOne(DoctorProfile::class);
+    }
 
-        public function lastMessage()
-        {
-            return $this->hasOne(ChatMessage::class, 'sender_id')
-                ->where(function($query) {
-                    $query->where('sender_id', $this->id)
-                        ->orWhere('receiver_id', $this->id);
-                })
-                ->orderBy('created_at', 'desc');
-        }
+    public function unreadMessages()
+    {
+        return $this->hasMany(ChatMessage::class, 'sender_id')
+            ->where('receiver_id', auth()->id())
+            ->whereNull('read_at');
+    }
+
+    public function lastMessage()
+    {
+        return $this->hasOne(ChatMessage::class, 'sender_id')
+            ->where(function ($query) {
+                $query->where('sender_id', $this->id)
+                    ->orWhere('receiver_id', $this->id);
+            })
+            ->orderBy('created_at', 'desc');
+    }
 }

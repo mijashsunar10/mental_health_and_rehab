@@ -6,7 +6,7 @@
             <flux:separator variant="subtle" />
         </div>
 
-        @if(session('success'))
+        @if (session('success'))
             <div class="p-4 mb-6 text-sm text-green-700 bg-green-100 rounded-lg">
                 {{ session('success') }}
             </div>
@@ -56,28 +56,37 @@
                 </div>
             </div>
 
-            <!-- Profile Update Card -->
-            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-l-4 border-purple-500">
+            <!-- Doctor Profile Card -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-l-4 border-green-500">
                 <div class="p-6">
                     <div class="flex items-center mb-4">
-                        <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <div class="p-3 rounded-full bg-green-100 text-green-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                   x`             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
                         </div>
-                        <h3 class="ml-3 text-lg font-semibold text-gray-800">Profile</h3>
+                        <h3 class="ml-3 text-lg font-semibold text-gray-800">Doctor Profile</h3>
                     </div>
-                    <p class="text-gray-600 mb-4">Update your personal information and contact details</p>
-                    <a href="/settings/profile" class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300">
-                        Edit Profile
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>
+
+                    @if (auth()->user()->doctorProfile)
+                        <p class="text-gray-600 mb-4">Manage your professional profile</p>
+                        <a href="{{ route('doctor.profile.show', auth()->id()) }}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+                            View Profile
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    @else
+                        <p class="text-gray-600 mb-4">Create your professional profile</p>
+                        <a href="{{ route('doctor.profile.create') }}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+                            Create Profile
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
-
-        <!-- Additional content can go here -->
     </div>
 </x-layouts.app>

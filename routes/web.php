@@ -7,6 +7,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DoctorProfileController;
 use App\Livewire\AdminRegister;
 use App\Livewire\Chat;
 use App\Livewire\DoctorList;
@@ -108,6 +109,21 @@ Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->n
 
 
 Route::get('chat',Chat::class)->name('chat');
+
+// routes/web.php
+
+// Public doctor routes
+Route::get('/doctor', [DoctorProfileController::class, 'index'])->name('doctors.index');
+Route::get('/doctors/{doctor}', [DoctorProfileController::class, 'show'])->name('doctors.show');
+
+// Doctor auth routes
+Route::middleware(['auth:doctor'])->group(function () {
+    // Profile management
+    Route::get('/doctor/profile/create', [DoctorProfileController::class, 'create'])->name('doctor.profile.create');
+    Route::post('/doctor/profile', [DoctorProfileController::class, 'store'])->name('doctor.profile.store');
+    Route::get('/doctor/profile/edit', [DoctorProfileController::class, 'edit'])->name('doctor.profile.edit');
+    Route::put('/doctor/profile', [DoctorProfileController::class, 'update'])->name('doctor.profile.update');
+});
 
 
 
