@@ -31,5 +31,6 @@
   <section id="footer">
     {{-- @include('layouts.footer') --}}
   </section>
+
 </body>
 </html>

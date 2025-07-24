@@ -7,7 +7,7 @@
     <section class="">
         @include('frontend.home.hero')
     </section>
-
+    
     
 
     <!-- Global JS -->
