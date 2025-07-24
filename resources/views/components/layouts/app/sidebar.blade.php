@@ -3,7 +3,7 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-blue-100 dark:bg-zinc-800">
+    <body class="min-h-screen bg-white dark:bg-zinc-800">
         <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
@@ -91,9 +91,11 @@
                             :current="request()->routeIs('doctors.index')"
                             class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
                         >
-                            {{ __('Dcotor List') }}
+                            {{ __('Doctor List') }}
                         </flux:navlist.item>
                 @endif
+
+     
 
 
                     
