@@ -231,7 +231,7 @@
 <div class="hero-container">
   <!-- Background Video -->
   <video class="video-background" id="hero-video" autoplay muted loop playsinline>
-    <source src="{{asset('videos/background1.mp4')}}" type="video/mp4">
+    <source src="{{asset('videos/background.mp4')}}" type="video/mp4">
     Your browser does not support the video tag.
   </video>
   
