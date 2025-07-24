@@ -61,10 +61,10 @@ class User extends Authenticatable
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->map(fn($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
-     public function suspend()
+    public function suspend()
     {
         $this->suspended_at = now();
         $this->save();
@@ -72,14 +72,16 @@ class User extends Authenticatable
 
     public function isSuspended()
     {
-        return $this->suspended_at ? true : false ;
-
+        return $this->suspended_at ? true : false;
     }
 
     public function unsuspended()
     {
         $this->suspended_at = NULL;
         $this->save();
-        
+    }
+    public function doctorProfile()
+    {
+        return $this->hasOne(DoctorProfile::class);
     }
 }

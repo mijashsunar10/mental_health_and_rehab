@@ -7,6 +7,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DoctorProfileController;
 use App\Livewire\AdminRegister;
 use App\Livewire\DoctorList;
 use App\Livewire\DoctorRegister;
@@ -87,8 +88,7 @@ Route::controller(FaqController::class)->group(function () {
 
 Route::prefix('ourteam')->group(function () {
     
-    Route::get('/create', [TeamMemberController::class, 'cr
-eate'])->name('ourteam.create');
+    Route::get('/create', [TeamMemberController::class, 'create'])->name('ourteam.create');
     Route::post('/store', [TeamMemberController::class, 'store'])->name('ourteam.store');
     Route::get('/{teamMember}/edit', [TeamMemberController::class, 'edit'])->name('ourteam.edit');
     Route::put('/{teamMember}', [TeamMemberController::class, 'update'])->name('ourteam.update');
@@ -107,6 +107,14 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::get('/contact',[ContactController::class,'contact'])->name('contact');
 Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->name('contact.send');
+
+Route::middleware(['auth', 'doctor'])->group(function () {
+    Route::get('/doctor/profile/edit', [DoctorProfileController::class, 'edit'])->name('doctor.profile.edit');
+    Route::post('/doctor/profile/update', [DoctorProfileController::class, 'update'])->name('doctor.profile.update');
+});
+
+Route::get('/doctor', [DoctorProfileController::class, 'index'])->name('doctor.profile.index');
+Route::get('/doctor/profile/{id}', [DoctorProfileController::class, 'show'])->name('doctor.profile.show');
 
 
 

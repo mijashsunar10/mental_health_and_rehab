@@ -112,10 +112,6 @@
                                         class="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder-gray-500"
                                         placeholder="••••••••">
                                 </div>
-
-
-
-
                                 <div>
                                     <button type="submit"
                                         class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
@@ -123,7 +119,7 @@
                                             <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                             </svg>
-                                            Register Admin
+                                            Register Doctor
                                         </span>
                                     </button>
                                 </div>
