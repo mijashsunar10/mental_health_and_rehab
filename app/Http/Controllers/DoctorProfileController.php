@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/DoctorProfileController.php
 
 namespace App\Http\Controllers;
 
@@ -8,51 +7,58 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Controller;
+use App\Enums\UserRole;
 
 class DoctorProfileController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:doctor');
+        // Apply auth middleware to all methods except index and show
+        // $this->middleware('auth')->except(['index', 'show']);
+        
+        // Additional check for doctor role on create/store/edit/update
+        // $this->middleware(function ($request, $next) {
+        //     if (auth()->check() && auth()->user()->role !== UserRole::Doctor->value) {
+        //         return redirect()->route('dashboard');
+        //     }
+        //     return $next($request);
+        // })->only(['create', 'store', 'edit', 'update']);
     }
 
-    // Show all doctors
+    // Show all doctors (public)
     public function index()
     {
-        $doctors = User::where('role', 'doctor')
+        $doctors = User::where('role', UserRole::Doctor->value)
             ->with('doctorProfile')
             ->paginate(10);
             
-        return view('doctors.index', compact('doctors'));
+        return view('doctor.profile.index', compact('doctors'));
     }
 
-    // Show single doctor
+    // Show single doctor (public)
     public function show(User $doctor)
     {
-        if ($doctor->role !== 'doctor') {
+        if ($doctor->role !== UserRole::Doctor->value) {
             abort(404);
         }
         
         $doctor->load('doctorProfile');
-        return view('doctors.show', compact('doctor'));
+        return view('doctor.profile.show', compact('doctor'));
     }
 
-    // Show create form
+    // Show create form (doctor auth only)
     public function create()
     {
-        // Check if profile already exists
         if (auth()->user()->doctorProfile) {
             return redirect()->route('doctor.profile.edit');
         }
         
-        return view('doctors.create');
+        return view('doctor.profile.create');
     }
 
-    // Store profile
+    // Store profile (doctor auth only)
     public function store(Request $request)
     {
-        // Check if profile already exists
         if (auth()->user()->doctorProfile) {
             return redirect()->route('doctor.profile.edit');
         }
@@ -75,7 +81,6 @@ class DoctorProfileController extends Controller
             'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
 
-        // Handle photo upload
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('doctor-photos', 'public');
             $validated['photo'] = $path;
@@ -89,7 +94,7 @@ class DoctorProfileController extends Controller
             ->with('success', 'Profile created successfully!');
     }
 
-    // Show edit form
+    // Show edit form (doctor auth only)
     public function edit()
     {
         $profile = auth()->user()->doctorProfile;
@@ -98,10 +103,10 @@ class DoctorProfileController extends Controller
             return redirect()->route('doctor.profile.create');
         }
         
-        return view('doctors.edit', compact('profile'));
+        return view('doctor.profile.edit', compact('profile'));
     }
 
-    // Update profile
+    // Update profile (doctor auth only)
     public function update(Request $request)
     {
         $profile = auth()->user()->doctorProfile;
@@ -128,9 +133,7 @@ class DoctorProfileController extends Controller
             'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
 
-        // Handle photo upload
         if ($request->hasFile('photo')) {
-            // Delete old photo if exists
             if ($profile->photo) {
                 Storage::disk('public')->delete($profile->photo);
             }

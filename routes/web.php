@@ -113,16 +113,20 @@ Route::get('chat',Chat::class)->name('chat');
 // routes/web.php
 
 // Public doctor routes
+// Public doctor routes
 Route::get('/doctor', [DoctorProfileController::class, 'index'])->name('doctors.index');
-Route::get('/doctors/{doctor}', [DoctorProfileController::class, 'show'])->name('doctors.show');
+Route::get('/doctor/{doctor}', [DoctorProfileController::class, 'show'])->name('doctors.show');
 
 // Doctor auth routes
-Route::middleware(['auth:doctor'])->group(function () {
-    // Profile management
-    Route::get('/doctor/profile/create', [DoctorProfileController::class, 'create'])->name('doctor.profile.create');
-    Route::post('/doctor/profile', [DoctorProfileController::class, 'store'])->name('doctor.profile.store');
-    Route::get('/doctor/profile/edit', [DoctorProfileController::class, 'edit'])->name('doctor.profile.edit');
-    Route::put('/doctor/profile', [DoctorProfileController::class, 'update'])->name('doctor.profile.update');
+Route::prefix('doctor/profile')->middleware(['auth:doctor'])->group(function () {
+    Route::get('/create', [DoctorProfileController::class, 'create'])->name('doctor.profile.create');
+    Route::post('/', [DoctorProfileController::class, 'store'])->name('doctor.profile.store');
+    Route::get('/edit', [DoctorProfileController::class, 'edit'])->name('doctor.profile.edit');
+    Route::put('/', [DoctorProfileController::class, 'update'])->name('doctor.profile.update');
+    
+    // Add this if you want doctors to view their own profile
+   
+
 });
 
 
