@@ -30,7 +30,9 @@
                     <th scope="col" class="px-6 py-3">Email</th>
                     <th scope="col" class="px-6 py-3">User Role</th>
                     <th scope="col" class="px-6 py-3">Created At</th>
-                      <th scope="col" class="px-6 py-3">Actions</th>
+                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <th scope="col" class="px-6 py-3">Actions</th>
+                    @endauth
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +41,9 @@
 
 
                     <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800">
-                        <td class="px-6 py-2 font-medium text-gray-900 dark:text-white">{{$user->id}}</td>
+                        <td class="px-6 py-2 font-medium text-gray-900 dark:text-white">
+                        {{ $loop->iteration }}
+                        </td>
                         <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{$user->name}}</td>
                         <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{$user->email}}</td>
                         
@@ -52,21 +56,24 @@
                                 Edit
                             </button> --}}
                             <!-- Add this to the actions column -->
-                        <button wire:click="delete({{ $user->id }})" 
-                            class="px-3 py-2 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
-                            onclick="return confirm('Are you sure you want to delete this user?')">
-                            Delete
-                        </button>
+                        @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                            <button wire:click="delete({{ $doctor->id }})" 
+                                class="px-3 py-2 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
+                                onclick="return confirm('Are you sure you want to delete this doctor?')">
+                                Delete
+                            </button>
 
-                            @if($user->isSuspended())
-                            <button wire:click="suspend({{ $user->id}})" class="flex items-center px-3 py-2 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700">
-                               <flux:icon.check class="w-4 h-4" /> UnSuspend
-                            </button>
-                          
+                            @if($doctor->isSuspended())
+                                <button wire:click="suspend({{ $doctor->id }})" 
+                                    class="flex items-center px-3 py-2 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700">
+                                    <flux:icon.check class="w-4 h-4" /> UnSuspend
+                                </button>
                             @else
-                             <button wire:click="suspend({{ $user->id}})" class="flex items-center px-3 py-2 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700">
-                               <flux:icon.x-circle class="w-4 h-4" />  Suspend
-                            </button>
+                                <button wire:click="suspend({{ $doctor->id }})" 
+                                    class="flex items-center px-3 py-2 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700">
+                                    <flux:icon.x-circle class="w-4 h-4" /> Suspend
+                                </button>
+                            @endif
 
                               @endif
                         </td>

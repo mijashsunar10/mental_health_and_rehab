@@ -21,7 +21,7 @@ Route::view('dashboard', 'dashboard')
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
+    Route::redirect('settings', 'settings/profille');
 
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
@@ -34,10 +34,20 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin', ])->group(function () {
     Route::get('users', UserList::class)->name('users.index');
     Route::get('doctors', DoctorList::class)->name('doctors.index');
 });
+
+
+Route::middleware(['auth', 'verified', 'doctor'])->group(function () {
+    Route::get('users', UserList::class)->name('users.index');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('doctors', DoctorList::class)->name('doctors.index');
+});
+
 
 Route::view('admin/dashboard', 'admin.dashboard')
     ->middleware(['auth', 'verified','admin'])

@@ -72,17 +72,43 @@
                             {{ __('Register New Doctor ') }}
                         </flux:navlist.item>
                     @endif
-
-                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
-                        <flux:navlist.item
-                            icon="list-bullet"
-                            href="{{ route('users.index') }}"
-                            :current="request()->routeIs('users.index')"
-                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
-                        >
-                            {{ __('User List') }}
-                        </flux:navlist.item>
+{{-- For Admin --}}
+                @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                    <flux:navlist.item
+                        icon="users"
+                        href="{{ route('users.index') }}"
+                        :current="request()->routeIs('users.index')"
+                        class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                    >
+                        {{ __('User List (Admin)') }}
+                    </flux:navlist.item>
                 @endif
+
+                {{-- For Doctor --}}
+                @if(auth()->user()->role === \App\Enums\UserRole::Doctor)
+                    <flux:navlist.item
+                        icon="users"
+                        href="{{ route('users.index') }}"
+                        :current="request()->routeIs('users.index')"
+                        class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                    >
+                        {{ __('User List ') }}
+                    </flux:navlist.item>
+                @endif
+
+                @if(auth()->user()->role === \App\Enums\UserRole::User)
+                    <flux:navlist.item
+                        icon="users"
+                        href="{{ route('doctors.index') }}"
+                        :current="request()->routeIs('doctors.index')"
+                        class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                    >
+                        {{ __('Doctor List') }}
+                    </flux:navlist.item>
+                @endif
+
+
+
 
                 @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                         <flux:navlist.item
