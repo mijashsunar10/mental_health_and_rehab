@@ -151,7 +151,7 @@
                     </a>
                 </li>
                 <li class="relative group">
-                    <a href="#">
+                    <a href="{{route('about.index')}}">
                         <button class="flex items-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
                             About Us
                         </button>
@@ -187,13 +187,13 @@
                     </ul>
                 </li>
 
-                <li class="relative group">
+                {{-- <li class="relative group">
                     <a href="#">
                         <button class="flex items-center font-semibold px-3 focus:outline-none transition-colors duration-300">
                             Menu
                         </button>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="relative group">
                     <a href="{{route('team.index')}}">
@@ -203,13 +203,13 @@
                     </a>
                 </li>
 
-                <li class="relative group">
+                {{-- <li class="relative group">
                     <a href="#">
                         <button class="flex items-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
                             Alumini
                         </button>
                     </a>
-                </li>
+                </li> --}}
                 
                 <li class="reltive group">
                     <a href="#">
