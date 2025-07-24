@@ -67,8 +67,6 @@
             </div>
 
             <!-- Profile Update Card -->
-             
-                @if (auth()->User()->role === 'doctor')
             <div
                 class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-l-4 border-purple-500">
                 <div class="p-6">
@@ -84,7 +82,7 @@
                         <h3 class="ml-3 text-lg font-semibold text-gray-800">Profile</h3>
                     </div>
                     <p class="text-gray-600 mb-4">Update your personal information and contact details</p>
-                            <a href="{{ route('doctor.profile.show', auth()->user()->id) }}"
+                    <a href="/settings/profile"
                         class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-300">
                         Edit Profile
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24"
@@ -94,11 +92,7 @@
                     </a>
                 </div>
             </div>
-             @endif
-            
 
-            @auth
-                @if (auth()->user()->role === 'doctor')
                     <!-- My Doctor Profile Card -->
                     <div
                         class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-l-4 border-pastry-primary">
@@ -125,8 +119,7 @@
                             </a>
                         </div>
                     </div>
-                @endif
-            @endauth
+               
 
         </div>
 
