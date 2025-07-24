@@ -19,8 +19,10 @@ class IllnessCategoryDetail extends Model
         'prevention'
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(IllnessCategory::class);
-    }
+   
+public function category()
+{
+    return $this->belongsTo(IllnessCategory::class, 'illness_category_id');
+}
+
 }

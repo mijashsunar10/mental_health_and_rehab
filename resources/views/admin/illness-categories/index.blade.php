@@ -78,6 +78,7 @@
                                         </svg>
                                     </a>
                                 @else
+                                
                                     <a href="{{ route('admin.illness-categories.details.create', $category) }}" 
                                        class="text-green-600 hover:text-green-900 transition-colors duration-150"
                                        title="Add Details">
