@@ -9,6 +9,7 @@ use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
 use App\Livewire\AdminRegister;
 use App\Livewire\DoctorRegister;
+use App\Livewire\UserList;
 
 Route::get('/', function () {
     return view('frontend.home.index');
@@ -24,6 +25,9 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+
+
+    Route::get('users',UserList::class)->middleware('admin')->name('users.index');
 });
 
 Route::view('admin/dashboard', 'admin.dashboard')

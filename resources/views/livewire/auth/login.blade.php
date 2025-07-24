@@ -38,6 +38,22 @@ new #[Layout('components.layouts.auth')] class extends Component {
                 'email' => __('auth.failed'),
             ]);
         }
+         $user = Auth::user();
+        if ($user->isSuspended())
+        {
+            Auth::logout();
+
+             throw ValidationException::withMessages([ 
+
+                //  stops the login process and shows a custom error message under the email_or_username input field.
+
+                'email' => 'User account is suspended'
+                
+                // __('auth.failed') comes from Laravel’s translation files and usually says: "These credentials do not match our records."
+
+
+            ]);
+        }
 
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();

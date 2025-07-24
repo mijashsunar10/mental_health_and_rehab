@@ -36,13 +36,59 @@
                     </flux:navlist.item>
 
 
-                <flux:navlist.item icon="book-open-text" href="{{route('admin.register')}}" target="_blank" class="mt-2 font-bold text-3xl">
-                {{ __('Register New Admin') }}
+              @php
+                $user = auth()->user();
+            @endphp
+
+            {{-- @if($user && $user->role === 'admin')
+                <flux:navlist.item icon="book-open-text" href="{{ route('admin.register') }}" target="_blank" class="mt-2 font-bold text-3xl">
+                    {{ __('Register New Admin') }}
                 </flux:navlist.item>
 
-                <flux:navlist.item icon="book-open-text" href="{{route('doctor.register')}}" target="_blank" class="mt-2 font-bold text-3xl">
-                {{ __('Register New Doctor') }}
+                <flux:navlist.item icon="book-open-text" href="{{ route('doctor.register') }}" target="_blank" class="mt-2 font-bold text-3xl">
+                    {{ __('Register New Doctor') }}
                 </flux:navlist.item>
+            @endif --}}
+
+               
+                    @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="book-open-text"
+                            href="{{ route('admin.register') }}"
+                            :current="request()->routeIs('admin.register')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Register New Admin ') }}
+                        </flux:navlist.item>
+                    @endif
+
+                    @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="book-open-text"
+                            href="{{ route('doctor.register') }}"
+                            :current="request()->routeIs('doctor.register')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Register New Doctor ') }}
+                        </flux:navlist.item>
+                    @endif
+
+                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="list-bullet"
+                            href="{{ route('users.index') }}"
+                            :current="request()->routeIs('users.index')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('User List') }}
+                        </flux:navlist.item>
+                @endif
+
+
+                    
+
+
+
 
                 </flux:navlist.group>
             </flux:navlist>

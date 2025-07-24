@@ -23,8 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-         'role',
-          'photo',
+        'role',
+        'photo',
+        'suspended_at',
     ];
 
     /**
@@ -61,5 +62,23 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+     public function suspend()
+    {
+        $this->suspended_at = now();
+        $this->save();
+    }
+
+    public function isSuspended()
+    {
+        return $this->suspended_at ? true : false ;
+
+    }
+
+    public function unsuspended()
+    {
+        $this->suspended_at = NULL;
+        $this->save();
+        
     }
 }
