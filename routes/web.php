@@ -96,6 +96,11 @@ Route::prefix('ourteam')->group(function () {
 
 Route::get('/team', [TeamMemberController::class, 'index'])->name('team.index');
 
+// about us route
+Route::get('/about', function () {
+    return view('frontend.about.index');
+})->name('about.index');
+
 Route::get('/assessment', [AssessmentController::class, 'index'])
     ->name('assessment.index')->middleware('auth');
     
