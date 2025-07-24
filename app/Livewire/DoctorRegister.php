@@ -27,6 +27,7 @@ class DoctorRegister extends Component
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'role' => 'doctor',
+            'nmc_number' => $this->nmc_number,
         ]);
 
         // // Log in the new admin

@@ -48,12 +48,15 @@
                          <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{$user->created_at}}</td>
             
                         <td class="px-6 py-2 flex items-center gap-2">
-                            <button class="px-3 py-2 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
+                            {{-- <button class="px-3 py-2 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700">
                                 Edit
-                            </button>
-                            <button class="px-3 py-2 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700">
-                                Delete
-                            </button>
+                            </button> --}}
+                            <!-- Add this to the actions column -->
+                        <button wire:click="delete({{ $user->id }})" 
+                            class="px-3 py-2 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
+                            onclick="return confirm('Are you sure you want to delete this user?')">
+                            Delete
+                        </button>
 
                             @if($user->isSuspended())
                             <button wire:click="suspend({{ $user->id}})" class="flex items-center px-3 py-2 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700">

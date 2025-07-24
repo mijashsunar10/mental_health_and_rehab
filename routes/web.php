@@ -8,6 +8,7 @@ use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
 use App\Livewire\AdminRegister;
+use App\Livewire\DoctorList;
 use App\Livewire\DoctorRegister;
 use App\Livewire\UserList;
 
@@ -27,7 +28,13 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
 
-    Route::get('users',UserList::class)->middleware('admin')->name('users.index');
+    // Route::get('users',UserList::class)->middleware('admin')->name('users.index');
+});
+
+
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+    Route::get('users', UserList::class)->name('users.index');
+    Route::get('doctors', DoctorList::class)->name('doctors.index');
 });
 
 Route::view('admin/dashboard', 'admin.dashboard')

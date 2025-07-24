@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'role',
         'photo',
+        'nmc_number',
         'suspended_at',
     ];
 

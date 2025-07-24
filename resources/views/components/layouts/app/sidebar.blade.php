@@ -53,7 +53,7 @@
                
                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                         <flux:navlist.item
-                            icon="book-open-text"
+                            icon="users"
                             href="{{ route('admin.register') }}"
                             :current="request()->routeIs('admin.register')"
                             class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
@@ -81,6 +81,17 @@
                             class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
                         >
                             {{ __('User List') }}
+                        </flux:navlist.item>
+                @endif
+
+                @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="users"
+                            href="{{ route('doctors.index') }}"
+                            :current="request()->routeIs('doctors.index')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Dcotor List') }}
                         </flux:navlist.item>
                 @endif
 
