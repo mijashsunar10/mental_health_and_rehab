@@ -34,15 +34,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::middleware(['auth', 'verified', 'admin', ])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('users', UserList::class)->name('users.index');
     Route::get('doctors', DoctorList::class)->name('doctors.index');
 });
 
 
-Route::middleware(['auth', 'verified', 'doctor'])->group(function () {
-    Route::get('users', UserList::class)->name('users.index');
-});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('doctors', DoctorList::class)->name('doctors.index');

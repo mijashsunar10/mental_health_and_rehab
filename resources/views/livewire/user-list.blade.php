@@ -57,19 +57,19 @@
                             </button> --}}
                             <!-- Add this to the actions column -->
                         @if(auth()->user()->role === \App\Enums\UserRole::Admin)
-                            <button wire:click="delete({{ $doctor->id }})" 
+                            <button wire:click="delete({{ $user->id }})" 
                                 class="px-3 py-2 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700"
                                 onclick="return confirm('Are you sure you want to delete this doctor?')">
                                 Delete
                             </button>
 
-                            @if($doctor->isSuspended())
-                                <button wire:click="suspend({{ $doctor->id }})" 
+                            @if($user->isSuspended())
+                                <button wire:click="suspend({{ $user->id }})" 
                                     class="flex items-center px-3 py-2 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700">
                                     <flux:icon.check class="w-4 h-4" /> UnSuspend
                                 </button>
                             @else
-                                <button wire:click="suspend({{ $doctor->id }})" 
+                                <button wire:click="suspend({{ $user->id }})" 
                                     class="flex items-center px-3 py-2 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700">
                                     <flux:icon.x-circle class="w-4 h-4" /> Suspend
                                 </button>
