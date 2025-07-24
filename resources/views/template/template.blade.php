@@ -15,7 +15,17 @@
       @vite(['resources/css/app.css', 'resources/js/app.js'])
       
        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   
+    <!-- Add this in your head section -->
+    <script src="https://cdn.tiny.cloud/1/ngdj1fhhw4watoul19rz744sdabe5zisfd26xlmufomkup6s/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea.tinymce',
+            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+            toolbar_mode: 'floating',
+            height: 500,
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+        });
+    </script>
     
 
 
