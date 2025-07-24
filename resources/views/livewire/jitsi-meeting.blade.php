@@ -1,5 +1,5 @@
 <div>
-    <div id="jitsi-container" style="height: 700px;"></div>
+    <div id="jitsi-container" style="height: 1000px;"></div>
 
     <script src="https://8x8.vc/external_api.js"></script>
     <script>
@@ -8,7 +8,7 @@
             const options = {
                 roomName: "{{ $roomName }}",
                 width: "100%",
-                height: 700,
+                height: 1000,
                 parentNode: document.querySelector('#jitsi-container'),
                 userInfo: {
                     email: "{{ $email }}",

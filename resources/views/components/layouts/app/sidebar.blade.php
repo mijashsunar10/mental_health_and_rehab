@@ -98,17 +98,18 @@
                     </flux:navlist.item>
                 @endif
 
-             @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Doctor)
+            @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Doctor)
                 <flux:navlist.item
                     icon="users"
-                    href="{{ route('meeting') }}"
-                    :current="request()->routeIs('meeting')"
-                    onclick="return confirmMeeting()"
+                    href="{{ route('jitsi.meeting') }}"
+                    :current="request()->routeIs('jitsi.meeting')"
+                    onclick="return confirmAndOpenMeeting(event, '{{ route('jitsi.meeting') }}')"
                     class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
                 >
                     {{ __('Start a Meeting') }}
                 </flux:navlist.item>
             @endif
+
 
                 @if(auth()->user()->role === \App\Enums\UserRole::User)
                     <flux:navlist.item
@@ -263,8 +264,12 @@
         @fluxScripts
 
         <script>
-            function confirmMeeting() {
-                return confirm('Do you want to start a new meeting?');
+            function confirmAndOpenMeeting(event, url) {
+                event.preventDefault(); // Prevent default navigation
+                if (confirm('Do you want to start a new meeting?')) {
+                    window.open(url, '_blank'); // Open in a new tab
+                }
+                return false;
             }
         </script>
 
