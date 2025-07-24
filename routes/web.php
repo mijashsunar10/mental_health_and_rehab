@@ -109,6 +109,9 @@ Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->n
 
 Route::get('chat',Chat::class)->name('chat');
 
+use App\Livewire\JitsiMeeting;
+
+Route::get('/meeting', JitsiMeeting::class)->name('meeting');
 
 
 require __DIR__.'/auth.php';

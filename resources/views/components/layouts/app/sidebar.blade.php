@@ -98,6 +98,18 @@
                     </flux:navlist.item>
                 @endif
 
+             @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Doctor)
+                <flux:navlist.item
+                    icon="users"
+                    href="{{ route('meeting') }}"
+                    :current="request()->routeIs('meeting')"
+                    onclick="return confirmMeeting()"
+                    class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                >
+                    {{ __('Start a Meeting') }}
+                </flux:navlist.item>
+            @endif
+
                 @if(auth()->user()->role === \App\Enums\UserRole::User)
                     <flux:navlist.item
                         icon="users"
@@ -249,5 +261,13 @@
         {{ $slot }}
 
         @fluxScripts
+
+        <script>
+            function confirmMeeting() {
+                return confirm('Do you want to start a new meeting?');
+            }
+        </script>
+
     </body>
+
 </html>
