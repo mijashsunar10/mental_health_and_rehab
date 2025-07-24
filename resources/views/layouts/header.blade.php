@@ -162,7 +162,7 @@
                 <li class="relative group">
                     <a href="#">
                         <button class="flex items-center font-semibold px-3 focus:outline-none transition-colors duration-300">
-                            Our Courses
+                            Self Assessment
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                             </svg>
@@ -170,8 +170,18 @@
                     </a>
                     <ul class="dropdown-menu absolute left-0 mt-2 w-56 bg-white border border-gray-200 shadow-lg rounded-md opacity-0 invisible transition-opacity duration-300" style="border-top: 4px solid #0b226d;">
                         <li class="relative group">
-                            <a href="#" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
-                                <div class="w-56 font-semibold">Bla bla</div>
+                            <a href="{{ route('assessment.show', ['category' => 'anxiety']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Anxiety</div>
+                            </a>
+                        </li>
+                        <li class="relative group">
+                            <a href="{{ route('assessment.show', ['category' => 'depression']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Depression</div>
+                            </a>
+                        </li>
+                        <li class="relative group">
+                            <a href="{{ route('assessment.show', ['category' => 'stress']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Stress</div>
                             </a>
                         </li>
                     </ul>

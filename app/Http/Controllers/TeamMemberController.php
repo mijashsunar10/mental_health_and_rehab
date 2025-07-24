@@ -43,7 +43,7 @@ public function create()
 
     public function edit(TeamMember $teamMember)
     {
-        return view('frontend.about.teamm.edit', compact('teamMember'));
+        return view('frontend.about.team.edit', compact('teamMember'));
     }
 
     public function update(Request $request, TeamMember $teamMember)

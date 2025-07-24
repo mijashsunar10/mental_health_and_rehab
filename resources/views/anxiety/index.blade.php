@@ -96,7 +96,7 @@
             </p>
         </section>
 
-        <!-- Rest of the content remains exactly the same -->
+        
         <!-- Types Section -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-blue-800 mb-4">Types Of Anxiety Disorders</h2>
@@ -117,6 +117,26 @@
                     </p>
                 </div>
             </div>
+            <!-- Substance Abuse Section -->
+        <section class="mb-12 bg-blue-100 p-8 rounded-lg shadow-sm mt-4">
+            <h2 class="text-2xl font-semibold text-blue-800 mb-4">Substance Abuse and Anxiety</h2>
+            <p class="text-gray-700 mb-4">
+                About 20% of individuals with anxiety disorders also have substance use disorders. People with anxiety may attempt to lessen symptoms using drugs or alcohol, which typically exacerbates anxiety symptoms.
+            </p>
+            
+            <div class="bg-blue-800 text-white p-6 rounded-lg">
+                <h3 class="text-xl font-medium mb-3">Integrated Treatment Approach</h3>
+                <p class="mb-4">
+                    Effective treatment addresses both substance abuse and the underlying anxiety disorder simultaneously through approaches like:
+                </p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Cognitive Behavioral Therapy</li>
+                    <li>Relaxation Training</li>
+                    <li>Breathwork Therapy</li>
+                    <li>Medication management</li>
+                </ul>
+            </div>
+        </section>
         </section>
 
         <!-- Treatment Section -->
@@ -144,7 +164,9 @@
                     </ul>
                 </div>
             </div>
+            
         </section>
+         
 
         <!-- Prevention Section -->
         <section class="mb-12 bg-blue-50 p-8 rounded-lg border border-blue-200">
@@ -174,26 +196,7 @@
             </div>
         </section>
 
-        <!-- Substance Abuse Section -->
-        <section class="mb-12 bg-blue-100 p-8 rounded-lg shadow-sm">
-            <h2 class="text-2xl font-semibold text-blue-800 mb-4">Substance Abuse and Anxiety</h2>
-            <p class="text-gray-700 mb-4">
-                About 20% of individuals with anxiety disorders also have substance use disorders. People with anxiety may attempt to lessen symptoms using drugs or alcohol, which typically exacerbates anxiety symptoms.
-            </p>
-            
-            <div class="bg-blue-800 text-white p-6 rounded-lg">
-                <h3 class="text-xl font-medium mb-3">Integrated Treatment Approach</h3>
-                <p class="mb-4">
-                    Effective treatment addresses both substance abuse and the underlying anxiety disorder simultaneously through approaches like:
-                </p>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li>Cognitive Behavioral Therapy</li>
-                    <li>Relaxation Training</li>
-                    <li>Breathwork Therapy</li>
-                    <li>Medication management</li>
-                </ul>
-            </div>
-        </section>
+       
     </div>
 </div>
 @endsection
