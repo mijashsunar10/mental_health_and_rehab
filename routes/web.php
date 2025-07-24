@@ -110,7 +110,7 @@ Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->n
 
 Route::middleware(['auth', 'doctor'])->group(function () {
     Route::get('/doctor/profile/edit', [DoctorProfileController::class, 'edit'])->name('doctor.profile.edit');
-    Route::post('/doctor/profile/update', [DoctorProfileController::class, 'update'])->name('doctor.profile.update');
+    Route::put('/doctor/profile/update', [DoctorProfileController::class, 'update'])->name('doctor.profile.update');
 });
 
 Route::get('/doctor', [DoctorProfileController::class, 'index'])->name('doctor.profile.index');

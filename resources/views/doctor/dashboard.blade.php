@@ -93,33 +93,38 @@
                 </div>
             </div>
 
-                    <!-- My Doctor Profile Card -->
-                    <div
-                        class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-l-4 border-pastry-primary">
-                        <div class="p-6">
-                            <div class="flex items-center mb-4">
-                                <div class="p-3 rounded-full bg-pastry-cream text-pastry-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+            <!-- My Doctor Profile Card -->
+            <div
+                class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-l-4 border-pastry-primary">
+                        <!-- My Doctor Profile Card -->
+                        <div
+                            class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-l-4 border-pastry-primary">
+                            <div class="p-6">
+                                <div class="flex items-center mb-4">
+                                    <div class="p-3 rounded-full bg-pastry-cream text-pastry-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5.121 17.804A9.956 9.956 0 0112 15c2.137 0 4.122.672 5.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0zm-3-9a10 10 0 100 20 10 10 0 000-20z" />
+                                        </svg>
+                                    </div>
+                                    <h3 class="ml-3 text-lg font-semibold text-gray-800">My Doctor Profile</h3>
+                                </div>
+                                <p class="text-gray-600 mb-4">Manage your professional bio, image, and specialization</p>
+                                <a href="{{ route('doctor.profile.show', auth()->user()->id) }}"
+                                    class="inline-flex items-center px-4 py-2 bg-pastry-primary text-white rounded-lg hover:bg-pastry-secondary transition-colors duration-300">
+                                    View Profile
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5.121 17.804A9.956 9.956 0 0112 15c2.137 0 4.122.672 5.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0zm-3-9a10 10 0 100 20 10 10 0 000-20z" />
+                                            d="M9 5l7 7-7 7" />
                                     </svg>
-                                </div>
-                                <h3 class="ml-3 text-lg font-semibold text-gray-800">My Doctor Profile</h3>
+                                </a>
                             </div>
-                            <p class="text-gray-600 mb-4">Manage your professional bio, image, and specialization</p>
-                            <a href="{{ route('doctor.profile.show', auth()->user()->id) }}"
-                                class="inline-flex items-center px-4 py-2 bg-pastry-primary text-white rounded-lg hover:bg-pastry-secondary transition-colors duration-300">
-                                View Profile
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
                         </div>
-                    </div>
-               
+                    
+            </div>
+
 
         </div>
 

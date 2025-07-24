@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\DoctorProfile;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,7 +11,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class DoctorProfileController extends Controller
 {
     use AuthorizesRequests;
- 
+
     public function index()
 {
     $doctors = \App\Models\DoctorProfile::with('user')->latest()->get();

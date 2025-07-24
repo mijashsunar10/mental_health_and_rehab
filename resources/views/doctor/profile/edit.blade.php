@@ -12,6 +12,7 @@
 
     <form action="{{ route('doctor.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded-2xl shadow-xl">
         @csrf
+        @method('PUT')
 
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Specialization</label>
