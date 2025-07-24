@@ -31,6 +31,10 @@
             border-bottom: 1px solid #BFDBFE;
         }
     </style>
+
+    @php
+use App\Enums\UserRole;
+@endphp
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Chat') }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Manage your profile and account settings') }}</flux:subheading>
@@ -39,41 +43,219 @@
 
     <div class="flex h-[550px] text-sm border rounded-xl shadow overflow-hidden bg-white">
         <!-- Sidebar: User List -->
-        <div class="w-1/4 border-r bg-gray-50 overflow-y-auto">
-            <div class="p-4 font-bold text-gray-700 border-b">Chats</div>
-            <div class="divide-y">
-                @foreach($users as $user)
-                    <div wire:click="selectUser({{$user->id}})" 
-                        class="p-3 cursor-pointer hover:bg-blue-100 transition
-                        {{$selectedUser->id === $user->id ? 'bg-blue-50' : ''}}">
-                        <div class="flex justify-between items-start">
-                            <div class="text-gray-800 {{$selectedUser->id !== $user->id && $unreadCounts[$user->id] > 0 ? 'font-bold' : ''}}">
-                                {{$user->name}}
-                            </div>
-                            @if($selectedUser->id !== $user->id && $unreadCounts[$user->id] > 0)
-                                <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                                    {{$unreadCounts[$user->id]}}
-                                </span>
-                            @endif
+         <div class="w-1/4 border-r bg-gray-50 overflow-y-auto">
+        <div class="p-4 font-bold text-gray-700 border-b">Chats</div>
+        
+        @if(in_array($userRole, [UserRole::Doctor, UserRole::Admin]))
+            <div class="flex border-b">
+                @if($userRole === UserRole::Doctor)
+                    <button 
+                        wire:click="switchTab('users')" 
+                        class="flex-1 py-2 text-center text-sm font-medium {{ $currentTab === 'users' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:text-gray-800' }}"
+                    >
+                        Users
+                    </button>
+                    <button 
+                        wire:click="switchTab('admins')" 
+                        class="flex-1 py-2 text-center text-sm font-medium {{ $currentTab === 'admins' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:text-gray-800' }}"
+                    >
+                        Admins
+                    </button>
+                @elseif($userRole === UserRole::Admin)
+                    <button 
+                        wire:click="switchTab('users')" 
+                        class="flex-1 py-2 text-center text-sm font-medium {{ $currentTab === 'users' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:text-gray-800' }}"
+                    >
+                        Users
+                    </button>
+                    <button 
+                        wire:click="switchTab('doctors')" 
+                        class="flex-1 py-2 text-center text-sm font-medium {{ $currentTab === 'doctors' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:text-gray-800' }}"
+                    >
+                        Doctors
+                    </button>
+                @endif
+            </div>
+        @endif
+        
+        <div class="divide-y">
+            @if($userRole === UserRole::User)
+                <!-- Users only see doctors -->
+                @foreach($doctors as $doctor)
+                <div wire:click="selectUser({{$doctor->id}})" 
+                    class="p-3 cursor-pointer hover:bg-blue-100 transition
+                    {{$selectedUser->id === $doctor->id ? 'bg-blue-50' : ''}}">
+                    <div class="flex justify-between items-start">
+                        <div class="text-gray-800 {{$selectedUser->id !== $doctor->id && $unreadCounts[$doctor->id] > 0 ? 'font-bold' : ''}}">
+                            {{$doctor->name}}
                         </div>
-                        <div class="text-xs text-gray-500 truncate">
-                            @if($user->lastConversationMessage)
-                                @if($user->lastConversationMessage->sender_id == auth()->id())
-                                    You: {{$user->lastConversationMessage->message}}
-                                @else
-                                    {{$user->lastConversationMessage->message}}
-                                @endif
-                            @endif
-                        </div>
-                        @if($user->lastConversationMessage)
-                            <div class="text-xs text-gray-400 mt-1">
-                                {{$user->lastConversationMessage->created_at->diffForHumans()}}
-                            </div>
+                        @if($selectedUser->id !== $doctor->id && $unreadCounts[$doctor->id] > 0)
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                                {{$unreadCounts[$doctor->id]}}
+                            </span>
                         @endif
                     </div>
-                @endforeach
-            </div>
+                    <div class="text-xs text-gray-500 truncate">
+                        @if($doctor->lastConversationMessage)
+                            @if($doctor->lastConversationMessage->sender_id == auth()->id())
+                                You: {{$doctor->lastConversationMessage->message}}
+                            @else
+                                {{$doctor->lastConversationMessage->message}}
+                            @endif
+                        @endif
+                    </div>
+                    @if($doctor->lastConversationMessage)
+                        <div class="text-xs text-gray-400 mt-1">
+                            {{$doctor->lastConversationMessage->created_at->diffForHumans()}}
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+            @elseif($userRole === UserRole::Doctor)
+                <!-- Doctors see users or admins based on current tab -->
+                @if($currentTab === 'users')
+                    @foreach($users as $user)
+                        <div wire:click="selectUser({{$user->id}})" 
+                            class="p-3 cursor-pointer hover:bg-blue-100 transition
+                            {{$selectedUser->id === $user->id ? 'bg-blue-50' : ''}}">
+                            <!-- ... [user list item content] ... -->
+
+                            <div class="flex justify-between items-start">
+                        <div class="text-gray-800 {{$selectedUser->id !== $user->id && $unreadCounts[$user->id] > 0 ? 'font-bold' : ''}}">
+                            {{$user->name}}
+                        </div>
+                        @if($selectedUser->id !== $user->id && $unreadCounts[$user->id] > 0)
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                                {{$unreadCounts[$user->id]}}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="text-xs text-gray-500 truncate">
+                        @if($user->lastConversationMessage)
+                            @if($user->lastConversationMessage->sender_id == auth()->id())
+                                You: {{$user->lastConversationMessage->message}}
+                            @else
+                                {{$user->lastConversationMessage->message}}
+                            @endif
+                        @endif
+                    </div>
+                    @if($user->lastConversationMessage)
+                        <div class="text-xs text-gray-400 mt-1">
+                            {{$user->lastConversationMessage->created_at->diffForHumans()}}
+                        </div>
+                    @endif
+                        </div>
+                    @endforeach
+                @else
+                    @foreach($admins as $admin)
+                        <div wire:click="selectUser({{$admin->id}})" 
+                            class="p-3 cursor-pointer hover:bg-blue-100 transition
+                            {{$selectedUser->id === $admin->id ? 'bg-blue-50' : ''}}">
+                            <!-- ... [admin list item content] ... -->
+                               <div class="flex justify-between items-start">
+                        <div class="text-gray-800 {{$selectedUser->id !== $admin->id && $unreadCounts[$admin->id] > 0 ? 'font-bold' : ''}}">
+                            {{$admin->name}}
+                        </div>
+                        @if($selectedUser->id !== $admin->id && $unreadCounts[$admin->id] > 0)
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                                {{$unreadCounts[$admin->id]}}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="text-xs text-gray-500 truncate">
+                        @if($admin->lastConversationMessage)
+                            @if($admin->lastConversationMessage->sender_id == auth()->id())
+                                You: {{$admin->lastConversationMessage->message}}
+                            @else
+                                {{$admin->lastConversationMessage->message}}
+                            @endif
+                        @endif
+                    </div>
+                    @if($admin->lastConversationMessage)
+                        <div class="text-xs text-gray-400 mt-1">
+                            {{$admin->lastConversationMessage->created_at->diffForHumans()}}
+                        </div>
+                    @endif
+
+
+
+
+                        </div>
+                    @endforeach
+                @endif
+                
+            @elseif($userRole === UserRole::Admin)
+                <!-- Admins see users or doctors based on current tab -->
+                @if($currentTab === 'users')
+                    @foreach($users as $user)
+                        <div wire:click="selectUser({{$user->id}})" 
+                            class="p-3 cursor-pointer hover:bg-blue-100 transition
+                            {{$selectedUser->id === $user->id ? 'bg-blue-50' : ''}}">
+                            <!-- ... [user list item content] ... -->
+
+                            <div class="flex justify-between items-start">
+                        <div class="text-gray-800 {{$selectedUser->id !== $user->id && $unreadCounts[$user->id] > 0 ? 'font-bold' : ''}}">
+                            {{$user->name}}
+                        </div>
+                        @if($selectedUser->id !== $user->id && $unreadCounts[$user->id] > 0)
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                                {{$unreadCounts[$user->id]}}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="text-xs text-gray-500 truncate">
+                        @if($user->lastConversationMessage)
+                            @if($user->lastConversationMessage->sender_id == auth()->id())
+                                You: {{$user->lastConversationMessage->message}}
+                            @else
+                                {{$user->lastConversationMessage->message}}
+                            @endif
+                        @endif
+                    </div>
+                    @if($user->lastConversationMessage)
+                        <div class="text-xs text-gray-400 mt-1">
+                            {{$user->lastConversationMessage->created_at->diffForHumans()}}
+                        </div>
+                    @endif
+
+                        </div>
+                    @endforeach
+                @else
+                    @foreach($doctors as $doctor)
+                        <div wire:click="selectUser({{$doctor->id}})" 
+                            class="p-3 cursor-pointer hover:bg-blue-100 transition
+                            {{$selectedUser->id === $doctor->id ? 'bg-blue-50' : ''}}">
+                            <!-- ... [doctor list item content] ... -->
+                               <div class="flex justify-between items-start">
+                        <div class="text-gray-800 {{$selectedUser->id !== $doctor->id && $unreadCounts[$doctor->id] > 0 ? 'font-bold' : ''}}">
+                            {{$doctor->name}}
+                        </div>
+                        @if($selectedUser->id !== $doctor->id && $unreadCounts[$doctor->id] > 0)
+                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                                {{$unreadCounts[$doctor->id]}}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="text-xs text-gray-500 truncate">
+                        @if($doctor->lastConversationMessage)
+                            @if($doctor->lastConversationMessage->sender_id == auth()->id())
+                                You: {{$doctor->lastConversationMessage->message}}
+                            @else
+                                {{$doctor->lastConversationMessage->message}}
+                            @endif
+                        @endif
+                    </div>
+                    @if($doctor->lastConversationMessage)
+                        <div class="text-xs text-gray-400 mt-1">
+                            {{$doctor->lastConversationMessage->created_at->diffForHumans()}}
+                        </div>
+                    @endif
+                        </div>
+                    @endforeach
+                @endif
+            @endif
         </div>
+    </div>
 
         <!-- Main Chat Section -->
         <div class="w-3/4 flex flex-col">

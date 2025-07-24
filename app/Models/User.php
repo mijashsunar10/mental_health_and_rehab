@@ -101,4 +101,7 @@ class User extends Authenticatable
                     ->latest()
                     ->limit(1);
             }
+
+            // In User.php
+
 }

@@ -11,12 +11,15 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\WithFileUploads as LivewireWithFileUploads;
+use App\Enums\UserRole;
 
 class Chat extends Component
 {
       use LivewireWithFileUploads;
 
    public $users;
+    public $doctors;
+    public $admins;
     public $selectedUser;
     public $newMessage;
     public $messages;
@@ -33,34 +36,46 @@ class Chat extends Component
     public $chatImages = [];
     public $editingMessageId = null;
     public $editingMessageContent = '';
+     public $currentTab = 'users'; // 'users', 'doctors' or 'admins'
+    public $userRole;
+
     
 
     protected $listeners = [];
 
 
-    public function mount()
-        {
-            $this->loginID = Auth::id();
-            $this->authId = Auth::id();
-            
-            $this->listeners = [
-                "echo-private:chat.{$this->loginID},MessageSent" => 'newMessageNotification',
-                "echo-private:chat.{$this->loginID},MessageUpdated" => 'messageUpdated',
-                "echo-private:chat.{$this->loginID},MessageDeleted" => 'messageDeleted',
-                'scrollToBottom' => 'scrollToBottom',
-                'prev-image' => 'prevImage',
-                'next-image' => 'nextImage',
-                'close-image-modal' => 'closeImageModal',
-            ];
+   public function mount()
+    {
+        $this->loginID = Auth::id();
+        $this->authId = Auth::id();
+        $this->userRole = Auth::user()->role;
+        
+        $this->listeners = [
+            "echo-private:chat.{$this->loginID},MessageSent" => 'newMessageNotification',
+            "echo-private:chat.{$this->loginID},MessageUpdated" => 'messageUpdated',
+            "echo-private:chat.{$this->loginID},MessageDeleted" => 'messageDeleted',
+            'scrollToBottom' => 'scrollToBottom',
+            'prev-image' => 'prevImage',
+            'next-image' => 'nextImage',
+            'close-image-modal' => 'closeImageModal',
+        ];
 
-
-               $this->dispatch('init-keyboard-navigation');
-            
-            $this->loadUsersWithUnreadCounts();
-
-            $this->selectedUser = $this->users->first();
-            $this->loadMessages();
+        $this->dispatch('init-keyboard-navigation');
+        $this->loadUsersWithUnreadCounts();
+        
+        // Set initial selected user based on role
+        if ($this->userRole === UserRole::User) {
+            $this->selectedUser = User::where('role', UserRole::Doctor)->first();
+        } elseif ($this->userRole === UserRole::Doctor) {
+            $this->selectedUser = User::where('role', UserRole::Admin)->first();
+            $this->currentTab = 'admins';
+        } else { // Admin
+            $this->selectedUser = User::where('role', UserRole::User)->first();
         }
+        
+        $this->loadMessages();
+    }
+
 
 
 
@@ -93,8 +108,12 @@ class Chat extends Component
 
 
         public function loadUsersWithUnreadCounts()
-        {
-            $this->users = User::whereNot('id', $this->authId)
+    {
+        $authUser = Auth::user();
+        
+        if ($authUser->role === UserRole::User) {
+            // Users can only chat with doctors
+            $this->doctors = User::where('role', UserRole::Doctor)
                 ->withCount(['unreadMessages' => function($query) {
                     $query->where('receiver_id', $this->authId)
                         ->whereNull('read_at');
@@ -111,10 +130,97 @@ class Chat extends Component
                     return optional($user->lastConversationMessage)->created_at;
                 });
                 
+            foreach ($this->doctors as $user) {
+                $this->unreadCounts[$user->id] = $user->unread_messages_count;
+            }
+            
+        } elseif ($authUser->role === UserRole::Doctor) {
+            // Doctors can chat with admins and users
+            $this->admins = User::where('role', UserRole::Admin)
+                ->withCount(['unreadMessages' => function($query) {
+                    $query->where('receiver_id', $this->authId)
+                        ->whereNull('read_at');
+                }])
+                ->with(['lastConversationMessage' => function($query) {
+                    $query->where(function($q) {
+                        $q->where('sender_id', $this->authId)
+                        ->orWhere('receiver_id', $this->authId);
+                    })
+                    ->orderBy('created_at', 'desc');
+                }])
+                ->get()
+                ->sortByDesc(function($user) {
+                    return optional($user->lastConversationMessage)->created_at;
+                });
+                
+            $this->users = User::where('role', UserRole::User)
+                ->withCount(['unreadMessages' => function($query) {
+                    $query->where('receiver_id', $this->authId)
+                        ->whereNull('read_at');
+                }])
+                ->with(['lastConversationMessage' => function($query) {
+                    $query->where(function($q) {
+                        $q->where('sender_id', $this->authId)
+                        ->orWhere('receiver_id', $this->authId);
+                    })
+                    ->orderBy('created_at', 'desc');
+                }])
+                ->get()
+                ->sortByDesc(function($user) {
+                    return optional($user->lastConversationMessage)->created_at;
+                });
+                
+            foreach ($this->admins as $user) {
+                $this->unreadCounts[$user->id] = $user->unread_messages_count;
+            }
+            foreach ($this->users as $user) {
+                $this->unreadCounts[$user->id] = $user->unread_messages_count;
+            }
+            
+        } elseif ($authUser->role === UserRole::Admin) {
+            // Admins can chat with doctors and users
+            $this->doctors = User::where('role', UserRole::Doctor)
+                ->withCount(['unreadMessages' => function($query) {
+                    $query->where('receiver_id', $this->authId)
+                        ->whereNull('read_at');
+                }])
+                ->with(['lastConversationMessage' => function($query) {
+                    $query->where(function($q) {
+                        $q->where('sender_id', $this->authId)
+                        ->orWhere('receiver_id', $this->authId);
+                    })
+                    ->orderBy('created_at', 'desc');
+                }])
+                ->get()
+                ->sortByDesc(function($user) {
+                    return optional($user->lastConversationMessage)->created_at;
+                });
+                
+            $this->users = User::where('role', UserRole::User)
+                ->withCount(['unreadMessages' => function($query) {
+                    $query->where('receiver_id', $this->authId)
+                        ->whereNull('read_at');
+                }])
+                ->with(['lastConversationMessage' => function($query) {
+                    $query->where(function($q) {
+                        $q->where('sender_id', $this->authId)
+                        ->orWhere('receiver_id', $this->authId);
+                    })
+                    ->orderBy('created_at', 'desc');
+                }])
+                ->get()
+                ->sortByDesc(function($user) {
+                    return optional($user->lastConversationMessage)->created_at;
+                });
+                
+            foreach ($this->doctors as $user) {
+                $this->unreadCounts[$user->id] = $user->unread_messages_count;
+            }
             foreach ($this->users as $user) {
                 $this->unreadCounts[$user->id] = $user->unread_messages_count;
             }
         }
+    }
 
 
                 
@@ -407,4 +513,18 @@ public function cancelEdit()
     $this->editingMessageContent = '';
     $this->dispatch('edit-cancelled');
 }
+
+ public function switchTab($tab)
+    {
+        $this->currentTab = $tab;
+        
+        // Set the first user in the tab as selected
+        if ($tab === 'users' && count($this->users) > 0) {
+            $this->selectUser($this->users->first()->id);
+        } elseif ($tab === 'doctors' && count($this->doctors) > 0) {
+            $this->selectUser($this->doctors->first()->id);
+        } elseif ($tab === 'admins' && count($this->admins) > 0) {
+            $this->selectUser($this->admins->first()->id);
+        }
+    }
 }
