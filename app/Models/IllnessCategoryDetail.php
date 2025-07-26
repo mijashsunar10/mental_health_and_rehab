@@ -20,7 +20,7 @@ class IllnessCategoryDetail extends Model
     ];
 
     public function category()
-    {
-        return $this->belongsTo(IllnessCategory::class);
-    }
+{
+    return $this->belongsTo(IllnessCategory::class, 'illness_category_id');
+}
 }

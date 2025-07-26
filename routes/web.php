@@ -14,7 +14,7 @@ use App\Livewire\DoctorRegister;
 
 Route::get('/', function () {
     return view('frontend.home.index');
-})->name('home');
+})->middleware(['auth', 'verified'])->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

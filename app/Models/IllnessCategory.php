@@ -31,6 +31,6 @@ class IllnessCategory extends Model
     }
     public function detail()
 {
-    return $this->hasOne(IllnessCategoryDetail::class, 'category_id');
+    return $this->hasOne(IllnessCategoryDetail::class, 'illness_category_id');
 }
 }
