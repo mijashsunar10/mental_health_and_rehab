@@ -38,7 +38,11 @@
   <section id="pagecontent" class="">
     @yield('pagecontent')
   </section>
+  
+  {{-- Add the panic button component --}}
+@include('components.panic-button')
   <section id="footer">
+    
     {{-- @include('layouts.footer') --}}
   </section>
 
