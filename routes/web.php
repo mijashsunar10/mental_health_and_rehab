@@ -180,6 +180,15 @@ use App\Http\Controllers\ProductController;
 
 Route::resource('/products', ProductController::class);
 
+use App\Http\Controllers\GoogleAuthController;
+
+// Route to redirect to Google's OAuth page
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
+
+// Route to handle the callback from Google
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
+
+
 require __DIR__.'/auth.php';
 
 
