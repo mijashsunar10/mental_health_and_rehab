@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\IllnessCategoryController;
 use App\Http\Controllers\Admin\IllnessCategoryDetailController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\AssessmentController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -9,6 +10,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\OrderController;
 use App\Livewire\AdminRegister;
 use App\Livewire\Chat;
 use App\Livewire\DoctorList;
@@ -143,6 +145,46 @@ Route::middleware(['auth'])
     Route::put('illness-categories/{illnessCategory}/details', [IllnessCategoryDetailController::class, 'update'])
         ->name('illness-categories.details.update');
 });
+
+//routes for the packages
+
+Route::middleware(['auth', 'verified', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->controller(PackageController::class)
+    ->group(function () {
+        // Package Routes
+        Route::get('packages', 'index')->name('packages.index');
+        Route::get('packages/create', 'create')->name('packages.create');
+        Route::post('packages', 'store')->name('packages.store');
+        Route::get('packages/{package}/edit', 'edit')->name('packages.edit');
+        Route::put('packages/{package}', 'update')->name('packages.update');
+        Route::delete('packages/{package}', 'destroy')->name('packages.destroy');
+        Route::get('packages/{package}', 'show')->name('packages.show');
+    });
+
+// Public show route (outside the admin group)
+Route::get('packages/{package}', [PackageController::class, 'show'])
+    ->name('packages.show');
+// Route::get('admin/packages', [PackageController::class, 'index'])
+//     ->name('packages.index');
+
+//route for purchasing packages
+Route::middleware(['auth', 'verified'])
+    ->controller(PackageController::class)
+    ->group(function () {
+        Route::get('packages/{package}', 'show')->name('packages.show');
+        Route::get('packages/{package}/purchase', 'showPurchaseForm')
+             ->name('packages.purchase');
+        Route::post('packages/{package}/purchase', 'processPurchase')
+             ->name('packages.purchase.submit');
+    });
+
+    Route::get('/order-confirmation/{order}', [OrderController::class, 'showConfirmation'])
+     ->name('order.confirmation')
+     ->middleware('auth');
+   
+     
 
 Route::get('chat',Chat::class)->name('chat');
 
