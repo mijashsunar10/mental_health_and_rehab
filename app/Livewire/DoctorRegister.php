@@ -21,7 +21,7 @@ class DoctorRegister extends Component
             'nmc_number' => 'required|string|max:255'
         ]);
 
-        // Create admin user
+        // Create doctor  user
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,

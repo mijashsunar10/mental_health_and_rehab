@@ -9,6 +9,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DoctorProfileController;
 use App\Livewire\AdminRegister;
 use App\Livewire\Chat;
 use App\Livewire\DoctorList;
@@ -144,6 +145,7 @@ Route::middleware(['auth'])
         ->name('illness-categories.details.update');
 });
 
+Route::resource('doctors', DoctorProfileController::class);
 Route::get('chat',Chat::class)->name('chat');
 
 // use App\Livewire\JitsiMeeting;
