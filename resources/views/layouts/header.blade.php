@@ -89,7 +89,7 @@
         transition: max-height 0.3s ease;
     }
 
-    #coursesDropdown.show {
+    #coursesDropdown.show illness-categories.index{
         max-height: 500px;
         /* Adjust based on your content */
     }
@@ -187,6 +187,35 @@
                     </a>
                 </li>
 
+                  <li class="relative cursor-pointer  group">
+                    <a href="{{route('admin.illness-categories.index')}}">
+                        <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
+                            What we Treat
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </a>
+                    <ul class="dropdown-menu absolute left-0 mt-2 w-56 bg-white border border-gray-200 shadow-lg rounded-md opacity-0 invisible transition-opacity duration-300"
+                        style="border-top: 4px solid #0b226d;">
+                        <li class="relative cursor-pointer group">
+                            <a href="{{ route('anxiety') }}" class="font-medium px-4 py-2  cursor-pointer   hover:bg-blue-50 hover:underline flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Anxiety</div>
+                            </a>
+                     </li>
+                        <li class="relative cursor-pointer group">
+                            <a href="{{ route('anxiety') }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Depression</div>
+                            </a>
+                      </li>
+                        <li class="relative cursor-pointer group">
+                            <a href="{{ route('anxiety') }} " class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline  cursor-pointer   flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Stress</div>
+                            </a>
+                    </li>
+                    </ul>
+                </li>
+
                 <!-- Courses Dropdown -->
                 <li class="relative cursor-pointer  group">
                     <a href="{{route('assessment.index')}}">
@@ -201,37 +230,41 @@
                         style="border-top: 4px solid #0b226d;">
                         <li class="relative cursor-pointer group">
                             <a href="{{ route('assessment.show', ['category' => 'anxiety']) }}" class="font-medium px-4 py-2  cursor-pointer   hover:bg-blue-50 hover:underline flex items-center">
-                                <div class="w-56 font-semibold text-blue-900">Anxiety</div>
+                                <div class="w-56 font-semibold text-blue-900">Anxiety Test</div>
                             </a>
                      </li>
                         <li class="relative cursor-pointer group">
                             <a href="{{ route('assessment.show', ['category' => 'depression']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
-                                <div class="w-56 font-semibold text-blue-900">Depression</div>
+                                <div class="w-56 font-semibold text-blue-900">Depression Test</div>
                             </a>
                       </li>
                         <li class="relative cursor-pointer group">
                             <a href="{{ route('assessment.show', ['category' => 'stress']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline  cursor-pointer   flex items-center">
-                                <div class="w-56 font-semibold text-blue-900">Stress</div>
+                                <div class="w-56 font-semibold text-blue-900">Stress Test</div>
                             </a>
                     </li>
                     </ul>
                 </li>
 
-                {{-- <li class="relative cursor-pointer group">
-                    <a href="#">
-                        <button class="flex items-center font-semibold px-3 focus:outline-none transition-colors duration-300">
-                            Menu
-   cursor-pointer                       </button>
-                    </a>
-                </li> --}}
+              
 
-                <li class="relative cursor-pointer py-1 group">
+                <li class="relative cursor-pointer  group">
                     <a href="{{ route('team.index') }}">
-                        <button
-                            class="flex items-center  cursor-pointer font-semibold px-3 focus:outline-none transition-colors duration-300">
+                        <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
                             Team
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
                         </button>
                     </a>
+                    <ul class="dropdown-menu absolute left-0 mt-2 w-56 bg-white border border-gray-200 shadow-lg rounded-md opacity-0 invisible transition-opacity duration-300"
+                        style="border-top: 4px solid #0b226d;">
+                        <li class="relative cursor-pointer group">
+                            <a href="{{route('doctor.profile')}}" class="font-medium px-4 py-2  cursor-pointer   hover:bg-blue-50 hover:underline flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Doctors</div>
+                            </a>
+                    
+                    </ul>
                 </li>
 
                 {{-- <li class="relative cursor-pointer group">
@@ -252,26 +285,37 @@
                     </a>
                 </li>
 
-              <li class="relative group cursor-pointer ">
+             @guest
+            <li class="relative group cursor-pointer">
                 <a href="{{ route('login') }}">
                     <button
-                        class="flex items-center font-semibold px-4 py-1 mb-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition duration-300" style="color: white !important">
-                        Login 
+                        class="flex items-center font-semibold px-4 py-1 mb-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition duration-300">
+                        Login
                     </button>
                 </a>
             </li>
+        @endguest
 
                
-                @auth
-                    <li class="relative cursor-pointer group">
-                        <a href="#">
-                            <button
-                                 class="flex items-center cursor-pointer  text-xl font-bold px-3 py-0.5 focus:outline-none transition-colors duration-300">
-                                <i class="fa-solid fa-circle-user"></i>
-                            </button>
-                        </a>
-                    </li>
-                @endauth
+               @auth
+                <li class="relative cursor-pointer group">
+                    <a href="
+                        @if(auth()->user()->role === 'admin')
+                            {{ route('admin.dashboard') }}
+                        @elseif(auth()->user()->role === 'doctor')
+                            {{ route('doctor.dashboard') }}
+                        @else
+                            {{ route('dashboard') }}
+                        @endif
+                    ">
+                        <button
+                            class="flex items-center cursor-pointer text-xl font-bold px-3 py-1.5 focus:outline-none transition-colors duration-300">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </button>
+                    </a>
+                </li>
+            @endauth
+
 
                 <li class="relative cursor-pointer group desktop-language-selector" style="color: black !important;">
                     <div class="language-selector text-gray-800 pl-1 py-1 rounded-md text-sm"

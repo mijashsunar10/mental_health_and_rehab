@@ -9,6 +9,8 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DoctorProfileController;
+use App\Http\Controllers\HomeController;
 use App\Livewire\AdminRegister;
 use App\Livewire\Chat;
 use App\Livewire\DoctorList;
@@ -16,9 +18,11 @@ use App\Livewire\DoctorRegister;
 use App\Http\Controllers\PanicButtonController;
 use App\Livewire\UserList;
 
-Route::get('/', function () {
-    return view('frontend.home.index');
-})->name('home');
+// Route::get('/', function () {
+//     return view('frontend.home.index');
+// })->name('home');
+
+ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -187,6 +191,11 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->
 
 // Route to handle the callback from Google
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
+
+Route::get('/doctor/profile',[DoctorProfileController::class,'index'])->name('doctor.profile');
+
+Route::get('/doctor/profile/show',[DoctorProfileController::class,'show'])->name('doctor.show');
+
 
 
 require __DIR__.'/auth.php';

@@ -1,8 +1,3 @@
-@extends('template.template')
-
-@section('pagecontent')
-
-<!-- Our Team Section -->
 <section class="py-20 px-4 bg-gradient-to-b from-blue-50 to-white mt-12" id="team-section">
     <div class="max-w-7xl mx-auto">
         <!-- Section Header with Create Button -->
@@ -66,12 +61,12 @@
                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                         
                         <!-- Gradient Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-gray-900/30 to-gray-900/10"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-blue-900/30 to-blue-900/10"></div>
                         
                         <!-- Member Info -->
                         <div class="absolute bottom-0 left-0 p-6 w-full">
-                            <h3 class="text-2xl font-bold text-blue-600 drop-shadow-md">{{ $member->name }}</h3>
-                            <p class="font-semibold text-white drop-shadow-md">{{ $member->position }}</p>
+                            <h3 class="text-2xl font-bold text-blue-300 drop-shadow-md">{{ $member->name }}</h3>
+                            <p class="font-semibold text-blue-100 drop-shadow-md">{{ $member->position }}</p>
                             
                             <!-- Social Links -->
                             @if($member->social_instagram || $member->social_facebook)
@@ -133,5 +128,3 @@
         @endif
     </div>
 </section>
-
-@endsection

@@ -55,10 +55,10 @@
             scrollbar-width: none;
         }
     </style>
-<section class="bg-gray-50">
+<section class="bg-gray-50 mt-20">
     <!-- Header Navigation -->
 
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-[90%] mx-auto">
         <!-- Hero Section -->
         <div class="gradient-bg text-white">
             <div class="px-6 py-12">

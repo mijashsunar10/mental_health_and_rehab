@@ -35,8 +35,17 @@
                         {{ __('Dashboard') }}
                     </flux:navlist.item>
 
-                     <flux:navlist.item icon="chat-bubble-oval-left-ellipsis" :href="route('chat')" :current="request()->routeIs('chat')" wire:navigate>{{ __('Chat') }}</flux:navlist.item>
+                      <flux:navlist.item
+                            icon="home"
+                            href="{{ route('home') }}"
+                            :current="request()->routeIs('home')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Home') }}
+                        </flux:navlist.item>
 
+                    
+                    
 
               @php
                 $user = auth()->user();
@@ -98,20 +107,9 @@
                     </flux:navlist.item>
                 @endif
 
-            @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Doctor)
-                <flux:navlist.item
-                    icon="users"
-                    href="{{ route('jitsi.meeting') }}"
-                    :current="request()->routeIs('jitsi.meeting')"
-                    onclick="return confirmAndOpenMeeting(event, '{{ route('jitsi.meeting') }}')"
-                    class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
-                >
-                    {{ __('Start a Meeting') }}
-                </flux:navlist.item>
-            @endif
+            
 
-
-                @if(auth()->user()->role === \App\Enums\UserRole::User)
+              @if(auth()->user()->role === \App\Enums\UserRole::User)
                     <flux:navlist.item
                         icon="users"
                         href="{{ route('doctors.index') }}"
@@ -121,6 +119,7 @@
                         {{ __('Doctor List') }}
                     </flux:navlist.item>
                 @endif
+
 
 
 
@@ -135,6 +134,48 @@
                             {{ __('Doctor List') }}
                         </flux:navlist.item>
                 @endif
+
+
+             <flux:navlist.item icon="chat-bubble-oval-left-ellipsis" :href="route('chat')" :current="request()->routeIs('chat')" wire:navigate>{{ __('  Chat') }}</flux:navlist.item>
+
+
+              
+
+                @if(auth()->user()->role === \App\Enums\UserRole::Admin || auth()->user()->role === \App\Enums\UserRole::Doctor)
+                <flux:navlist.item
+                    icon="users"
+                    href="{{ route('jitsi.meeting') }}"
+                    :current="request()->routeIs('jitsi.meeting')"
+                    onclick="return confirmAndOpenMeeting(event, '{{ route('jitsi.meeting') }}')"
+                    class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                >
+                    {{ __('Start a Meeting') }}
+                </flux:navlist.item>
+            @endif
+
+            @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="plus"
+                            href="{{ route('ourteam.create') }}"
+                            :current="request()->routeIs('ourteam.create')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Add Team Member') }}
+                        </flux:navlist.item>
+            @endif
+
+             @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="plus"
+                            href="{{ route('faqs.create') }}"
+                            :current="request()->routeIs('faqs.create')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Add Faqs') }}
+                        </flux:navlist.item>
+            @endif
+
+     
 
      
 

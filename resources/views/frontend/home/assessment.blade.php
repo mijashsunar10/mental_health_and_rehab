@@ -3,7 +3,7 @@
         <!-- Hero Section -->
         <div class="text-center mb-16">
             <h1 class="text-4xl font-extrabold text-blue-900 sm:text-5xl mb-4">
-               Take Your <span class="text-blue-600">Self Assesesemnt</span> Test
+               Take Your <span class="text-blue-600">Self Assesesement</span> Test
             </h1>
             <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-600">
                 Gain insights into your mental wellbeing with our clinically-validated assessments

@@ -13,7 +13,21 @@
         @include('frontend.home.about')
         {{-- @include('frontend.home.aboutus1') --}}
     </section>
-    
+
+    <section>
+         @include('frontend.home.assessment')
+    </section>
+
+    <section>
+         @include('frontend.home.team')
+    </section>
+
+    <section>
+         @include('frontend.home.faq')
+    </section>
+
+
+
 
     <!-- Global JS -->
     @vite(['resources/js/app.js'])

@@ -16,16 +16,26 @@
       
        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Add this in your head section -->
-    <script src="https://cdn.tiny.cloud/1/ngdj1fhhw4watoul19rz744sdabe5zisfd26xlmufomkup6s/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
+   <!-- Place the first <script> tag in your HTML's <head> -->
+      <script src="https://cdn.tiny.cloud/1/yefhnnw3pe7wp6973ntpshfk1zrgvx879j3pni68yvvzdhop/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+
+      <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+      <script>
         tinymce.init({
-            selector: 'textarea.tinymce',
-            plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
-            toolbar_mode: 'floating',
-            height: 500,
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+          selector: 'textarea',
+          plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+          toolbar: 'undo redo | blocks
+
+                <li class="relative cursor-pointer  group">
+                    <a href="{{ route('team.index') }}">
+                        <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
+                            Team
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
-    </script>
+      </script>
+    
     
 
 
