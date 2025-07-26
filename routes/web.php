@@ -102,14 +102,18 @@ Route::get('/about', function () {
 })->name('about.index');
 
 Route::get('/assessment', [AssessmentController::class, 'index'])
-    ->name('assessment.index')->middleware('auth');
+    ->name('assessment.index');
     
     
 Route::middleware(['auth'])->group(function () {
     Route::get('/assessment/{category}', [AssessmentController::class, 'show'])->name('assessment.show');
     Route::post('/responses', [ResponseController::class, 'store'])->name('responses.store');
-    Route::get('/assessment/{category}/result', [ResponseController::class, 'result'])->name('assessment.result');
+ 
 });
+
+   Route::get('/assessment/{category}/result', [ResponseController::class, 'result'])->middleware(['auth'])->name('assessment.result');
+
+
 Route::get('/contact',[ContactController::class,'contact'])->name('contact');
 Route::post('/contact/send', [ContactController::class, 'submitContactForm'])->name('contact.send');
 
@@ -151,4 +155,29 @@ Route::get('chat',Chat::class)->name('chat');
 use App\Livewire\JitsiMeeting;
 
 Route::get('/meeting/{room?}', JitsiMeeting::class)->name('jitsi.meeting');
+
+
+// use App\Http\Controllers\VideoController;
+
+use App\Http\Controllers\VideoController;
+
+// Display a list of videos
+Route::get('cloudinary/videos', [VideoController::class, 'index'])->name('videos.index');
+
+// Show the form to create a new video
+Route::get('cloudinary/videos/create', [VideoController::class, 'create'])->name('videos.create');
+
+// Store a new video
+Route::post('cloudinary/videos', [VideoController::class, 'store'])->name('videos.store');
+
+// Delete a video
+Route::delete('cloudinary/videos/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
+
+
+use App\Http\Controllers\ProductController;
+
+Route::resource('/products', ProductController::class);
+
 require __DIR__.'/auth.php';
+
+

@@ -29,7 +29,7 @@ class ContactController extends Controller
             Contact::create($validatedData);
             
             // Send email
-            Mail::to('sandeshpahari05@gmail.com')
+            Mail::to('sunaranamol@gmail.com')
                 ->send(new ContactFormMail($validatedData));
                 
             return response()->json(['message' => 'Your message has been sent successfully!'], 200);
