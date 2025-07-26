@@ -13,6 +13,7 @@ use App\Livewire\AdminRegister;
 use App\Livewire\Chat;
 use App\Livewire\DoctorList;
 use App\Livewire\DoctorRegister;
+use App\Http\Controllers\PanicButtonController;
 use App\Livewire\UserList;
 
 Route::get('/', function () {
@@ -146,7 +147,8 @@ Route::middleware(['auth'])
 
 Route::get('chat',Chat::class)->name('chat');
 
-// use App\Livewire\JitsiMeeting;
+// Panic button route
+Route::post('/panic-alert', [PanicButtonController::class, 'sendPanicAlert'])->name('panic.alert');
 
 use App\Livewire\JitsiMeeting;
 
