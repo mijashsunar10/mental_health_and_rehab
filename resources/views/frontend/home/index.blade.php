@@ -4,10 +4,15 @@
 
 <section class="bg-background text-foreground overflow-x-hidden">
     <!-- Hero Section -->
-    <section class="">
+    <section class="" id="">
         @include('frontend.home.hero')
     </section>
     
+    <section id="about
+">
+        @include('frontend.home.about')
+        {{-- @include('frontend.home.aboutus1') --}}
+    </section>
     
 
     <!-- Global JS -->

@@ -3,13 +3,13 @@
 @section('pagecontent')
 <div class="relative overflow-hidden">
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-blue-900">
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-900">
         <!-- Darkened Background Image -->
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
                  alt="Serene mental health recovery" 
                  class="w-full h-full object-cover opacity-70">
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/90 to-blue-800/50"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/90 to-gray-800/50"></div>
         </div>
         
         <!-- Hero Content -->
@@ -39,7 +39,7 @@
     </section>
 
     <!-- Our Story Section -->
-    <section id="our-story" class="py-20 bg-white">
+    {{-- <section id="our-story" class="py-20 bg-white">
         <div class="max-w-6xl mx-auto px-6 lg:px-8">
             <div class="lg:flex items-center gap-12">
                 <div class="lg:w-1/2 mb-12 lg:mb-0 animate-fade-in-left">
@@ -73,7 +73,14 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
+    <div id="our-story">
+
+    @include('frontend.home.about')
+    </div>
+
+    
+    @include('frontend.home.aboutus1')
 
     <!-- Approach Section -->
     <section class="py-20 bg-blue-50">

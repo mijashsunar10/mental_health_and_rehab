@@ -149,8 +149,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     </form>
 
-        <a href="{{ route('auth.google.redirect') }}" class="btn bg-blue-100 p-3 shadow-sm border rounded-md text-blue-900">
-        Login with Google 
+        <a href="{{ route('auth.google.redirect') }}" class="btn  shadow-sm rounded-md text-blue-900">
+       <img height="200px" width="200px" src="{{asset('google.png')}}" alt="">
     </a>
 
 

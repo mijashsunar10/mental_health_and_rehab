@@ -1,6 +1,3 @@
-@extends('template.template')
-
-@section('pagecontent')
 <div class="min-h-screen flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="w-full max-w-4xl mx-auto">
         <!-- Hero Section -->
@@ -97,4 +94,3 @@
         </div>
     </div>
 </div>
-@endsection

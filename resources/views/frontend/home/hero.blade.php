@@ -194,24 +194,49 @@
       bottom: 2rem;
     }
   }
+  /* Compact Button Styles */
+  .hero-button {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;  /* Reduced padding */
+    font-size: 0.95rem;      /* Slightly smaller font */
+    font-weight: 600;
+    border-radius: 50px;
+    background: white;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    white-space: nowrap;     /* Prevent text wrapping */
+  }
 
-  /* Large tablets and small desktops (1024px and up) */
-  @media (min-width: 1024px) {
-    .hero-heading {
-      font-size: 6rem;
-      margin: 3rem 0;
-    }
-    
+  .hero-button:hover {
+    transform: scale(1.03);  /* More subtle hover effect */
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    background: #f8f8f8;
+  }
+
+  /* Responsive adjustments */
+  @media (min-width: 600px) {
     .hero-button {
-      padding: 1.2rem 2.5rem;
-      font-size: 1.2rem;
+      padding: 0.7rem 1.6rem;
+      font-size: 1rem;
     }
   }
+
+  @media (min-width: 1024px) {
+    .hero-button {
+      padding:  1rem 1.8rem;
+      font-size:1.1rem;
+    }
+  }
+
 
   /* Large desktops (1200px and up) */
   @media (min-width: 1200px) {
     .hero-heading {
-      font-size: 7rem;
+      font-size: 3rem;
     }
   }
 
@@ -221,10 +246,10 @@
       font-size: 9rem;
     }
     
-    .hero-button {
+    /* .hero-button {
       padding: 1.5rem 3rem;
       font-size: 1.3rem;
-    }
+    } */
   }
 </style>
 
@@ -252,14 +277,11 @@
   </div>
 
   <!-- Button -->
-  <div class="button-container ">
-    <button class="hero-button">
-      Begin Your Journey
-    </button>
-  </div>
+<div class="button-container">
+  <button class="hero-button" onclick="smoothScrollToNextSection()">
+    Begin Your Journey
+  </button>
 </div>
-<div style="height: 100vh"> 
-  <p class="primary">k xa</p>
 </div>
 
 <script>
@@ -305,4 +327,21 @@
     };
     window.addEventListener('resize', handleResize);
   });
+</script>
+
+<!-- Button -->
+
+
+<script>
+  function smoothScrollToNextSection() {
+    const nextSection = document.getElementById('about');
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollBy({
+        top: window.innerHeight,
+        behavior: 'smooth'
+      });
+    }
+  }
 </script>

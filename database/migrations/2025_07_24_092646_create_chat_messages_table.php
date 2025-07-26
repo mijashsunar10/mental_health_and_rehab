@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('deleted_for_sender')->default(false);
             $table->boolean('deleted_for_receiver')->default(false);
             $table->timestamp('edited_at')->nullable();
-                   
+                
         });
     }
 

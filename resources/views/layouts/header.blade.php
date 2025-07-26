@@ -171,116 +171,109 @@
 
             <!-- Navbar Items -->
             <ul class="navbar-ul hidden lg:flex lg:space-x-2 xl:space-x-6 transition-all duration-300">
-                <li class="relative group nav-item">
-                    <a href="#">
+                <li class="relative cursor-pointer group nav-item">
+                    <a href="{{route('home')}}">
                         <button
-                            class="flex items-center justify-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
+                            class="flex items-center py-1 cursor-pointer justify-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
                             Home
                         </button>
                     </a>
                 </li>
-                <li class="relative group">
+                <li class="relative cursor-pointer group">
                     <a href="{{route('about.index')}}">
-                        <button class="flex items-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
+                        <button class="flex items-center py-1 cursor-pointer   font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
                             About Us
-                        </button>
+                       </button>
                     </a>
                 </li>
 
                 <!-- Courses Dropdown -->
-                <li class="relative group">
+                <li class="relative cursor-pointer  group">
                     <a href="{{route('assessment.index')}}">
-                        <button class="flex items-center font-semibold px-3 focus:outline-none transition-colors duration-300">
+                        <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
                             Self Assessment
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                     </a>
                     <ul class="dropdown-menu absolute left-0 mt-2 w-56 bg-white border border-gray-200 shadow-lg rounded-md opacity-0 invisible transition-opacity duration-300"
                         style="border-top: 4px solid #0b226d;">
-                        <li class="relative group">
-                            <a href="{{ route('assessment.show', ['category' => 'anxiety']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
+                        <li class="relative cursor-pointer group">
+                            <a href="{{ route('assessment.show', ['category' => 'anxiety']) }}" class="font-medium px-4 py-2  cursor-pointer   hover:bg-blue-50 hover:underline flex items-center">
                                 <div class="w-56 font-semibold text-blue-900">Anxiety</div>
                             </a>
-                        </li>
-                        <li class="relative group">
+                     </li>
+                        <li class="relative cursor-pointer group">
                             <a href="{{ route('assessment.show', ['category' => 'depression']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
                                 <div class="w-56 font-semibold text-blue-900">Depression</div>
                             </a>
-                        </li>
-                        <li class="relative group">
-                            <a href="{{ route('assessment.show', ['category' => 'stress']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
+                      </li>
+                        <li class="relative cursor-pointer group">
+                            <a href="{{ route('assessment.show', ['category' => 'stress']) }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline  cursor-pointer   flex items-center">
                                 <div class="w-56 font-semibold text-blue-900">Stress</div>
                             </a>
-                        </li>
+                    </li>
                     </ul>
                 </li>
 
-                {{-- <li class="relative group">
+                {{-- <li class="relative cursor-pointer group">
                     <a href="#">
                         <button class="flex items-center font-semibold px-3 focus:outline-none transition-colors duration-300">
                             Menu
-                        </button>
+   cursor-pointer                       </button>
                     </a>
                 </li> --}}
 
-                <li class="relative group">
+                <li class="relative cursor-pointer py-1 group">
                     <a href="{{ route('team.index') }}">
                         <button
-                            class="flex items-center font-semibold px-3 focus:outline-none transition-colors duration-300">
+                            class="flex items-center  cursor-pointer font-semibold px-3 focus:outline-none transition-colors duration-300">
                             Team
                         </button>
                     </a>
                 </li>
 
-                {{-- <li class="relative group">
+                {{-- <li class="relative cursor-pointer group">
                     <a href="#">
                         <button
-                            class="flex items-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
+                            class="flex items-center font- cursor-pointer semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
                             Alumini
                         </button>
                     </a>
                 </li> --}}
                 
                 <li class="reltive group">
-                    <a href="#">
+                    <a href="{{route('faqs.index')}}">
                         <button
-                            class="flex items-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
+                            class="flex items-center font-semibold px-3 py-1 mb-2 focus:outline-none transition-colors duration-300">
                             Faqs
                         </button>
                     </a>
                 </li>
 
-                <li class="relative group">
-                    <a href="">
-                        <button
-                            class="flex items-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
-                            Contact
-                        </button>
-                    </a>
-                </li>
-                <li class="relative group">
-                    <a href="">
-                        <button
-                            class="flex items-center font-semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
-                            Gallery
-                        </button>
-                    </a>
-                </li>
+              <li class="relative group cursor-pointer ">
+                <a href="{{ route('login') }}">
+                    <button
+                        class="flex items-center font-semibold px-4 py-1 mb-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition duration-300" style="color: white !important">
+                        Login 
+                    </button>
+                </a>
+            </li>
 
+               
                 @auth
-                    <li class="relative group">
+                    <li class="relative cursor-pointer group">
                         <a href="#">
                             <button
-                                class="flex items-center text-xl font-bold px-3 py-0.5 focus:outline-none transition-colors duration-300">
+                                 class="flex items-center cursor-pointer  text-xl font-bold px-3 py-0.5 focus:outline-none transition-colors duration-300">
                                 <i class="fa-solid fa-circle-user"></i>
                             </button>
                         </a>
                     </li>
                 @endauth
 
-                <li class="relative group desktop-language-selector" style="color: black !important;">
+                <li class="relative cursor-pointer group desktop-language-selector" style="color: black !important;">
                     <div class="language-selector text-gray-800 pl-1 py-1 rounded-md text-sm"
                         style="color: black !important;">
                         <div id="gt-desktop-43217984" style="color: black !important;"></div>
