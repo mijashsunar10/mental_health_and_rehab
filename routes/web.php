@@ -157,7 +157,7 @@ Route::middleware(['auth'])
 
 //routes for the packages
 
-Route::middleware(['auth', 'verified', 'admin'])
+Route::middleware(['auth', 'verified'])
     ->prefix('admin')
     ->name('admin.')
     ->controller(PackageController::class)

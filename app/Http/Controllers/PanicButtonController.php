@@ -39,7 +39,7 @@ class PanicButtonController extends Controller
             // Define emergency contacts (you can move this to config or database)
           $emergencyContacts = [
                 'sandeshpahari05@gmail.com',
-                'mijashsunar1@gmail.com',
+                'sunaranamol@gmail.com',
                 'sangam.darlami88@gmail.com',
                 // Add more emergency contacts as needed
             ];

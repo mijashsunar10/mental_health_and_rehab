@@ -127,6 +127,7 @@
                     </p>
                     
                     @auth
+                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                         <a href="{{ route('faqs.create') }}" class="inline-block mt-8">
                             <button class="glass border border-blue-200 px-8 py-3 rounded-full font-bold text-blue-800 hover:shadow-[0_0_30px_rgba(66,153,225,0.3)] transition-all duration-300 flex items-center gap-2 group">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:rotate-90 transition-transform" viewBox="0 0 20 20" fill="currentColor">
@@ -135,6 +136,7 @@
                                 Add New FAQ
                             </button>
                         </a>
+                        @endauth
                     @endauth
                 </div>
 
@@ -164,6 +166,9 @@
                                         {{ $faq->answer }}
                                     </p>
                                     @auth
+                                     
+                    
+                     @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                                         <div class="mt-6 flex flex-wrap gap-3">
                                             <a href="{{ route('faqs.edit', $faq->slug) }}"
                                                 class="transition-all duration-200 hover:scale-105">
@@ -194,6 +199,7 @@
                                             </form>
                                         </div>
                                     @endauth
+                                    @endif
                                 </div>
                             </div>
                         </div>

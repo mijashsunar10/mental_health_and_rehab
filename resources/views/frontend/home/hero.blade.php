@@ -154,7 +154,7 @@
   /* Responsive Adjustments */
   /* Mobile (default) */
   .hero-heading {
-    font-size: 2.8rem;
+    font-size: 2.8rem;Sangam
     line-height: 1.2;
     margin: 1.5rem 0;
   }

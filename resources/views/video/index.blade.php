@@ -1,18 +1,23 @@
-@extends('layouts.main')
+@extends('template.template')
 
-@section('content')
-<div class="container mx-auto px-4 py-8">
+@section('pagecontent')
+
+<div class="container mx-auto px-4 py-8 mt-20">
     <div class="flex justify-between items-center mb-8">
         <div>
             <h1 class="text-3xl font-bold text-gray-800">Video Gallery</h1>
-            <p class="text-gray-600 mt-1">Explore and manage your video collection</p>
+            <p class="text-gray-600 mt-1">Self help Videos</p>
         </div>
+        @auth
+           @if(auth()->user()->role === \App\Enums\UserRole::Admin)
         <a href="{{ route('videos.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
             </svg>
             Upload Video
         </a>
+        @endif
+        @endauth
     </div>
 
     @if (session('success'))
@@ -58,6 +63,9 @@
                                 <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
                         </a> --}}
+                         @auth
+           @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        
                         <form action="{{ route('videos.destroy', $video->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
@@ -68,6 +76,8 @@
                                 </svg>
                             </button>
                         </form>
+                        @endif
+                        @endauth
                     </div>
                 </div>
             </div>

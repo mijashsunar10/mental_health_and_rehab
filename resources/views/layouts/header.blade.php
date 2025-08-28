@@ -163,9 +163,9 @@
     <div class="mx-auto  px-4 sm:px-6 lg:px-8 w-full ">
         <div class="flex justify-between h-18  items-center">
             <!-- Logo and Name -->
-            <div class="flex-shrink-0 flex items-center ">
+            <div class="flex-shrink-0 hidden  lg:flex items-center ">
                 <img src="{{ asset('bakery/images/logo.png') }}" alt="Logo"
-                    class="logo-img  xl:h-24 xl:w-48 h-full w-full sm:ml-10 mr-3 transition-all duration-300">
+                    class="logo-img  xl:h-32 xl:w-48 h-full w-full sm:ml-10 mr-3 transition-all duration-300">
                 <div id="logoName" style="font-family: 'Rubik Doodle Shadow', cursive;"></div>
             </div>
 
@@ -216,8 +216,37 @@
                     </ul>
                 </li>
 
+                  <li class="relative cursor-pointer  group">
+                    <a href="{{route('admin.illness-categories.index')}}">
+                        <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
+                            Resources
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </a>
+                    <ul class="dropdown-menu absolute left-0 mt-2 w-56 bg-white border border-gray-200 shadow-lg rounded-md opacity-0 invisible transition-opacity duration-300"
+                        style="border-top: 4px solid #0b226d;">
+                        <li class="relative cursor-pointer group">
+                            <a href="{{ route('assessment.index') }}" class="font-medium px-4 py-2  cursor-pointer   hover:bg-blue-50 hover:underline flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Self Assesement Test</div>
+                            </a>
+                     </li>
+                        <li class="relative cursor-pointer group">
+                            <a href="{{ route('videos.index') }}" class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Self Help Videos</div>
+                            </a>
+                      </li>
+                        {{-- <li class="relative cursor-pointer group">
+                            <a href="{{ route('anxiety') }} " class="font-medium px-4 py-2 hover:bg-blue-50 hover:underline  cursor-pointer   flex items-center">
+                                <div class="w-56 font-semibold text-blue-900">Stress</div>
+                            </a>
+                    </li> --}}
+                    </ul>
+                </li>
+
                 <!-- Courses Dropdown -->
-                <li class="relative cursor-pointer  group">
+                {{-- <li class="relative cursor-pointer  group">
                     <a href="{{route('assessment.index')}}">
                         <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
                             Self Assessment
@@ -244,7 +273,7 @@
                             </a>
                     </li>
                     </ul>
-                </li>
+                </li> --}}
 
               
 
@@ -266,15 +295,14 @@
                     
                     </ul>
                 </li>
-
-                {{-- <li class="relative cursor-pointer group">
-                    <a href="#">
+                <li class="relative cursor-pointer group">
+                    <a href="{{route('admin.packages.index')}}">
                         <button
-                            class="flex items-center font- cursor-pointer semibold px-3 mb-2 focus:outline-none transition-colors duration-300">
-                            Alumini
+                            class="flex items-center font-semibold cursor-pointer semibold px-3 py-1 mb-2 focus:outline-none transition-colors duration-300">
+                            Packages
                         </button>
                     </a>
-                </li> --}}
+                </li>
                 
                 <li class="reltive group">
                     <a href="{{route('faqs.index')}}">
@@ -285,11 +313,20 @@
                     </a>
                 </li>
 
+                  <li class="reltive group">
+                    <a href="{{route('contact')}}">
+                        <button
+                            class="flex items-center font-semibold px-3 py-1 mb-2 focus:outline-none transition-colors duration-300">
+                            Contact
+                        </button>
+                    </a>
+                </li>
+
              @guest
             <li class="relative group cursor-pointer">
                 <a href="{{ route('login') }}">
                     <button
-                        class="flex items-center font-semibold px-4 py-1 mb-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition duration-300">
+                        class="flex items-center font-semibold px-4 py-1 mb-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition duration-300" style="color: white !important">
                         Login
                     </button>
                 </a>

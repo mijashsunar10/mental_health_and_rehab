@@ -8,6 +8,8 @@
             <h1 class="text-2xl font-bold text-gray-800">Illness Categories</h1>
             <p class="text-gray-600 mt-1">Manage all your illness categories here</p>
         </div>
+        @auth
+         @if(auth()->user()->role === \App\Enums\UserRole::Admin)
         <a href="{{ route('admin.illness-categories.create') }}" 
            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -15,6 +17,8 @@
             </svg>
             Add New Category
         </a>
+        @endif
+        @endauth
     </div>
 
     <!-- Categories Table -->
@@ -57,6 +61,7 @@
                                 {{ $category->slug }}
                             </span>
                         </td>
+                         @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end space-x-2">
                                 <!-- Edit Category Button -->
@@ -102,6 +107,7 @@
                                 </form>
                             </div>
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>

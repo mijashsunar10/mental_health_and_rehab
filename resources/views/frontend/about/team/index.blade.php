@@ -14,11 +14,13 @@
                     </span>
                 </div>
                 @auth
+                 @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <a href="{{ route('ourteam.create') }}"
                         class="flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 shadow-md hover:shadow-lg animate-bounce-in"
                         style="animation-delay: 0.2s">
                         <i class="fas fa-plus mr-2"></i> Add Team Member
                     </a>
+                    @endauth
                 @endauth
             </div>
             <h2 class="text-4xl md:text-5xl font-bold text-blue-800 mb-4 animate-reveal-up">

@@ -175,6 +175,41 @@
                         </flux:navlist.item>
             @endif
 
+            @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="plus"
+                            href="{{ route('admin.packages.create') }}"
+                            :current="request()->routeIs('admin.packages.create')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Add Packages') }}
+                        </flux:navlist.item>
+            @endif
+
+              @if(auth()->user()->role === \App\Enums\UserRole::Doctor)
+                        <flux:navlist.item
+                            icon="plus"
+                            href="{{ route('doctor.profile') }}"
+                            :current="request()->routeIs('doctor.profile')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Add Team Member') }}
+                        </flux:navlist.item>
+            @endif
+
+            {{-- videos.create --}}
+
+            @if(auth()->user()->role === \App\Enums\UserRole::Admin)
+                        <flux:navlist.item
+                            icon="plus"
+                            href="{{ route('videos.create') }}"
+                            :current="request()->routeIs('videos.create')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Add Self Help Videos') }}
+                        </flux:navlist.item>
+            @endif
+
      
 
      
