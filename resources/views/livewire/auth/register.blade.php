@@ -17,6 +17,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public string $password = '';
     public string $password_confirmation = '';
     public $photo;
+    //  public $password_confirmation;
+    public $phone;     // ✅ add this
+    public $address;   // ✅ add this
+    public $dob;     
 
     /**
      * Handle an incoming registration request.
@@ -24,10 +28,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public function register(): void
     {
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'photo' => ['image','nullable'],
+           'name' => ['required', 'string', 'max:255'],
+            'photo' => ['image', 'nullable'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'dob' => ['nullable', 'date'],
+
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -35,6 +43,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
          if ($this->photo) {
             $validated['photo'] = $this->photo->store("photos", "public");
         }
+        // $user->dob = Carbon::parse($this->dob)->format('Y-m-d');
+
 
         event(new Registered(($user = User::create($validated))));
 
@@ -71,6 +81,36 @@ new #[Layout('components.layouts.auth')] class extends Component {
             autocomplete="email"
             placeholder="email@example.com"
         />
+
+        <flux:input
+            wire:model="phone"
+            :label="__('Phone Number')"
+            type="tel"
+            required
+            autocomplete="phone"
+            placeholder="+9779812345678"
+        />
+
+                <flux:input
+            wire:model="dob"
+            :label="__('Date of Birth')"
+            type="date"
+            required
+            autocomplete="bday"
+            placeholder="YYYY-MM-DD"
+        />
+
+
+                <flux:input
+            wire:model="address"
+            :label="__('Address')"
+            type="text"
+            required
+            autocomplete="street-address"
+            placeholder="Kathmandu, Nepal"
+        />
+
+
           <flux:input
             wire:model="photo"
             id="photo"
@@ -78,6 +118,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
             type="file"
             name="photo" 
         />
+
+        
 
         @if($photo)
 

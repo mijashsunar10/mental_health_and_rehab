@@ -27,6 +27,9 @@ class User extends Authenticatable
         'photo',
         'nmc_number',
         'suspended_at',
+        'phone',
+        'address',
+        'dob',
     ];
 
     /**
