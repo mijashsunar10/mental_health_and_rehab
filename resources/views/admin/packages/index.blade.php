@@ -222,50 +222,51 @@
                     Buy Now
                 </button>
             @else
-                <a href="{{ route('packages.purchase', $package) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition">
+                <a href="{{ route('packages.purchase', ['package' => $package->id]) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition">
                     Buy Now
                 </a>
+
             @endguest
         @endif
-     <!-- Modal (overlay) -->
-    <div
-        x-cloak
-        x-show="showRegisterModal"
-        x-transition.opacity
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <!-- Modal (overlay) -->
+            <div
+                x-cloak
+                x-show="showRegisterModal"
+                x-transition.opacity
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 
-        <!-- Modal panel -->
-        <div
-            x-show="showRegisterModal"
-            x-transition.scale.origin.center
-            @click.outside="showRegisterModal = false"
-            class="w-[90%] max-w-md bg-white rounded-xl shadow-lg p-6 relative">
+                <!-- Modal panel -->
+                <div
+                    x-show="showRegisterModal"
+                    x-transition.scale.origin.center
+                    @click.outside="showRegisterModal = false"
+                    class="w-[90%] max-w-md bg-white rounded-xl shadow-lg p-6 relative">
 
-            <!-- Close -->
-            <button
-                @click="showRegisterModal = false"
-                class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
-                ✕
-            </button>
+                    <!-- Close -->
+                    <button
+                        @click="showRegisterModal = false"
+                        class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+                        ✕
+                    </button>
 
-            <h2 class="text-lg font-semibold text-gray-900 mb-2">Register Required</h2>
-            <p class="text-gray-600 mb-6">
-                Before buying this package, you have to register an account.
-            </p>
+                    <h2 class="text-lg font-semibold text-gray-900 mb-2">Register Required</h2>
+                    <p class="text-gray-600 mb-6">
+                        Before buying this package, you have to register an account.
+                    </p>
 
-            <div class="flex justify-end gap-3">
-                <button
-                    @click="showRegisterModal = false"
-                    class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800">
-                    Cancel
-                </button>
-                <a href="{{ route('register') }}"
-                   class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
-                    Register
-                </a>
+                    <div class="flex justify-end gap-3">
+                        <button
+                            @click="showRegisterModal = false"
+                            class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-800">
+                            Cancel
+                        </button>
+                        <a href="{{ route('register') }}"
+                        class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
+                            Register
+                        </a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 </div>
                             </div>
                         </div>

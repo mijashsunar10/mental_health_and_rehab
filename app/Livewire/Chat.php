@@ -38,6 +38,8 @@ class Chat extends Component
     public $editingMessageContent = '';
      public $currentTab = 'users'; // 'users', 'doctors' or 'admins'
     public $userRole;
+    public $pattern;
+     public $replacement;
 
     
 
@@ -527,4 +529,15 @@ public function cancelEdit()
             $this->selectUser($this->admins->first()->id);
         }
     }
+
+            // In your Livewire component or a helper class
+        // In your Livewire component
+            public function makeLinksClickable($text)
+            {
+                return preg_replace(
+                    '/(https?:\/\/[^\s]+)/',
+                    '<a href="$1" target="_blank" class="text-blue-400 hover:text-blue-600 underline">$1</a>',
+                    e($text)
+                );
+            }
 }

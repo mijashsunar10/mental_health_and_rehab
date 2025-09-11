@@ -371,13 +371,14 @@ use App\Enums\UserRole;
                                 </div>
                             @else
                                 <!-- Text message -->
-                                <div class="px-4 py-2 rounded-2xl shadow 
-                                    {{$message->sender_id === auth()->id() ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800' }}">
-                                    {{$message->message}}
-                                    @if($message->edited_at)
-                                        <span class="text-xs {{$message->sender_id === auth()->id() ? 'text-blue-200' : 'text-gray-500'}} ml-1">(edited)</span>
-                                    @endif
-                                </div>
+                               <!-- Text message -->
+                        <div class="px-4 py-2 rounded-2xl shadow 
+                                            {{$message->sender_id === auth()->id() ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800' }}">
+                                            {!! $this->makeLinksClickable($message->message) !!}
+                                            @if($message->edited_at)
+                                                <span class="text-xs {{$message->sender_id === auth()->id() ? 'text-blue-200' : 'text-gray-500'}} ml-1">(edited)</span>
+                                            @endif
+                                        </div>
                             @endif
 
                             <!-- Timestamp for RECEIVED messages (right side) -->

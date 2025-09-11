@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CheckPackageAccess;
 use App\Http\Middleware\DoctorMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,7 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
         //
           $middleware -> alias([
             'admin' => AdminMiddleware::class,
-            'doctor' => DoctorMiddleware::class
+            'doctor' => DoctorMiddleware::class,
+            'package.access' => CheckPackageAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

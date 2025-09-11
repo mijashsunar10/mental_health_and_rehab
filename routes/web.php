@@ -13,6 +13,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StripeController;
 use App\Livewire\AdminRegister;
 use App\Livewire\Chat;
 use App\Livewire\DoctorList;
@@ -27,7 +28,7 @@ use App\Livewire\UserList;
  Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified','package.access'])
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
@@ -112,11 +113,10 @@ Route::get('/assessment', [AssessmentController::class, 'index'])
     ->name('assessment.index');
     
     
-Route::middleware(['auth'])->group(function () {
     Route::get('/assessment/{category}', [AssessmentController::class, 'show'])->name('assessment.show');
     Route::post('/responses', [ResponseController::class, 'store'])->name('responses.store');
  
-});
+
 
    Route::get('/assessment/{category}/result', [ResponseController::class, 'result'])->middleware(['auth'])->name('assessment.result');
 
@@ -128,13 +128,15 @@ Route::get('/anxiety', function () {
     return view('anxiety.index');
 })->name('anxiety');
 
+
 Route::middleware(['auth'])
     ->prefix('admin')
     ->name('admin.')
     ->controller(IllnessCategoryController::class)
     ->group(function () {
         // Illness Categories Routes
-        Route::get('illness-categories', 'index')->name('illness-categories.index');
+           Route::get('illness-categories', 'index')->name('illness-categories.index');
+     
         Route::get('illness-categories/create', 'create')->name('illness-categories.create');
         Route::post('illness-categories', 'store')->name('illness-categories.store');
         Route::get('illness-categories/{illnessCategory}/edit', 'edit')->name('illness-categories.edit');
@@ -181,18 +183,31 @@ Route::get('packages/{package}', [PackageController::class, 'show'])
 Route::
     controller(PackageController::class)
     ->group(function () {
-        Route::get('packages/{package}', 'show')->name('packages.show');
+        // Route::get('packages/{package}', 'show')->name('packages.show');
         Route::get('packages/{package}/purchase', 'showPurchaseForm')
              ->name('packages.purchase');
-        Route::post('packages/{package}/purchase', 'processPurchase')
-             ->name('packages.purchase.submit');
+        // Route::post('packages/{package}/purchase', 'processPurchase')
+        //      ->name('packages.purchase.submit');
     });
 
-    Route::get('/order-confirmation/{order}', [OrderController::class, 'showConfirmation'])
-     ->name('order.confirmation')
-     ->middleware('auth');
+//     Route::get('/order-confirmation/{order}', [OrderController::class, 'showConfirmation'])
+//      ->name('order.confirmation')
+//      ->middleware('auth');
    
-     
+     // routes/web.php
+// routes/web.php
+Route::middleware(['auth'])->group(function () {
+    // Package purchase routes
+    // Route::get('/packages/{package}/purchase', [PackageController::class, 'showPurchaseForm'])->name('packages.purchase');
+    Route::post('/packages/{package}/purchase', [PackageController::class, 'processPurchase'])->name('packages.purchase.submit');
+    Route::post('/packages/{package}/stripe-payment', [StripeController::class, 'handlePayment'])->name('stripe.payment');
+    Route::get('/purchase/success/{purchase}', [PackageController::class, 'purchaseSuccess'])
+    ->name('purchase.success');
+
+    Route::get('/purchase/cancel', [PackageController::class, 'purchaseCancel'])->name('purchase.cancel');
+});
+
+// Route::get('/packages/{package}/purchase', [PackageController::class, 'showPurchaseForm'])->name('packages.purchase');
 
 Route::get('chat',Chat::class)->name('chat');
 
@@ -226,7 +241,7 @@ use App\Http\Controllers\ProductController;
 Route::resource('/products', ProductController::class);
 
 use App\Http\Controllers\GoogleAuthController;
-use App\Http\Controllers\StripeController;
+// use App\Http\Controllers\StripeController;
 
 // Route to redirect to Google's OAuth page
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
@@ -240,7 +255,7 @@ Route::get('/doctor/profile/show',[DoctorProfileController::class,'show'])->name
 
 
 Route::get('/stripe',[StripeController::class,'index']);
-Route::post('/stripe',[StripeController::class,'store'])->name('stripe.payment');
+// Route::post('/stripe',[StripeController::class,'store'])->name('stripe.payment');
 
 
 
