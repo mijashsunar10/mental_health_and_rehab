@@ -25,33 +25,38 @@ new #[Layout('components.layouts.auth')] class extends Component {
     /**
      * Handle an incoming registration request.
      */
-    public function register(): void
-    {
-        $validated = $this->validate([
-           'name' => ['required', 'string', 'max:255'],
-            'photo' => ['image', 'nullable'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'dob' => ['nullable', 'date'],
+public function register()
+{
+    $validated = $this->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'photo' => ['image', 'nullable'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+        'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+        'phone' => ['nullable', 'string', 'max:20'],
+        'address' => ['nullable', 'string', 'max:255'],
+        'dob' => ['nullable', 'date'],
+    ]);
 
-        ]);
-
-        $validated['password'] = Hash::make($validated['password']);
-
-         if ($this->photo) {
-            $validated['photo'] = $this->photo->store("photos", "public");
-        }
-        // $user->dob = Carbon::parse($this->dob)->format('Y-m-d');
-
-
-        event(new Registered(($user = User::create($validated))));
-
-        Auth::login($user);
-
-        $this->redirectIntended(route('home', absolute: false), navigate: true);
+    $validated['password'] = Hash::make($validated['password']);
+    if ($this->photo) {
+        $validated['photo'] = $this->photo->store("photos", "public");
     }
+
+    $user = User::create($validated);
+
+    event(new Registered($user));
+
+    Auth::login($user);
+
+    // Flash success message
+    session()->flash('success', 'Registration successful! 🎉 Now you can buy the packages.');
+
+    // Redirect back to the page where user clicked "Buy Now"
+   $this->redirect(url('/admin/packages'));
+
+}
+
+
 }; ?>
 
 <div class="flex flex-col gap-6">

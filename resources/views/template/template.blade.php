@@ -35,13 +35,23 @@
               fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
       </script>
-    
+ 
+<style>[x-cloak]{ display:none !important; }</style>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     
 
 
      
 </head>
 <body class="min-h-screen flex flex-col">
+
+  @if (session('success'))
+    <div class="mb-4 px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-200">
+        {{ session('success') }}
+    </div>
+@endif
+
 <section id="header">
  @include('layouts.header')
 </section>

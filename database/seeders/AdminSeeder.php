@@ -21,6 +21,10 @@ class AdminSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'role' =>  UserRole::Admin,
             'password' => Hash::make('123456789'),
+            'phone' => '9826115361',
+            'address'=>'Birauta-17,Pokhara',
+            'dob'=>'2060.10.01'
+
 
         ]);
     }

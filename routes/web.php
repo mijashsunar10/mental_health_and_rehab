@@ -157,8 +157,7 @@ Route::middleware(['auth'])
 
 //routes for the packages
 
-Route::middleware(['auth', 'verified'])
-    ->prefix('admin')
+Route::prefix('admin')
     ->name('admin.')
     ->controller(PackageController::class)
     ->group(function () {
@@ -179,8 +178,8 @@ Route::get('packages/{package}', [PackageController::class, 'show'])
 //     ->name('packages.index');
 
 //route for purchasing packages
-Route::middleware(['auth', 'verified'])
-    ->controller(PackageController::class)
+Route::
+    controller(PackageController::class)
     ->group(function () {
         Route::get('packages/{package}', 'show')->name('packages.show');
         Route::get('packages/{package}/purchase', 'showPurchaseForm')

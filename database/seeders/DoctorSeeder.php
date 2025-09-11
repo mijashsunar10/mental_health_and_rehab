@@ -22,6 +22,9 @@ class DoctorSeeder extends Seeder
             'email' => 'doctor@gmail.com',
             'role' =>  UserRole::Doctor,
             'password' => Hash::make('123456789'),
+            'phone' => '9826115361',
+            'address'=>'Birauta-17,Pokhara',
+            'dob'=>'2060.10.01'
 
         ]);
 
