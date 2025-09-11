@@ -226,6 +226,7 @@ use App\Http\Controllers\ProductController;
 Route::resource('/products', ProductController::class);
 
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\StripeController;
 
 // Route to redirect to Google's OAuth page
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
@@ -236,6 +237,10 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->
 Route::get('/doctor/profile',[DoctorProfileController::class,'index'])->name('doctor.profile');
 
 Route::get('/doctor/profile/show',[DoctorProfileController::class,'show'])->name('doctor.show');
+
+
+Route::get('/stripe',[StripeController::class,'index']);
+Route::post('/stripe',[StripeController::class,'store'])->name('stripe.payment');
 
 
 

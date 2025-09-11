@@ -1,3 +1,0 @@
-php artisan db:seed --class=AdminSeeder
-php artisan db:seed --class=DoctorSeeder
- php artisan db:seed AssessmentQuestionsSeeder
