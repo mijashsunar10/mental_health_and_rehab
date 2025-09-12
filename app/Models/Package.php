@@ -21,4 +21,6 @@ class Package extends Model
     protected $casts = [
         'options' => 'array'
     ];
+
+    
 }

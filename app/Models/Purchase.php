@@ -18,7 +18,8 @@ class Purchase extends Model
         'amount',
         'start_date',
         'end_date',
-        'status'
+        'status',
+        
     ];
 
     public function user(): BelongsTo

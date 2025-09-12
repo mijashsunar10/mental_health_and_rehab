@@ -47,14 +47,14 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('users', UserList::class)->name('users.index');
-    Route::get('doctors', DoctorList::class)->name('doctors.index');
+    Route::get('/doctors/list', DoctorList::class)->name('doctors.index');
 });
 
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('doctors', DoctorList::class)->name('doctors.index');
-});
+// Route::middleware(['auth', 'verified'])->group(function () {
+//     Route::get('/doctors', DoctorList::class)->name('doctors.index');
+// });
 
 
 Route::view('admin/dashboard', 'admin.dashboard')

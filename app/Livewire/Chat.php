@@ -12,6 +12,7 @@ use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\WithFileUploads as LivewireWithFileUploads;
 use App\Enums\UserRole;
+use App\Models\Purchase;
 
 class Chat extends Component
 {
@@ -40,17 +41,24 @@ class Chat extends Component
     public $userRole;
     public $pattern;
      public $replacement;
+     public $activePurchase;
 
     
 
     protected $listeners = [];
 
 
-   public function mount()
+        public function mount()
     {
         $this->loginID = Auth::id();
         $this->authId = Auth::id();
         $this->userRole = Auth::user()->role;
+        
+        // Get user's active purchase
+        $this->activePurchase = Purchase::where('user_id', $this->authId)
+            ->where('status', 'active')
+            ->where('end_date', '>', now())
+            ->first();
         
         $this->listeners = [
             "echo-private:chat.{$this->loginID},MessageSent" => 'newMessageNotification',
@@ -67,7 +75,26 @@ class Chat extends Component
         
         // Set initial selected user based on role
         if ($this->userRole === UserRole::User) {
-            $this->selectedUser = User::where('role', UserRole::Doctor)->first();
+            // If user has an active purchase, get the doctor from the package
+            if ($this->activePurchase) {
+                // Extract doctor name from package options
+                $doctorName = $this->activePurchase->package->options[$this->activePurchase->selected_option]['name'];
+                
+                // Find doctor by name
+                $doctor = User::where('role', UserRole::Doctor)
+                             ->where('name', $doctorName)
+                             ->first();
+                             
+                if ($doctor) {
+                    $this->selectedUser = $doctor;
+                } else {
+                    // Fallback to first doctor if not found by name
+                    $this->selectedUser = User::where('role', UserRole::Doctor)->first();
+                }
+            } else {
+                // No active purchase, get first doctor
+                $this->selectedUser = User::where('role', UserRole::Doctor)->first();
+            }
         } elseif ($this->userRole === UserRole::Doctor) {
             $this->selectedUser = User::where('role', UserRole::Admin)->first();
             $this->currentTab = 'admins';
@@ -78,60 +105,38 @@ class Chat extends Component
         $this->loadMessages();
     }
 
-
-
-
-        public function selectUser($id)
-        {
-            // Before switching users, mark all messages from the current user as read
-            if ($this->selectedUser) {
-                ChatMessage::where('sender_id', $this->selectedUser->id)
-                    ->where('receiver_id', $this->authId)
-                    ->whereNull('read_at')
-                    ->update(['read_at' => now()]);
-            }
-
-            $this->selectedUser = User::find($id);
-            $this->loadMessages();
-
-            // Mark messages from newly selected user as read
-            ChatMessage::where('sender_id', $id)
-                ->where('receiver_id', $this->authId)
-                ->whereNull('read_at')
-                ->update(['read_at' => now()]);
-
-            // Refresh unread counts
-            $this->loadUsersWithUnreadCounts();
-            
-            // Force Livewire to refresh the view
-            $this->dispatch('$refresh');
-        }
-
-
-
-        public function loadUsersWithUnreadCounts()
+    public function loadUsersWithUnreadCounts()
     {
         $authUser = Auth::user();
         
         if ($authUser->role === UserRole::User) {
-            // Users can only chat with doctors
-            $this->doctors = User::where('role', UserRole::Doctor)
-                ->withCount(['unreadMessages' => function($query) {
-                    $query->where('receiver_id', $this->authId)
-                        ->whereNull('read_at');
-                }])
-                ->with(['lastConversationMessage' => function($query) {
-                    $query->where(function($q) {
-                        $q->where('sender_id', $this->authId)
-                        ->orWhere('receiver_id', $this->authId);
-                    })
-                    ->orderBy('created_at', 'desc');
-                }])
-                ->get()
-                ->sortByDesc(function($user) {
-                    return optional($user->lastConversationMessage)->created_at;
-                });
+            // Users can only chat with their assigned doctor from purchased package
+            if ($this->activePurchase) {
+                // Extract doctor name from package options
+                $doctorName = $this->activePurchase->package->options[$this->activePurchase->selected_option]['name'];
                 
+                $this->doctors = User::where('role', UserRole::Doctor)
+                    ->where('name', $doctorName) // Filter by doctor name from package
+                    ->withCount(['unreadMessages' => function($query) {
+                        $query->where('receiver_id', $this->authId)
+                            ->whereNull('read_at');
+                    }])
+                    ->with(['lastConversationMessage' => function($query) {
+                        $query->where(function($q) {
+                            $q->where('sender_id', $this->authId)
+                            ->orWhere('receiver_id', $this->authId);
+                        })
+                        ->orderBy('created_at', 'desc');
+                    }])
+                    ->get()
+                    ->sortByDesc(function($user) {
+                        return optional($user->lastConversationMessage)->created_at;
+                    });
+            } else {
+                // No active purchase, show empty doctors list
+                $this->doctors = collect();
+            }
+            
             foreach ($this->doctors as $user) {
                 $this->unreadCounts[$user->id] = $user->unread_messages_count;
             }
@@ -223,6 +228,35 @@ class Chat extends Component
             }
         }
     }
+
+
+                public function selectUser($id)
+                {
+                    // Before switching users, mark all messages from the current user as read
+                    if ($this->selectedUser) {
+                        ChatMessage::where('sender_id', $this->selectedUser->id)
+                            ->where('receiver_id', $this->authId)
+                            ->whereNull('read_at')
+                            ->update(['read_at' => now()]);
+                    }
+
+                    $this->selectedUser = User::find($id);
+                    $this->loadMessages();
+
+                    // Mark messages from newly selected user as read
+                    ChatMessage::where('sender_id', $id)
+                        ->where('receiver_id', $this->authId)
+                        ->whereNull('read_at')
+                        ->update(['read_at' => now()]);
+
+                    // Refresh unread counts
+                    $this->loadUsersWithUnreadCounts();
+                    
+                    // Force Livewire to refresh the view
+                    $this->dispatch('$refresh');
+                }
+
+
 
 
                 
@@ -515,12 +549,21 @@ public function cancelEdit()
     $this->editingMessageContent = '';
     $this->dispatch('edit-cancelled');
 }
-
- public function switchTab($tab)
+public function switchTab($tab)
     {
         $this->currentTab = $tab;
         
-        // Set the first user in the tab as selected
+        // For users, they should only see the doctors tab with their assigned doctor
+        if ($this->userRole === UserRole::User) {
+            $this->currentTab = 'doctors';
+            
+            if (count($this->doctors) > 0) {
+                $this->selectUser($this->doctors->first()->id);
+            }
+            return;
+        }
+        
+        // Set the first user in the tab as selected (for doctors and admins)
         if ($tab === 'users' && count($this->users) > 0) {
             $this->selectUser($this->users->first()->id);
         } elseif ($tab === 'doctors' && count($this->doctors) > 0) {
@@ -529,7 +572,6 @@ public function cancelEdit()
             $this->selectUser($this->admins->first()->id);
         }
     }
-
             // In your Livewire component or a helper class
         // In your Livewire component
             public function makeLinksClickable($text)

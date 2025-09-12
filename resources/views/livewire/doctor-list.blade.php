@@ -20,7 +20,10 @@
                     <th scope="col" class="px-6 py-3">ID</th>
                     <th scope="col" class="px-6 py-3">Name</th>
                     <th scope="col" class="px-6 py-3">Email</th>
-                     <th scope="col" class="px-6 py-3">NMC Number</th>
+                    <th scope="col" class="px-6 py-3">NMC Number</th>
+                    <th scope="col" class="px-6 py-3">Phone</th>
+                    <th scope="col" class="px-6 py-3">Address</th>
+                    <th scope="col" class="px-6 py-3">DOB</th>                     
                     <th scope="col" class="px-6 py-3">Created At</th>
                      @if(auth()->user()->role === \App\Enums\UserRole::Admin)
                     <th scope="col" class="px-6 py-3">Actions</th>
@@ -36,6 +39,9 @@
                         <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{ $doctor->name }}</td>
                         <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{ $doctor->email }}</td>
                         <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{ $doctor->nmc_number }}</td>
+                        <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{ $doctor->phone }}</td>
+                        <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{ $doctor->address }}</td>
+                        <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{ $doctor->dob }}</td>
                         <td class="px-6 py-2 text-gray-600 dark:text-gray-300">{{ $doctor->created_at }}</td>
                         <td class="px-6 py-2 flex items-center gap-2">
                            @if(auth()->user()->role === \App\Enums\UserRole::Admin)

@@ -70,6 +70,49 @@
                                         </p>
                                     @enderror
                                 </div>
+                                 <div>
+                                    <label for="phone" class="block text-lg font-medium text-gray-800 mb-1">phone Address</label>
+                                    <input id="phone" name="phone" type="tel" wire:model="phone" required
+                                        class="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder-gray-500"
+                                        placeholder="admin@calcorerecovery.com">
+                                    @error('phone'))
+                                        <p class="mt-2 text-red-600 flex items-center text-sm">
+                                            <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+
+                                 <div>
+                                    <label for="address" class="block text-lg font-medium text-gray-800 mb-1">address Address</label>
+                                    <input id="address" name="address" type="string" wire:model="address" required
+                                        class="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder-gray-500"
+                                        placeholder="admin@calcorerecovery.com">
+                                    @error('address'))
+                                        <p class="mt-2 text-red-600 flex items-center text-sm">
+                                            <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                                 <div>
+                                    <label for="dob" class="block text-lg font-medium text-gray-800 mb-1">dob Address</label>
+                                    <input id="dob" name="dob" type="date" wire:model="dob" required
+                                        class="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder-gray-500"
+                                        placeholder="admin@calcorerecovery.com">
+                                    @error('dob'))
+                                        <p class="mt-2 text-red-600 flex items-center text-sm">
+                                            <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
 
                                 {{-- <input type="file" wire:model="photo"> --}}
 

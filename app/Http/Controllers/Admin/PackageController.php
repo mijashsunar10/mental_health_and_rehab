@@ -15,6 +15,7 @@ use Illuminate\Validation\ValidationException;
 // use App\Models\Package;
 use App\Models\Purchase;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -30,7 +31,9 @@ class PackageController extends Controller
 
     public function create()
     {
-        return view('admin.packages.create');
+        $doctors = User::where('role', 'doctor')->get();
+
+        return view('admin.packages.create', compact('doctors'));
     }
 
     public function store(Request $request)

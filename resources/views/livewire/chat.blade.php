@@ -79,38 +79,50 @@ use App\Enums\UserRole;
         @endif
         
         <div class="divide-y">
-            @if($userRole === UserRole::User)
-                <!-- Users only see doctors -->
-                @foreach($doctors as $doctor)
-                <div wire:click="selectUser({{$doctor->id}})" 
-                    class="p-3 cursor-pointer hover:bg-blue-100 transition
-                    {{$selectedUser->id === $doctor->id ? 'bg-blue-50' : ''}}">
-                    <div class="flex justify-between items-start">
-                        <div class="text-gray-800 {{$selectedUser->id !== $doctor->id && $unreadCounts[$doctor->id] > 0 ? 'font-bold' : ''}}">
-                            {{$doctor->name}}
-                        </div>
-                        @if($selectedUser->id !== $doctor->id && $unreadCounts[$doctor->id] > 0)
-                            <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                                {{$unreadCounts[$doctor->id]}}
-                            </span>
-                        @endif
-                    </div>
-                    <div class="text-xs text-gray-500 truncate">
-                        @if($doctor->lastConversationMessage)
-                            @if($doctor->lastConversationMessage->sender_id == auth()->id())
-                                You: {{$doctor->lastConversationMessage->message}}
-                            @else
-                                {{$doctor->lastConversationMessage->message}}
-                            @endif
-                        @endif
-                    </div>
-                    @if($doctor->lastConversationMessage)
-                        <div class="text-xs text-gray-400 mt-1">
-                            {{$doctor->lastConversationMessage->created_at->diffForHumans()}}
-                        </div>
-                    @endif
+    @if($userRole === UserRole::User)
+    <!-- Users only see their assigned doctor -->
+    @if($doctors->count() > 0)
+        @foreach($doctors as $doctor)
+        <div wire:click="selectUser({{$doctor->id}})" 
+            class="p-3 cursor-pointer hover:bg-blue-100 transition
+            {{$selectedUser && $selectedUser->id === $doctor->id ? 'bg-blue-50' : ''}}">
+            <div class="flex justify-between items-start">
+                <div class="text-gray-800 {{$selectedUser && $selectedUser->id !== $doctor->id && isset($unreadCounts[$doctor->id]) && $unreadCounts[$doctor->id] > 0 ? 'font-bold' : ''}}">
+                    {{$doctor->name}}
                 </div>
-            @endforeach
+                @if($selectedUser && $selectedUser->id !== $doctor->id && isset($unreadCounts[$doctor->id]) && $unreadCounts[$doctor->id] > 0)
+                    <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                        {{$unreadCounts[$doctor->id]}}
+                    </span>
+                @endif
+            </div>
+            <div class="text-xs text-gray-500 truncate">
+                @if($doctor->lastConversationMessage)
+                    @if($doctor->lastConversationMessage->sender_id == auth()->id())
+                        You: {{$doctor->lastConversationMessage->message}}
+                    @else
+                        {{$doctor->lastConversationMessage->message}}
+                    @endif
+                @endif
+            </div>
+            @if($doctor->lastConversationMessage)
+                <div class="text-xs text-gray-400 mt-1">
+                    {{$doctor->lastConversationMessage->created_at->diffForHumans()}}
+                </div>
+            @endif
+        </div>
+        @endforeach
+    @else
+        <div class="p-4 text-center text-gray-500">
+            @if($activePurchase)
+                Your assigned doctor will be available soon.
+            @else
+                You need to purchase a package to chat with a doctor.
+            @endif
+        </div>
+    @endif
+
+
             @elseif($userRole === UserRole::Doctor)
                 <!-- Doctors see users or admins based on current tab -->
                 @if($currentTab === 'users')

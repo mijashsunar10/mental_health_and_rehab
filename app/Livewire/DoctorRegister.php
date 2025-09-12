@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class DoctorRegister extends Component
 {
-    public $name, $email, $password, $password_confirmation, $nmc_number;
+    public $name, $email, $password, $password_confirmation, $nmc_number, $phone, $address, $dob;
 
       public function register()
     {
@@ -18,7 +18,11 @@ class DoctorRegister extends Component
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|min:8|confirmed',
-            'nmc_number' => 'required|string|max:255'
+            'nmc_number' => 'required|string|max:255',
+            'phone' => ['nullable', 'string', 'max:20'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'dob' => ['nullable', 'date'],
+
         ]);
 
         // Create admin user
@@ -28,6 +32,9 @@ class DoctorRegister extends Component
             'password' => Hash::make($this->password),
             'role' => 'doctor',
             'nmc_number' => $this->nmc_number,
+            'phone' => $this->phone,
+            'address' => $this->address,   
+            'dob' => $this->dob,
         ]);
 
         // // Log in the new admin

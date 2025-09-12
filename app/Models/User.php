@@ -105,6 +105,12 @@ class User extends Authenticatable
                     ->limit(1);
             }
 
+
+            // In User.php model
+public function purchases()
+{
+    return $this->hasMany(Purchase::class);
+}
             // In User.php
 
 }

@@ -91,12 +91,21 @@
                     @foreach($oldOptions as $index => $option)
                         <div class="option-group mb-3 p-3 border border-blue-200 rounded bg-blue-50">
                             <div class="grid grid-cols-3 gap-2">
-                                <div>
-                                    <label class="block text-xs text-blue-600 mb-1">Name</label>
-                                    <input type="text" name="options[{{ $index }}][name]" 
-                                        value="{{ $option['name'] ?? '' }}" 
-                                        class="w-full px-2 py-1 text-sm border border-blue-300 rounded">
-                                </div>
+                               <div>
+                                            <label class="block text-xs text-blue-600 mb-1">Doctor</label>
+                                            <select name="options[{{ $index }}][name]" 
+                                                class="w-full px-2 py-1 text-sm border border-blue-300 rounded">
+                                                <option value="">-- Select Doctor --</option>
+                                                @foreach($doctors as $doctor)
+                                                    <option value="{{ $doctor->name }}"
+                                                        {{ (isset($option['name']) && $option['name'] == $doctor->name) ? 'selected' : '' }}>
+                                                        {{ $doctor->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+
                                 <div>
                                     <label class="block text-xs text-blue-600 mb-1">Price ($)</label>
                                     <input type="number" step="0.01" name="options[{{ $index }}][price]" 

@@ -61,9 +61,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div class="bg-blue-50 p-4 rounded-lg">
                             <h3 class="font-semibold text-blue-800 mb-2">Package Details</h3>
-                           <p><i class="fas fa-cube text-blue-500 mr-2"></i> {{ $package->title }}</p>
-    <p><i class="fas fa-tag text-blue-500 mr-2"></i> {{ $package->options[$purchase->selected_option]['name'] }}</p>
-    <p><i class="fas fa-clock text-blue-500 mr-2"></i> Started: {{ $purchase->start_date }}</p>
+                                <p><i class="fas fa-cube text-blue-500 mr-2"></i> {{ $package->title }}</p>
+            <p><i class="fas fa-tag text-blue-500 mr-2"></i> {{ $package->options[$purchase->selected_option]['name'] }}</p>
+            <p><i class="fas fa-clock text-blue-500 mr-2"></i> Started: {{ $purchase->start_date }}</p>
+                <p><i class="fas fa-clock text-blue-500 mr-2"></i> Started: {{ $purchase->name }}</p>
+    
                         </div>
                         
                         <div class="bg-green-50 p-4 rounded-lg">
