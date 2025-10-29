@@ -65,15 +65,18 @@
                 <div class="flex flex-col lg:flex-row items-start gap-8">
                     <div
                         class="w-48 h-48 rounded-2xl overflow-hidden flex-shrink-0 border-4 border-white/20 shadow-2xl">
-                        <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop&crop=face"
-                            alt="Dr. Anil Bhan" class="w-full h-full object-cover" />
+                        <img src="{{ $doctor->photo ? asset('storage/' . $doctor->photo) : asset('doctors/doctor.webp') }}"
+                            alt="{{ $doctor->name }}" class="w-full h-full object-cover" />
                     </div>
 
                     <div class="flex-1">
                         <div class="mb-4">
-                            <h1 class="text-4xl lg:text-5xl font-bold mb-3">Dr. Sangam Darlami</h1>
+                            <h1 class="text-4xl lg:text-5xl font-bold mb-3">{{ $doctor->name }}</h1>
                             <p class="text-xl mb-2 text-blue-100"> Consultant Psychiatrist</p>
-                            <p class="text-lg mb-3 text-blue-100">Calm Core Recovery ,Pokhara</p>
+                            @if($doctor->address)
+                            <p class="text-lg mb-3 text-blue-100">{{ $doctor->address }}</p>
+                            @endif
+                            @if($doctor->nmc_number)
                             <div class="flex items-center gap-2 text-sm text-blue-100">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -81,8 +84,9 @@
                                         d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                <span>NMC Number: CV789123</span>
+                                <span>NMC Number: {{ $doctor->nmc_number }}</span>
                             </div>
+                            @endif
                         </div>
                         <!-- department -->
                         <div class="flex flex-wrap gap-3 mb-6">
@@ -108,23 +112,13 @@
                     <!-- Quick Actions -->
                     <div class="lg:w-80 w-full">
                         <div class="glass-effect rounded-2xl p-6 shadow-xl">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Book Appointment</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Info</h3>
                             <div class="space-y-3">
-                                <button onclick="showBookingModal()"
-                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-[1.02]">
-                                    <div class="flex items-center justify-center gap-2">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        Book Consultation
-                                    </div>
-                                </button>
-                                <!-- <button
-                                    class="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-3 px-4 rounded-xl transition-all duration-200">
-                                    Video Consultation
-                                </button> -->
-                                <div class="pt-3 border-t border-gray-200">
+                                <div class="flex items-center gap-3 text-sm text-gray-700">
+                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Select a date and time in the booking section below</span>
                                 </div>
                             </div>
                         </div>
@@ -291,250 +285,19 @@
                 </div>
             </div>
 
-            <!-- Right Sidebar -->
+            <!-- Right Sidebar - Appointment Booking -->
             <div class="lg:w-96 space-y-6">
-                <!-- Calendar Widget -->
                 <div class="bg-white rounded-xl shadow-sm border p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Select Appointment Date</h3>
-                    <div id="calendar-container">
-                        <!-- Calendar will be generated here -->
-                    </div>
-                </div>
-
-                <!-- Available Slots -->
-                <div class="bg-white rounded-xl shadow-sm border p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Available Time Slots</h3>
-                    <div id="time-slots-container">
-                        <p class="text-gray-500 text-center py-4">Select a date to view available slots</p>
-                    </div>
-                </div>
-
-                <!-- Quick Info -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Booking Modal -->
-    <div id="booking-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-gray-800">Confirm Appointment</h2>
-                <button onclick="hideBookingModal()" class="text-gray-500 hover:text-gray-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="space-y-4">
-                <div class="bg-gray-50 rounded-xl p-4">
-                    <h3 class="font-semibold text-gray-800 mb-2">Dr. Anil Bhan</h3>
-                    <p class="text-sm text-gray-600">Cardiovascular Surgery</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                        <div id="selected-date" class="bg-blue-50 p-3 rounded-lg text-sm font-medium text-blue-800">
-                            Not selected
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                        <div id="selected-time" class="bg-blue-50 p-3 rounded-lg text-sm font-medium text-blue-800">
-                            Not selected
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Patient Name</label>
-                    <input type="text"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Enter patient name">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                    <input type="tel"
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Enter phone number">
-                </div>
-
-                <div class="flex gap-3 pt-4">
-                    <button onclick="hideBookingModal()"
-                        class="flex-1 border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50">
-                        Cancel
-                    </button>
-                    <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium">
-                        Confirm Booking
-                    </button>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Book Appointment</h3>
+                    <livewire:book-appointment :doctorId="$doctor->id" />
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Global variables
-        let selectedDate = null;
-        let selectedTime = null;
-
-        // Calendar functionality
-        function generateCalendar() {
-            const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
-
-            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            let calendarHTML = `
-                <div class="flex items-center justify-between mb-4">
-                    <h4 class="font-semibold text-gray-800">${monthNames[currentMonth]} ${currentYear}</h4>
-                    <div class="flex gap-2">
-                        <button class="p-1 hover:bg-gray-100 rounded">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                            </svg>
-                        </button>
-                        <button class="p-1 hover:bg-gray-100 rounded">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="grid grid-cols-7 gap-1 mb-2">
-                    <div class="text-center text-xs font-medium text-gray-500 py-2">Sun</div>
-                    <div class="text-center text-xs font-medium text-gray-500 py-2">Mon</div>
-                    <div class="text-center text-xs font-medium text-gray-500 py-2">Tue</div>
-                    <div class="text-center text-xs font-medium text-gray-500 py-2">Wed</div>
-                    <div class="text-center text-xs font-medium text-gray-500 py-2">Thu</div>
-                    <div class="text-center text-xs font-medium text-gray-500 py-2">Fri</div>
-                    <div class="text-center text-xs font-medium text-gray-500 py-2">Sat</div>
-                </div>
-                <div class="grid grid-cols-7 gap-1">
-            `;
-
-            // Empty cells for days before month starts
-            for (let i = 0; i < firstDay; i++) {
-                calendarHTML += '<div class="h-10"></div>';
-            }
-
-            // Days of the month
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(currentYear, currentMonth, day);
-                const dateStr = date.toISOString().split('T')[0];
-                const isToday = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
-                const isPast = date < today;
-                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-
-                let dayClass = 'calendar-day h-10 flex items-center justify-center text-sm cursor-pointer rounded-lg transition-all duration-200';
-
-                if (isPast) {
-                    dayClass += ' text-gray-300 cursor-not-allowed';
-                } else if (isWeekend) {
-                    dayClass += ' text-gray-400 cursor-not-allowed';
-                } else {
-                    dayClass += ' text-gray-700 hover:bg-blue-50 hover:text-blue-600';
-                }
-
-                if (isToday) {
-                    dayClass += ' bg-blue-100 text-blue-600 font-semibold';
-                }
-
-                calendarHTML += `
-                    <div class="${dayClass}" 
-                         onclick="${!isPast && !isWeekend ? `selectDate('${dateStr}', ${day})` : ''}"
-                         data-date="${dateStr}">
-                        ${day}
-                    </div>
-                `;
-            }
-
-            calendarHTML += '</div>';
-            document.getElementById('calendar-container').innerHTML = calendarHTML;
-        }
-
-        function selectDate(dateStr, day) {
-            // Remove previous selection
-            document.querySelectorAll('.calendar-day').forEach(el => {
-                el.classList.remove('bg-blue-600', 'text-white', 'selected');
-            });
-
-            // Add selection to clicked date
-            const selectedEl = document.querySelector(`[data-date="${dateStr}"]`);
-            selectedEl.classList.add('bg-blue-600', 'text-white', 'selected');
-
-            selectedDate = dateStr;
-            generateTimeSlots(dateStr);
-
-            // Update modal
-            const date = new Date(dateStr);
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('selected-date').textContent = date.toLocaleDateString('en-US', options);
-        }
-
-        function generateTimeSlots(dateStr) {
-            const slots = [
-                { time: '09:00 AM', available: true },
-                { time: '09:30 AM', available: false },
-                { time: '10:00 AM', available: true },
-                { time: '10:30 AM', available: true },
-                { time: '11:00 AM', available: false },
-                { time: '11:30 AM', available: true },
-                { time: '02:00 PM', available: true },
-                { time: '02:30 PM', available: true },
-                { time: '03:00 PM', available: false },
-                { time: '03:30 PM', available: true },
-                { time: '04:00 PM', available: true },
-                { time: '04:30 PM', available: true }
-            ];
-
-            let slotsHTML = '<div class="grid grid-cols-2 gap-2">';
-
-            slots.forEach(slot => {
-                const slotClass = slot.available
-                    ? 'available-slot text-white cursor-pointer hover:opacity-90 transform hover:scale-105'
-                    : 'unavailable-slot text-white cursor-not-allowed opacity-60';
-
-                slotsHTML += `
-                    <div class="${slotClass} p-3 rounded-lg text-center text-sm font-medium transition-all duration-200"
-                         onclick="${slot.available ? `selectTimeSlot('${slot.time}', this)` : ''}"
-                         data-time="${slot.time}">
-                        ${slot.time}
-                        ${slot.available ? '' : '<div class="text-xs mt-1">Booked</div>'}
-                    </div>
-                `;
-            });
-
-            slotsHTML += '</div>';
-            document.getElementById('time-slots-container').innerHTML = slotsHTML;
-        }
-
-        function selectTimeSlot(time, element) {
-            // Remove previous selection
-            document.querySelectorAll('[data-time]').forEach(el => {
-                el.classList.remove('selected-slot');
-                if (el.classList.contains('available-slot')) {
-                    el.className = el.className.replace('selected-slot', 'available-slot');
-                }
-            });
-
-            // Add selection to clicked slot
-            element.classList.remove('available-slot');
-            element.classList.add('selected-slot');
-
-            selectedTime = time;
-            document.getElementById('selected-time').textContent = time;
-        }
-
         // Tab functionality
-        function initializeTabs() {
+        document.addEventListener('DOMContentLoaded', function () {
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
 
@@ -564,106 +327,6 @@
                     setTimeout(() => {
                         targetContent.classList.add('animate-fade-in');
                     }, 10);
-                });
-            });
-        }
-
-        // Modal functionality
-        function showBookingModal() {
-            if (!selectedDate || !selectedTime) {
-                alert('Please select a date and time slot first.');
-                return;
-            }
-
-            const modal = document.getElementById('booking-modal');
-            modal.classList.remove('hidden');
-
-            // Animate modal appearance
-            setTimeout(() => {
-                modal.querySelector('.bg-white').classList.remove('scale-95');
-                modal.querySelector('.bg-white').classList.add('scale-100');
-            }, 10);
-        }
-
-        function hideBookingModal() {
-            const modal = document.getElementById('booking-modal');
-            modal.querySelector('.bg-white').classList.remove('scale-100');
-            modal.querySelector('.bg-white').classList.add('scale-95');
-
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
-        // Smooth scroll for sticky elements
-        function initializeScrollEffects() {
-            window.addEventListener('scroll', () => {
-                const navbar = document.querySelector('nav');
-                if (window.scrollY > 50) {
-                    navbar.classList.add('shadow-lg');
-                } else {
-                    navbar.classList.remove('shadow-lg');
-                }
-            });
-        }
-
-        // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            generateCalendar();
-            initializeTabs();
-            initializeScrollEffects();
-
-            // Close modal when clicking outside
-            document.getElementById('booking-modal').addEventListener('click', function (e) {
-                if (e.target === this) {
-                    hideBookingModal();
-                }
-            });
-
-            // Add keyboard support for modal
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    hideBookingModal();
-                }
-            });
-        });
-
-        // Add some interactive effects
-        document.addEventListener('DOMContentLoaded', function () {
-            // Add hover effects to cards
-            const cards = document.querySelectorAll('.bg-white');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function () {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.1)';
-                });
-
-                card.addEventListener('mouseleave', function () {
-                    this.style.transform = 'translateY(0)';
-                    this.style.boxShadow = '';
-                });
-            });
-
-            // Add loading states to buttons
-            const buttons = document.querySelectorAll('button');
-            buttons.forEach(button => {
-                button.addEventListener('click', function (e) {
-                    if (this.textContent.includes('Book') || this.textContent.includes('Confirm')) {
-                        const originalText = this.textContent;
-                        this.innerHTML = `
-                            <div class="flex items-center justify-center gap-2">
-                                <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Processing...
-                            </div>
-                        `;
-
-                        setTimeout(() => {
-                            this.textContent = originalText;
-                        }, 2000);
-                    }
                 });
             });
         });
