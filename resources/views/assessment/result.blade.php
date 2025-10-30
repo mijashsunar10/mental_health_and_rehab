@@ -1,7 +1,7 @@
 @extends('template.template')
 
 @section('pagecontent')
-<div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-6 mt-10 mb-10 border border-gray-100">
+<div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-6 mt-20 mb-10 border border-gray-100">
     <!-- Result Header -->
     <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-t-lg -mx-6 -mt-6 mb-6">
         <div class="text-center">

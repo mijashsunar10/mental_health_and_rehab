@@ -249,6 +249,8 @@ use App\Http\Controllers\ProductController;
 Route::resource('/products', ProductController::class);
 
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\OllamaController;
+
 // use App\Http\Controllers\StripeController;
 
 // Route to redirect to Google's OAuth page
@@ -264,6 +266,11 @@ Route::get('/doctor/profile/{id}',[DoctorProfileController::class,'show'])->name
 
 Route::get('/stripe',[StripeController::class,'index']);
 // Route::post('/stripe',[StripeController::class,'store'])->name('stripe.payment');
+
+Route::get('/chatbotapi', function () {
+    return view('frontend.chat.chat');
+})->name('chat.view');
+Route::post('/assistant/chat', [OllamaController::class, 'chat'])->name('assistant.chat');
 
 
 
