@@ -46,12 +46,6 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  @if (session('success'))
-    <div class="mb-4 px-4 py-3 rounded-lg bg-green-100 text-green-800 border border-green-200">
-        {{ session('success') }}
-    </div>
-@endif
-
 <section id="header">
  @include('layouts.header')
 </section>

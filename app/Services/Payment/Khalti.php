@@ -57,7 +57,7 @@ class Khalti implements PaymentGatewayInterface
      */
     public function initiate(float $amount, $return_url, ?array $arguments = null)
     {
-        $this->amount = env('APP_DEBUG') ? 1000 : ($amount * 100);
+        $this->amount = $amount * 100;
         $process_url = $this->base_url . 'epayment/initiate/';
 
         $website_url = url('/');
