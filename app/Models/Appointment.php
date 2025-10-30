@@ -16,12 +16,18 @@ class Appointment extends Model
         'end_time',
         'status',
         'appointment_type',
+        'payment_status',
+        'transaction_id',
+        'payment_amount',
+        'payment_date',
         'notes',
         'patient_notes',
     ];
 
     protected $casts = [
         'appointment_date' => 'date',
+        'payment_date' => 'datetime',
+        'payment_amount' => 'decimal:2',
     ];
 
     /**

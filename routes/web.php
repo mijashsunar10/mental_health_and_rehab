@@ -272,7 +272,14 @@ Route::get('/chatbotapi', function () {
 })->name('chat.view');
 Route::post('/assistant/chat', [OllamaController::class, 'chat'])->name('assistant.chat');
 
+// Khalti Payment Routes for Appointments
+use App\Http\Controllers\KhaltiController;
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/khalti/checkout/{appointment}', [KhaltiController::class, 'checkout'])->name('khalti.checkout');
+    Route::get('/khalti/verification/{appointment}', [KhaltiController::class, 'verification'])->name('khalti.verification');
+    Route::get('/appointment/receipt/{appointment}', [KhaltiController::class, 'receipt'])->name('appointment.receipt');
+});
 
 require __DIR__.'/auth.php';
 

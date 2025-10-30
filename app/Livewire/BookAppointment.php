@@ -124,6 +124,11 @@ class BookAppointment extends Component
         $this->appointmentType = 'physical';
     }
 
+    public function setAppointmentType($type)
+    {
+        $this->appointmentType = $type;
+    }
+
     public function bookAppointment()
     {
         if (!Auth::check()) {
@@ -135,7 +140,7 @@ class BookAppointment extends Component
             'appointmentType' => 'required|in:physical,virtual',
         ]);
 
-        // Double check slot is still available
+        // Double check slot is still available (only check active appointments)
         $existingAppointment = Appointment::where('doctor_id', $this->doctorId)
             ->where('appointment_date', $this->selectedDate)
             ->where('start_time', $this->selectedSlot)
@@ -148,12 +153,19 @@ class BookAppointment extends Component
             return;
         }
 
+        // Delete any cancelled or completed appointments at this slot to avoid unique constraint violation
+        Appointment::where('doctor_id', $this->doctorId)
+            ->where('appointment_date', $this->selectedDate)
+            ->where('start_time', $this->selectedSlot)
+            ->whereIn('status', ['cancelled', 'completed'])
+            ->delete();
+
         // Find the end time from doctor availability
         $availability = DoctorAvailability::where('doctor_id', $this->doctorId)
             ->where('start_time', $this->selectedSlot)
             ->first();
 
-        Appointment::create([
+        $appointment = Appointment::create([
             'doctor_id' => $this->doctorId,
             'patient_id' => Auth::id(),
             'appointment_date' => $this->selectedDate,
@@ -161,14 +173,13 @@ class BookAppointment extends Component
             'end_time' => $availability->end_time,
             'status' => 'pending',
             'appointment_type' => $this->appointmentType,
+            'payment_status' => 'pending',
+            'payment_amount' => 1000.00,
             'patient_notes' => $this->patientNotes,
         ]);
 
-        session()->flash('success', 'Appointment booked successfully!');
-        $this->closeModal();
-        $this->selectedDate = null;
-        $this->selectedSlot = null;
-        $this->availableSlots = [];
+        // Redirect to Khalti payment
+        return redirect()->route('khalti.checkout', ['appointment' => $appointment->id]);
     }
 
     public function render()
