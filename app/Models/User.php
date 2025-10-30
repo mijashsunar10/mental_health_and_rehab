@@ -113,4 +113,28 @@ public function purchases()
 }
             // In User.php
 
+    /**
+     * Get the doctor's availabilities.
+     */
+    public function availabilities()
+    {
+        return $this->hasMany(DoctorAvailability::class, 'doctor_id');
+    }
+
+    /**
+     * Get appointments where user is the doctor.
+     */
+    public function doctorAppointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctor_id');
+    }
+
+    /**
+     * Get appointments where user is the patient.
+     */
+    public function patientAppointments()
+    {
+        return $this->hasMany(Appointment::class, 'patient_id');
+    }
+
 }

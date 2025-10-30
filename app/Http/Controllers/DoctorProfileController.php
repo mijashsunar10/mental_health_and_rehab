@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class DoctorProfileController extends Controller
 {
     //
     public function index()
     {
-        return view('doctor.index');
+        $doctors = User::where('role', 'doctor')->get();
+        return view('doctor.index', compact('doctors'));
     }
 
-    public function show()
+    public function show($id)
     {
-        return view('doctor.show');
+        $doctor = User::findOrFail($id);
+        return view('doctor.show', compact('doctor'));
     }
 }

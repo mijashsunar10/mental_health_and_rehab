@@ -66,6 +66,14 @@ Route::view('admin/dashboard', 'admin.dashboard')
     ->middleware(['auth', 'verified','doctor'])
     ->name('doctor.dashboard');
 
+    Route::get('doctor/availability', \App\Livewire\Doctor\ManageAvailability::class)
+    ->middleware(['auth', 'verified','doctor'])
+    ->name('doctor.availability');
+
+    Route::get('doctor/appointments', \App\Livewire\Doctor\Appointments::class)
+    ->middleware(['auth', 'verified','doctor'])
+    ->name('doctor.appointments');
+
 
     Route::middleware(['auth','admin'])->group(function()
     {
@@ -251,7 +259,7 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->
 
 Route::get('/doctor/profile',[DoctorProfileController::class,'index'])->name('doctor.profile');
 
-Route::get('/doctor/profile/show',[DoctorProfileController::class,'show'])->name('doctor.show');
+Route::get('/doctor/profile/{id}',[DoctorProfileController::class,'show'])->name('doctor.show');
 
 
 Route::get('/stripe',[StripeController::class,'index']);
