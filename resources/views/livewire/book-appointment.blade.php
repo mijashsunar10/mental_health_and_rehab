@@ -117,11 +117,12 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Appointment Type</label>
                         <div class="grid grid-cols-2 gap-3">
-                            <label class="relative flex items-center p-4 bg-white border-2 rounded-lg cursor-pointer transition-all {{ $appointmentType === 'physical' ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300' }}">
+                            <div wire:click="setAppointmentType('physical')" class="relative flex items-center p-4 bg-white border-2 rounded-lg cursor-pointer transition-all {{ $appointmentType === 'physical' ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300' }}">
                                 <input
                                     type="radio"
-                                    wire:model="appointmentType"
+                                    name="appointmentType"
                                     value="physical"
+                                    {{ $appointmentType === 'physical' ? 'checked' : '' }}
                                     class="sr-only">
                                 <div class="flex items-center gap-3 w-full">
                                     <div class="flex-shrink-0">
@@ -141,13 +142,14 @@
                                         </div>
                                     @endif
                                 </div>
-                            </label>
+                            </div>
 
-                            <label class="relative flex items-center p-4 bg-white border-2 rounded-lg cursor-pointer transition-all {{ $appointmentType === 'virtual' ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-green-300' }}">
+                            <div wire:click="setAppointmentType('virtual')" class="relative flex items-center p-4 bg-white border-2 rounded-lg cursor-pointer transition-all {{ $appointmentType === 'virtual' ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-green-300' }}">
                                 <input
                                     type="radio"
-                                    wire:model="appointmentType"
+                                    name="appointmentType"
                                     value="virtual"
+                                    {{ $appointmentType === 'virtual' ? 'checked' : '' }}
                                     class="sr-only">
                                 <div class="flex items-center gap-3 w-full">
                                     <div class="flex-shrink-0">
@@ -167,7 +169,7 @@
                                         </div>
                                     @endif
                                 </div>
-                            </label>
+                            </div>
                         </div>
                         @error('appointmentType') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>

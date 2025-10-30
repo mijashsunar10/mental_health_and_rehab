@@ -265,7 +265,14 @@ Route::get('/doctor/profile/{id}',[DoctorProfileController::class,'show'])->name
 Route::get('/stripe',[StripeController::class,'index']);
 // Route::post('/stripe',[StripeController::class,'store'])->name('stripe.payment');
 
+// Khalti Payment Routes for Appointments
+use App\Http\Controllers\KhaltiController;
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/khalti/checkout/{appointment}', [KhaltiController::class, 'checkout'])->name('khalti.checkout');
+    Route::get('/khalti/verification/{appointment}', [KhaltiController::class, 'verification'])->name('khalti.verification');
+    Route::get('/appointment/receipt/{appointment}', [KhaltiController::class, 'receipt'])->name('appointment.receipt');
+});
 
 require __DIR__.'/auth.php';
 
