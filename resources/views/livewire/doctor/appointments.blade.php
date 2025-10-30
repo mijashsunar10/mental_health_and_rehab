@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
                                     <div>
                                         <p class="text-xs text-gray-500 mb-1">Date</p>
                                         <p class="text-sm font-medium text-gray-800">
@@ -71,6 +71,22 @@
                                             {{ \Carbon\Carbon::parse($appointment->start_time)->format('g:i A') }} -
                                             {{ \Carbon\Carbon::parse($appointment->end_time)->format('g:i A') }}
                                         </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">Type</p>
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            {{ $appointment->appointment_type === 'physical' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
+                                            @if($appointment->appointment_type === 'physical')
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                                </svg>
+                                            @else
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                </svg>
+                                            @endif
+                                            {{ ucfirst($appointment->appointment_type) }}
+                                        </span>
                                     </div>
                                     <div>
                                         <p class="text-xs text-gray-500 mb-1">Status</p>
@@ -165,6 +181,23 @@
                                     {{ \Carbon\Carbon::parse($selectedAppointment->start_time)->format('g:i A') }} -
                                     {{ \Carbon\Carbon::parse($selectedAppointment->end_time)->format('g:i A') }}
                                 </p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Appointment Type</p>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium
+                                    {{ $selectedAppointment->appointment_type === 'physical' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
+                                    @if($selectedAppointment->appointment_type === 'physical')
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                        Physical Visit
+                                    @else
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                        Virtual Call
+                                    @endif
+                                </span>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-500">Status</p>

@@ -113,6 +113,65 @@
                         </div>
                     </div>
 
+                    <!-- Appointment Type -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Appointment Type</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative flex items-center p-4 bg-white border-2 rounded-lg cursor-pointer transition-all {{ $appointmentType === 'physical' ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300' }}">
+                                <input
+                                    type="radio"
+                                    wire:model="appointmentType"
+                                    value="physical"
+                                    class="sr-only">
+                                <div class="flex items-center gap-3 w-full">
+                                    <div class="flex-shrink-0">
+                                        <svg class="w-6 h-6 {{ $appointmentType === 'physical' ? 'text-blue-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <div class="font-semibold text-sm {{ $appointmentType === 'physical' ? 'text-blue-800' : 'text-gray-700' }}">Physical</div>
+                                        <div class="text-xs text-gray-500">In-person visit</div>
+                                    </div>
+                                    @if($appointmentType === 'physical')
+                                        <div class="flex-shrink-0">
+                                            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </div>
+                            </label>
+
+                            <label class="relative flex items-center p-4 bg-white border-2 rounded-lg cursor-pointer transition-all {{ $appointmentType === 'virtual' ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-green-300' }}">
+                                <input
+                                    type="radio"
+                                    wire:model="appointmentType"
+                                    value="virtual"
+                                    class="sr-only">
+                                <div class="flex items-center gap-3 w-full">
+                                    <div class="flex-shrink-0">
+                                        <svg class="w-6 h-6 {{ $appointmentType === 'virtual' ? 'text-green-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <div class="font-semibold text-sm {{ $appointmentType === 'virtual' ? 'text-green-800' : 'text-gray-700' }}">Virtual</div>
+                                        <div class="text-xs text-gray-500">Online video call</div>
+                                    </div>
+                                    @if($appointmentType === 'virtual')
+                                        <div class="flex-shrink-0">
+                                            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    @endif
+                                </div>
+                            </label>
+                        </div>
+                        @error('appointmentType') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
                     <!-- Patient Notes -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Reason for Visit (Optional)</label>

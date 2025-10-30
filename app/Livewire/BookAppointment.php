@@ -16,6 +16,7 @@ class BookAppointment extends Component
     public $selectedDate;
     public $selectedSlot;
     public $patientNotes = '';
+    public $appointmentType = 'physical';
     public $availableDates = [];
     public $availableSlots = [];
     public $showModal = false;
@@ -120,6 +121,7 @@ class BookAppointment extends Component
     {
         $this->showModal = false;
         $this->patientNotes = '';
+        $this->appointmentType = 'physical';
     }
 
     public function bookAppointment()
@@ -130,6 +132,7 @@ class BookAppointment extends Component
 
         $this->validate([
             'patientNotes' => 'nullable|string|max:1000',
+            'appointmentType' => 'required|in:physical,virtual',
         ]);
 
         // Double check slot is still available
@@ -157,6 +160,7 @@ class BookAppointment extends Component
             'start_time' => $this->selectedSlot,
             'end_time' => $availability->end_time,
             'status' => 'pending',
+            'appointment_type' => $this->appointmentType,
             'patient_notes' => $this->patientNotes,
         ]);
 
