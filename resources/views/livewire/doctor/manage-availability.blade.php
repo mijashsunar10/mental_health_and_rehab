@@ -1,4 +1,7 @@
 <div class="w-full">
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     <div class="bg-white rounded-xl shadow-md p-6">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Manage Your Availability</h2>
 
@@ -17,23 +20,22 @@
                     <!-- Date Selection -->
                     <div>
                         <label for="selectedDate" class="block text-sm font-medium text-gray-700 mb-2">Select Date</label>
-                        <input type="date" wire:model="selectedDate" id="selectedDate" min="{{ date('Y-m-d') }}" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring text-black focus:ring-blue-200">
+                        <input type="text" wire:model="selectedDate" id="selectedDate" readonly class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring text-black focus:ring-blue-200 cursor-pointer" placeholder="Click to select date">
                         @error('selectedDate') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Start Time -->
                     <div>
                         <label for="startTime" class="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
-                        <input type="time" wire:model="startTime" id="startTime" class="w-full rounded-lg border-gray-300 focus:border-blue-500 text-black focus:ring focus:ring-blue-200">
+                        <input type="text" wire:model="startTime" id="startTime" readonly class="w-full rounded-lg border-gray-300 focus:border-blue-500 text-black focus:ring focus:ring-blue-200 cursor-pointer" placeholder="Click to select time">
                         @error('startTime') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- End Time -->
                     <div>
                         <label for="endTime" class="block text-sm font-medium text-gray-700 mb-2">End Time</label>
-                        <input type="time" wire:model="endTime" id="endTime" class="w-full rounded-lg border-gray-300 focus:border-blue-500 text-black focus:ring focus:ring-blue-200">
+                        <input type="text" wire:model="endTime" id="endTime" readonly class="w-full rounded-lg border-gray-300 focus:border-blue-500 text-black focus:ring focus:ring-blue-200 cursor-pointer" placeholder="Click to select time">
                         @error('endTime') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        <p class="text-xs text-gray-500 mt-1">1-hour slots will be created automatically</p>
                     </div>
                 </div>
 
@@ -116,4 +118,70 @@
             @endif
         </div>
     </div>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePickers();
+        });
+
+        function initializePickers() {
+            const dateInput = document.getElementById('selectedDate');
+            const startTimeInput = document.getElementById('startTime');
+            const endTimeInput = document.getElementById('endTime');
+
+            // Date picker
+            if (dateInput && !dateInput._flatpickr) {
+                flatpickr(dateInput, {
+                    minDate: "today",
+                    dateFormat: "Y-m-d",
+                    disableMobile: true,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        dateInput.value = dateStr;
+                        dateInput.dispatchEvent(new Event('input'));
+                    }
+                });
+            }
+
+            // Start time picker
+            if (startTimeInput && !startTimeInput._flatpickr) {
+                flatpickr(startTimeInput, {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    minuteIncrement: 30,
+                    disableMobile: true,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        startTimeInput.value = dateStr;
+                        startTimeInput.dispatchEvent(new Event('input'));
+                    }
+                });
+            }
+
+            // End time picker
+            if (endTimeInput && !endTimeInput._flatpickr) {
+                flatpickr(endTimeInput, {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    minuteIncrement: 30,
+                    disableMobile: true,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        endTimeInput.value = dateStr;
+                        endTimeInput.dispatchEvent(new Event('input'));
+                    }
+                });
+            }
+        }
+
+        // Reinitialize Flatpickr after Livewire updates
+        document.addEventListener('livewire:load', function() {
+            Livewire.hook('message.processed', (message, component) => {
+                initializePickers();
+            });
+        });
+    </script>
 </div>
