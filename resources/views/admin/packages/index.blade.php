@@ -1,6 +1,24 @@
 @extends('template.template')
 
 @section('pagecontent')
+@if (session('error'))
+    <div id="errorAlert" class="bg-red-100 border border-red-400 text-red-700 mt-20 px-4 py-3 rounded relative " role="alert">
+        <strong class="font-bold">Error:</strong>
+        <span class="block sm:inline">{{ session('error') }}</span>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            const alert = document.getElementById('errorAlert');
+            if (alert) {
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 500); // removes after fade
+            }
+        }, 5000); // 5 seconds
+    </script>
+@endif
+
     <div class="bg-white rounded-lg shadow-md p-6 mt-20 max-w-[80%] mx-auto">
         <!-- Header with controls -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">

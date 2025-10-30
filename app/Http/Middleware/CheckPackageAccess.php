@@ -28,7 +28,7 @@ class CheckPackageAccess
                 ->first();
 
             if (!$activePurchase) {
-                return redirect()->route('packages.index')
+                return redirect()->route('admin.packages.index')
                     ->with('error', 'You need to purchase a package to access the dashboard');
             }
         }
