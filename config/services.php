@@ -43,7 +43,7 @@ return [
 
 'ollama' => [
     'base' => env('OLLAMA_API_BASE', 'http://127.0.0.1:11434'),
-    'model' => env('OLLAMA_MODEL', 'llama3.2:3b'),
+    'model' => env('OLLAMA_MODEL', 'llama3.2:1b'),
 ],
 
 ];

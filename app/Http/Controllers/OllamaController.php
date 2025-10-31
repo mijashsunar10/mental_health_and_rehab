@@ -12,7 +12,7 @@ class OllamaController extends Controller
     public function __construct()
     {
         $this->base = config('services.ollama.base', 'http://127.0.0.1:11434');
-        $this->model = config('services.ollama.model', 'llama3.2:3b');
+        $this->model = config('services.ollama.model', 'llama3.2:1b');
     }
 
     public function chat(Request $request)
