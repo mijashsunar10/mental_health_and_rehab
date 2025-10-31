@@ -32,7 +32,7 @@
 
             <div class="flex-1">
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ $doctor->name }}</h1>
-                <p class="text-lg text-gray-600 mb-1">Consultant Psychiatrist</p>
+                <p class="text-lg text-gray-600 mb-1">{{ $doctor->designation ?: 'Consultant Psychiatrist' }}</p>
                 @if($doctor->address)
                 <p class="text-lg text-gray-600 mb-3">{{ $doctor->address }}</p>
                 @endif
@@ -40,15 +40,15 @@
                 <p class="text-sm text-gray-500 mb-4">NMC Number: {{ $doctor->nmc_number }}</p>
                 @endif
 
-                <div class="flex items-center gap-1 mb-4">
-                    <span class="bg-blue-900 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        Depression 
-                    </span>
-                    <span class="bg-blue-900 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        Anxiety 
-                    </span>
-
+                @if($doctor->specializations && count($doctor->specializations) > 0)
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    @foreach(array_slice($doctor->specializations, 0, 2) as $specialization)
+                        <span class="bg-blue-900 text-white px-3 py-1 rounded-full text-sm font-medium">
+                            {{ $specialization }}
+                        </span>
+                    @endforeach
                 </div>
+                @endif
 
                 <div class="flex items-center gap-6 text-gray-600">
                     @if($doctor->address)
@@ -88,78 +88,44 @@
         <div class="mb-8">
             <!-- Specialization Content -->
             <div id="specialization-content-{{ $doctor->id }}" class="tab-content">
+                @if($doctor->specializations && count($doctor->specializations) > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach($doctor->specializations as $specialization)
                     <div class="flex items-center gap-3">
                         <svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <span class="text-gray-700">Depression & Anxiety Disorders</span>
+                        <span class="text-gray-700">{{ $specialization }}</span>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-gray-700">Schizophrenia & Psychotic Disorders</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-gray-700">Child & Adolescent Psychiatry</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-gray-700">Cognitive Behavioral Therapy (CBT)</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-gray-700">Bipolar Disorder</span>
-                    </div>
+                    @endforeach
                 </div>
+                @else
+                <div class="text-center text-gray-500 py-8">
+                    <p>No specializations added yet.</p>
+                </div>
+                @endif
             </div>
 
             <!-- Qualification Content -->
             <div id="qualification-content-{{ $doctor->id }}" class="tab-content hidden">
+                @if($doctor->qualifications && count($doctor->qualifications) > 0)
                 <div class="space-y-4">
+                    @foreach($doctor->qualifications as $qualification)
                     <div class="flex items-start gap-3">
                         <svg class="check-icon mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <span class="text-gray-700">MBBS - King George's Medical University, 2013</span>
+                        <span class="text-gray-700">{{ $qualification }}</span>
                     </div>
-                    <div class="flex items-start gap-3">
-                        <svg class="check-icon mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-gray-700">MD (Psychiatry) - King George's Medical University, 2016</span>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <svg class="check-icon mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-gray-700">Certificate in Cognitive Behavioral Therapy
-                            International Institute of CBT, London • 2016</span>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <svg class="check-icon mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span class="text-gray-700">Certificate in Addiction Medicine - Cleveland Clinic, USA, 2018</span>
-                    </div>
+                    @endforeach
                 </div>
+                @else
+                <div class="text-center text-gray-500 py-8">
+                    <p>No qualifications added yet.</p>
+                </div>
+                @endif
             </div>
         </div>
 

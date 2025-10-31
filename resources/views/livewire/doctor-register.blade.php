@@ -100,10 +100,9 @@
                                     @enderror
                                 </div>
                                  <div>
-                                    <label for="dob" class="block text-lg font-medium text-gray-800 mb-1">dob Address</label>
-                                    <input id="dob" name="dob" type="date" wire:model="dob" required
-                                        class="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder-gray-500"
-                                        placeholder="admin@calcorerecovery.com">
+                                    <label for="dob" class="block text-lg font-medium text-gray-800 mb-1">Date of Birth</label>
+                                    <input id="dob" name="dob" type="date" wire:model="dob"
+                                        class="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder-gray-500">
                                     @error('dob'))
                                         <p class="mt-2 text-red-600 flex items-center text-sm">
                                             <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -114,10 +113,76 @@
                                     @enderror
                                 </div>
 
-                                {{-- <input type="file" wire:model="photo"> --}}
+                                <div>
+                                    <label for="designation" class="block text-lg font-medium text-gray-800 mb-1">Designation</label>
+                                    <input id="designation" name="designation" type="text" wire:model="designation"
+                                        class="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 placeholder-gray-500"
+                                        placeholder="e.g., Consultant Psychiatrist">
+                                    @error('designation'))
+                                        <p class="mt-2 text-red-600 flex items-center text-sm">
+                                            <svg class="h-5 w-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
 
-                             
+                                <div>
+                                    <label class="block text-lg font-medium text-gray-800 mb-2">Specializations</label>
+                                    <div class="flex gap-2 mb-2">
+                                        <input type="text" wire:model="newSpecialization"
+                                            class="flex-1 px-4 py-2 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                            placeholder="e.g., Depression & Anxiety Disorders">
+                                        <button type="button" wire:click="addSpecialization"
+                                            class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition duration-200">
+                                            Add
+                                        </button>
+                                    </div>
+                                    @if(count($specializations) > 0)
+                                        <div class="space-y-2">
+                                            @foreach($specializations as $index => $specialization)
+                                                <div class="flex items-center gap-2 bg-gray-100 p-2 rounded-lg">
+                                                    <span class="flex-1 text-gray-800">{{ $specialization }}</span>
+                                                    <button type="button" wire:click="removeSpecialization({{ $index }})"
+                                                        class="text-red-600 hover:text-red-800">
+                                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
 
+                                <div>
+                                    <label class="block text-lg font-medium text-gray-800 mb-2">Qualifications</label>
+                                    <div class="flex gap-2 mb-2">
+                                        <input type="text" wire:model="newQualification"
+                                            class="flex-1 px-4 py-2 text-gray-800 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                                            placeholder="e.g., MBBS - King George's Medical University, 2013">
+                                        <button type="button" wire:click="addQualification"
+                                            class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition duration-200">
+                                            Add
+                                        </button>
+                                    </div>
+                                    @if(count($qualifications) > 0)
+                                        <div class="space-y-2">
+                                            @foreach($qualifications as $index => $qualification)
+                                                <div class="flex items-center gap-2 bg-gray-100 p-2 rounded-lg">
+                                                    <span class="flex-1 text-gray-800">{{ $qualification }}</span>
+                                                    <button type="button" wire:click="removeQualification({{ $index }})"
+                                                        class="text-red-600 hover:text-red-800">
+                                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
 
                                 <div>
                                     <label for="password" class="block text-lg font-medium text-gray-800 mb-1">Password</label>

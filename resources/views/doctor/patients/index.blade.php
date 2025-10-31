@@ -60,11 +60,11 @@
 
         <!-- Search -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-6">
-            <form method="GET" action="{{ route('doctor.patients.index') }}" class="flex gap-4">
+            <form method="GET" action="{{ route('doctor.patients.index') }}" class="flex text-black gap-4">
                 <div class="flex-1">
                     <input type="text" name="search" value="{{ request('search') }}"
                            placeholder="Search by name, email, or phone..."
-                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="w-full py-2 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <button type="submit"
                         class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300">

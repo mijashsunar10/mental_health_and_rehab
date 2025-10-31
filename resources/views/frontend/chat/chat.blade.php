@@ -22,12 +22,34 @@
     </div>
 
     <!-- Chat input -->
-    <form id="chatForm" class="flex space-x-2">
-        <input id="input" type="text" placeholder="Describe what's going on..." 
-               class="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Send
-        </button>
+    <form id="chatForm" class="space-y-2">
+        <div class="flex items-center space-x-2">
+            <input id="input" type="text" placeholder="Describe what's going on..."
+                   class="flex-1 border border-gray-300 text-gray-900 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+            <!-- Language selector for voice input -->
+            <select id="voiceLang" class="border border-gray-300 text-gray-900 rounded px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="en-US">English</option>
+                <option value="ne-NP">नेपाली</option>
+            </select>
+
+            <!-- Voice input button -->
+            <button type="button" id="voiceBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+            </button>
+
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Send
+            </button>
+        </div>
+
+        <!-- Recording indicator -->
+        <div id="recordingIndicator" class="hidden text-sm text-green-600 flex items-center space-x-2">
+            <span class="animate-pulse">●</span>
+            <span>Listening... Speak now</span>
+        </div>
     </form>
 </div>
 
@@ -154,6 +176,133 @@ form.addEventListener('submit', async (e) => {
     } finally {
         pauseBtn.classList.add('hidden');
         resumeBtn.classList.add('hidden');
+    }
+});
+
+// ==================== VOICE INPUT FUNCTIONALITY ====================
+const voiceBtn = document.getElementById('voiceBtn');
+const voiceLang = document.getElementById('voiceLang');
+const recordingIndicator = document.getElementById('recordingIndicator');
+
+// Check for browser support
+if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    voiceBtn.disabled = true;
+    voiceBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    voiceBtn.title = 'Voice input not supported in this browser';
+    console.warn('Speech Recognition API not supported in this browser');
+}
+
+// Initialize Speech Recognition
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let isRecording = false;
+
+if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;  // Stop after one result
+    recognition.interimResults = true;  // Show interim results
+    recognition.maxAlternatives = 1;
+
+    // Voice button click handler
+    voiceBtn.addEventListener('click', () => {
+        if (isRecording) {
+            stopRecording();
+        } else {
+            startRecording();
+        }
+    });
+
+    function startRecording() {
+        try {
+            // Set language from dropdown
+            recognition.lang = voiceLang.value;
+
+            // Start recognition
+            recognition.start();
+            isRecording = true;
+
+            // Update UI
+            voiceBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+            voiceBtn.classList.add('bg-red-600', 'hover:bg-red-700', 'animate-pulse');
+            recordingIndicator.classList.remove('hidden');
+
+            console.log('Voice recognition started in language:', voiceLang.value);
+        } catch (error) {
+            console.error('Error starting voice recognition:', error);
+            alert('Failed to start voice recognition. Please check your microphone permissions.');
+        }
+    }
+
+    function stopRecording() {
+        if (recognition) {
+            recognition.stop();
+        }
+        isRecording = false;
+
+        // Reset UI
+        voiceBtn.classList.remove('bg-red-600', 'hover:bg-red-700', 'animate-pulse');
+        voiceBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+        recordingIndicator.classList.add('hidden');
+    }
+
+    // Handle speech recognition results
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const isFinal = event.results[0].isFinal;
+
+        // Update input field with transcribed text
+        if (isFinal) {
+            input.value = transcript;
+            console.log('Final transcript:', transcript);
+        }
+    };
+
+    // Handle recognition end
+    recognition.onend = () => {
+        stopRecording();
+        console.log('Voice recognition ended');
+    };
+
+    // Handle errors
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        stopRecording();
+
+        let errorMessage = 'Voice recognition error';
+        switch(event.error) {
+            case 'no-speech':
+                errorMessage = 'No speech detected. Please try again.';
+                break;
+            case 'audio-capture':
+                errorMessage = 'Microphone not found. Please check your device.';
+                break;
+            case 'not-allowed':
+                errorMessage = 'Microphone access denied. Please allow microphone permissions.';
+                break;
+            case 'network':
+                errorMessage = 'Network error. Please check your internet connection.';
+                break;
+            default:
+                errorMessage = `Error: ${event.error}`;
+        }
+
+        // Show error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'text-sm text-red-600 mt-1';
+        errorDiv.textContent = errorMessage;
+        form.appendChild(errorDiv);
+
+        // Remove error message after 3 seconds
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 3000);
+    };
+}
+
+// Stop recording when changing language
+voiceLang.addEventListener('change', () => {
+    if (isRecording) {
+        stopRecording();
     }
 });
 </script>
