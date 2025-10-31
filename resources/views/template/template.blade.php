@@ -91,18 +91,26 @@
         </button>
 
         <!-- Chat window -->
-        <div 
+        <div
             x-show="open"
             x-cloak
             x-transition
-            class="absolute bottom-16 right-0 w-[400px] sm:w-96 h-[500px] bg-white border border-gray-200 rounded-lg shadow-2xl flex flex-col overflow-hidden"
+            :class="isMaximized ? 'fixed inset-4 w-auto h-auto' : 'absolute bottom-16 right-0 w-[400px] sm:w-96 h-[500px]'"
+            class="bg-white border border-gray-200 rounded-lg shadow-2xl flex flex-col overflow-hidden"
         >
             <!-- Header -->
             <div class="bg-blue-600 text-white py-3 px-4 font-semibold flex justify-between items-center flex-shrink-0">
                 <span>Dr. AI – Assistant</span>
-                <button @click="open = false" class="text-white hover:text-gray-200">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="flex items-center space-x-2">
+                    <!-- Maximize/Minimize button -->
+                    <button @click="isMaximized = !isMaximized" class="text-white hover:text-gray-200" :title="isMaximized ? 'Minimize' : 'Maximize'">
+                        <i :class="isMaximized ? 'fas fa-compress' : 'fas fa-expand'"></i>
+                    </button>
+                    <!-- Close button -->
+                    <button @click="open = false" class="text-white hover:text-gray-200">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Messages -->
@@ -116,8 +124,10 @@
             <div class="flex flex-col border-t flex-shrink-0">
                 <div class="flex justify-between px-3 py-2 bg-gray-50">
                     <div class="flex space-x-2">
-                        <button id="pauseBtn" @click="paused = true" class="hidden bg-yellow-500 text-white px-3 py-1 rounded text-xs hover:bg-yellow-600 transition">⏸ Pause</button>
-                        <button id="resumeBtn" @click="paused = false" class="hidden bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 transition">▶ Continue</button>
+                        <!-- Stop button - visible when processing -->
+                        <button x-show="isProcessing" @click="stopStream()" class="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700 transition flex items-center">
+                            <i class="fas fa-stop mr-1"></i> Stop
+                        </button>
                     </div>
                     <button @click="clearMessages()" class="text-gray-500 hover:text-gray-700 text-xs flex items-center" title="Clear conversation">
                         <i class="fas fa-trash-alt mr-1"></i> Clear
@@ -144,8 +154,13 @@
                             <i :class="!isOnline ? 'fas fa-microphone-slash' : (isRecording ? 'fas fa-stop' : 'fas fa-microphone')"></i>
                         </button>
 
-                        <button type="submit" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 text-sm transition flex items-center" :disabled="isProcessing">
-                            <i class="fas fa-paper-plane"></i>
+                        <!-- Send button - always visible with better styling -->
+                        <button type="submit"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm transition-all flex items-center justify-center shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed min-w-[60px]"
+                                :disabled="isProcessing"
+                                title="Send message">
+                            <i class="fas fa-paper-plane" :class="isProcessing ? 'animate-pulse' : ''"></i>
+                            <span class="ml-2 hidden sm:inline">Send</span>
                         </button>
                     </div>
 
@@ -178,6 +193,7 @@
                 isRecording: false,
                 recognition: null,
                 isOnline: navigator.onLine,
+                isMaximized: false,
 
                 init() {
                     this.csrf = document.querySelector('meta[name="csrf-token"]').content;
@@ -329,6 +345,15 @@
                     const messages = document.getElementById('messages');
                     messages.innerHTML = '';
                     this.addMessage('assistant', "Hello! I'm Dr. AI. How can I help you today?");
+                },
+
+                stopStream() {
+                    if (this.controller) {
+                        this.controller.abort();
+                        this.controller = null;
+                        this.isProcessing = false;
+                        console.log('Stream stopped by user');
+                    }
                 },
 
                 async sendMessage() {
