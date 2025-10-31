@@ -17,6 +17,11 @@ new class extends Component {
     public ?string $address = '';
     public ?string $dob = '';
     public ?string $nmc_number = '';
+    public ?string $designation = '';
+    public array $specializations = [];
+    public array $qualifications = [];
+    public string $newSpecialization = '';
+    public string $newQualification = '';
     public $photo;
     public ?string $current_photo = '';
 
@@ -32,7 +37,38 @@ new class extends Component {
         $this->address = $user->address ?? '';
         $this->dob = $user->dob ?? '';
         $this->nmc_number = $user->nmc_number ?? '';
+        $this->designation = $user->designation ?? '';
+        $this->specializations = $user->specializations ?? [];
+        $this->qualifications = $user->qualifications ?? [];
         $this->current_photo = $user->photo;
+    }
+
+    public function addSpecialization(): void
+    {
+        if (!empty($this->newSpecialization)) {
+            $this->specializations[] = $this->newSpecialization;
+            $this->newSpecialization = '';
+        }
+    }
+
+    public function removeSpecialization($index): void
+    {
+        unset($this->specializations[$index]);
+        $this->specializations = array_values($this->specializations);
+    }
+
+    public function addQualification(): void
+    {
+        if (!empty($this->newQualification)) {
+            $this->qualifications[] = $this->newQualification;
+            $this->newQualification = '';
+        }
+    }
+
+    public function removeQualification($index): void
+    {
+        unset($this->qualifications[$index]);
+        $this->qualifications = array_values($this->qualifications);
     }
 
     /**
@@ -58,9 +94,12 @@ new class extends Component {
             'photo' => ['nullable', 'image', 'max:2048'], // 2MB max
         ];
 
-        // Add NMC number validation for doctors
+        // Add doctor-specific validations
         if ($user->role->value === 'doctor') {
             $rules['nmc_number'] = ['nullable', 'string', 'max:100'];
+            $rules['designation'] = ['nullable', 'string', 'max:255'];
+            $rules['specializations'] = ['nullable', 'array'];
+            $rules['qualifications'] = ['nullable', 'array'];
         }
 
         $validated = $this->validate($rules);
@@ -189,14 +228,95 @@ new class extends Component {
             <!-- Date of Birth -->
             <flux:input wire:model="dob" :label="__('Date of Birth')" type="date" autocomplete="bday" />
 
-            <!-- NMC Number (Only for Doctors) -->
+            <!-- Doctor-Specific Fields -->
             @if(auth()->user()->role->value === 'doctor')
+                <!-- NMC Number -->
                 <flux:input
                     wire:model="nmc_number"
                     :label="__('NMC Number')"
                     type="text"
                     placeholder="Enter your Nepal Medical Council registration number"
                 />
+
+                <!-- Designation -->
+                <flux:input
+                    wire:model="designation"
+                    :label="__('Designation')"
+                    type="text"
+                    placeholder="e.g., Consultant Psychiatrist, Clinical Psychologist"
+                />
+
+                <!-- Specializations -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Specializations</label>
+
+                    <!-- List of current specializations -->
+                    @if(count($specializations) > 0)
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            @foreach($specializations as $index => $specialization)
+                                <div class="inline-flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                                    <span>{{ $specialization }}</span>
+                                    <button type="button" wire:click="removeSpecialization({{ $index }})" class="ml-2 text-blue-600 hover:text-blue-800">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <!-- Add new specialization -->
+                    <div class="flex gap-2">
+                        <input
+                            type="text"
+                            wire:model="newSpecialization"
+                            placeholder="e.g., Depression & Anxiety Disorders"
+                            class="flex-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:focus:ring-blue-800"
+                            wire:keydown.enter.prevent="addSpecialization"
+                        />
+                        <button type="button" wire:click="addSpecialization" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Add
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Press Enter or click Add to add a specialization</p>
+                </div>
+
+                <!-- Qualifications -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Qualifications</label>
+
+                    <!-- List of current qualifications -->
+                    @if(count($qualifications) > 0)
+                        <div class="space-y-2 mb-3">
+                            @foreach($qualifications as $index => $qualification)
+                                <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ $qualification }}</span>
+                                    <button type="button" wire:click="removeQualification({{ $index }})" class="text-red-600 hover:text-red-800">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <!-- Add new qualification -->
+                    <div class="flex gap-2">
+                        <input
+                            type="text"
+                            wire:model="newQualification"
+                            placeholder="e.g., MBBS, MD (Psychiatry), University of Nepal"
+                            class="flex-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:focus:ring-blue-800"
+                            wire:keydown.enter.prevent="addQualification"
+                        />
+                        <button type="button" wire:click="addQualification" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Add
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Press Enter or click Add to add a qualification</p>
+                </div>
             @endif
 
             <div class="flex items-center gap-4">

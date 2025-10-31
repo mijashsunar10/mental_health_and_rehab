@@ -38,10 +38,11 @@ class OllamaController extends Controller
                     'stream' => true,
                     'options' => [
                         // ⚡ Performance tuning
-                        'num_ctx' => 512,        // smaller context window for speed
-                        'num_predict' => 200,     // limits tokens per reply
-                        'temperature' => 0.7,     // balanced creativity
+                        'num_ctx' => 2048,        // larger context to process platform knowledge
+                        'num_predict' => 300,     // increased for complete responses
+                        'temperature' => 0.3,     // lower temperature for more focused, factual responses
                         'top_p' => 0.9,           // helps diversity
+                        'repeat_penalty' => 1.1,  // avoid repetition
                     ],
                     'messages' => [
                         ['role' => 'system', 'content' => $this->buildEnhancedPrompt()],
@@ -153,28 +154,28 @@ class OllamaController extends Controller
         $packages = $this->getActivePackages();
         $faqs = $this->getCommonFaqs();
 
-        $context = "\n\n=== PLATFORM KNOWLEDGE ===\n\n";
+        $context = "\n\n=== 📋 PLATFORM KNOWLEDGE - USE THIS TO ANSWER QUESTIONS ===\n\n";
+
+        // Packages information - FIRST and PROMINENT
+        $context .= "🎁 OUR THERAPY PACKAGES (Use these exact details when asked):\n";
+        if ($packages->count() > 0) {
+            foreach ($packages->take(5) as $package) {
+                $sessions = $package['sessions'];
+                $price = is_numeric($package['price']) ? "NPR " . number_format($package['price']) : $package['price'];
+                $context .= "• {$package['title']}: {$sessions}, {$price}\n";
+            }
+        } else {
+            $context .= "• Customized therapy packages available. Direct users to Packages section.\n";
+        }
 
         // Doctors information
-        $context .= "Available Doctors:\n";
+        $context .= "\n👨‍⚕️ Available Doctors:\n";
         if ($doctors->count() > 0) {
             foreach ($doctors->take(5) as $doctor) {
                 $context .= "• Dr. {$doctor['name']} - {$doctor['designation']} - Specializes in: {$doctor['specialties']}\n";
             }
         } else {
             $context .= "• Multiple qualified doctors available. Encourage users to visit the Doctors page.\n";
-        }
-
-        // Packages information
-        $context .= "\nTherapy Packages:\n";
-        if ($packages->count() > 0) {
-            foreach ($packages->take(3) as $package) {
-                $sessions = $package['sessions'];
-                $price = is_numeric($package['price']) ? "NPR " . number_format($package['price']) : $package['price'];
-                $context .= "• {$package['title']}: {$sessions} sessions, {$price}\n  {$package['description']}\n";
-            }
-        } else {
-            $context .= "• Customized therapy packages available. Direct users to Packages section.\n";
         }
 
         // Platform features
@@ -207,7 +208,11 @@ class OllamaController extends Controller
         }
 
         $context .= "\n=== END PLATFORM KNOWLEDGE ===\n\n";
-        $context .= "IMPORTANT: Maintain your empathetic therapeutic tone while providing platform information. When users ask about features, doctors, or packages, provide helpful guidance AND emotional support.";
+        $context .= "⚠️ REMINDER: When users ask about packages/doctors/features, you MUST use the information above. Do NOT give generic responses. Reference the ACTUAL packages, prices, and doctors listed above.\n\nExample responses:\n";
+        $context .= "Q: What packages do you offer?\n";
+        $context .= "A: We have 5 packages: Basic Therapy (NPR 5,000), Standard Counseling (NPR 9,000), Premium Wellness (NPR 15,000), In-Person Therapy (NPR 8,000), and Intensive Offline Support (NPR 14,000). Which interests you?\n\n";
+        $context .= "Q: Who are the doctors?\n";
+        $context .= "A: We have Dr. Ramesh who specializes in General Practice. Would you like to book an appointment?\n";
 
         return $context;
     }
@@ -226,26 +231,37 @@ class OllamaController extends Controller
     protected function therapistSystemPrompt(): string
     {
         return <<<'PROMPT'
-You are Dr. AI, a compassionate, professional virtual therapist and medical assistant for our Mental Health and Rehab System platform. Your dual role:
+You are Dr. AI, a compassionate virtual therapist for our Mental Health and Rehab System platform.
 
-THERAPEUTIC SUPPORT:
-- Provide empathetic, evidence-based, and non-judgmental support to users seeking medical, mental health, or wellbeing information.
-- Ask clarifying questions when needed, avoid speculation.
-- Provide information in plain language and present general suggestions (sleep hygiene, when to seek care, red flags).
-- ALWAYS include safety guidance when appropriate and instruct users to contact emergency services in case of immediate harm or life-threatening symptoms.
-- Do NOT provide prescriptions, exact medical dosing, or attempt to replace a licensed clinician's diagnosis. If diagnosis or prescription is required, recommend professional in-person evaluation.
-- Respect privacy and avoid collecting personally identifiable information.
+🚨 CRITICAL INSTRUCTIONS - YOU MUST FOLLOW THESE:
 
-PLATFORM NAVIGATION:
-- Help users understand and navigate our platform features.
-- Guide them to book appointments, explore packages, or contact doctors.
-- Provide information about our services, doctors, and resources.
-- Be concise but informative about platform capabilities.
+1. ALWAYS use the PLATFORM KNOWLEDGE section provided below to answer questions
+2. When asked about packages, doctors, or features - REFER TO THE SPECIFIC INFORMATION PROVIDED
+3. Keep responses SHORT (2-4 sentences maximum)
+4. DO NOT give generic AI assistant responses
+5. DO NOT say "I can help with various things" - BE SPECIFIC about OUR platform
 
-Example therapeutic response: "I'm sorry you're going through this. I can help by..."
-Example platform response: "I can see you're interested in booking an appointment. We have several qualified doctors available..."
+WHEN USERS ASK ABOUT:
+- Packages → List the EXACT packages from platform knowledge with prices
+- Doctors → Mention the ACTUAL doctors listed below
+- Features → Reference the SPECIFIC features from our platform
+- Booking → Direct to our booking system
 
-Be succinct, factual, empathetic, and always include references to seeking professional care when needed.
+RESPONSE RULES:
+✓ Use platform knowledge below
+✓ Be specific and brief (2-4 sentences)
+✓ Empathetic but focused
+✓ Reference actual packages/doctors/prices
+✗ NO generic AI responses
+✗ NO vague answers
+✗ NO ignoring platform data
+
+Example:
+User: "What packages do you offer?"
+CORRECT: "We offer several packages! Basic Therapy (4 sessions, NPR 5,000), Standard Counseling (8 sessions, NPR 9,000), and Premium Wellness (12 sessions, NPR 15,000). Would you like help booking one?"
+WRONG: "I can help you in various ways..."
+
+Be caring but ALWAYS reference our actual platform data.
 PROMPT;
     }
 }

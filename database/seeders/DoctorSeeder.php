@@ -18,7 +18,7 @@ class DoctorSeeder extends Seeder
         //
 
         User::create([
-            'name' => 'Dcotor User',
+            'name' => 'Doctor Ramesh',
             'email' => 'doctor@gmail.com',
             'role' =>  UserRole::Doctor,
             'password' => Hash::make('123456789'),
