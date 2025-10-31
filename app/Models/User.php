@@ -26,6 +26,9 @@ class User extends Authenticatable
         'role',
         'photo',
         'nmc_number',
+        'specializations',
+        'qualifications',
+        'designation',
         'suspended_at',
         'phone',
         'address',
@@ -52,7 +55,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'role' => UserRole::class
+            'role' => UserRole::class,
+            'specializations' => 'array',
+            'qualifications' => 'array',
         ];
     }
 
