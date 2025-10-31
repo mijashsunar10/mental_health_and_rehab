@@ -63,4 +63,12 @@ class Appointment extends Model
         $appointmentDateTime = Carbon::parse($this->appointment_date->format('Y-m-d') . ' ' . $this->end_time);
         return $appointmentDateTime->isPast();
     }
+
+    /**
+     * Get notes for this appointment.
+     */
+    public function doctorNotes()
+    {
+        return $this->hasMany(DoctorNote::class);
+    }
 }

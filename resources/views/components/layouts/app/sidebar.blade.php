@@ -118,6 +118,15 @@
                     >
                         {{ __('Doctor List') }}
                     </flux:navlist.item>
+
+                    <flux:navlist.item
+                        icon="folder-git-2"
+                        href="{{ route('records.index') }}"
+                        :current="request()->routeIs('records.index')"
+                        class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                    >
+                        {{ __('My Medical Records') }}
+                    </flux:navlist.item>
                 @endif
 
 
@@ -194,6 +203,15 @@
                             class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
                         >
                             {{ __('Add Team Member') }}
+                        </flux:navlist.item>
+
+                        <flux:navlist.item
+                            icon="folder-git-2"
+                            href="{{ route('doctor.patients.index') }}"
+                            :current="request()->routeIs('doctor.patients.*')"
+                            class="cursor-pointer me-5 flex items-center space-x-2 rtl:space-x-reverse mt-2"
+                        >
+                            {{ __('Patient Records') }}
                         </flux:navlist.item>
             @endif
 
