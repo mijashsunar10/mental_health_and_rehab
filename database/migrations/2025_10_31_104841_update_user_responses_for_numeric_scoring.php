@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('user_responses', function (Blueprint $table) {
             // Change response column from enum to string to support numeric values (0-4)
-            $table->string('response', 1)->change();
+            $table->string('response', 255)->change();
         });
     }
 
