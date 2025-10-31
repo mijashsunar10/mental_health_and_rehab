@@ -1,0 +1,691 @@
+Soch College of IT 
+           
+Tribhuvan University 
+Institute of Science and Technology 
+ 
+Final Year Report on 
+ Mental Health and Rehabilitation Center
+ 
+Submitted To 
+Department of Computer Science and Information Technology 
+Soch College of IT 
+ 
+In partial fulfillment of the requirement for the bachelor’s degree in computer science and information technology 
+ 
+Submitted By: 
+Mijash Sunar 
+Sangam Darlami 
+Sandesh Pahari 
+
+November,  2025 
+
+
+DECLARATION
+
+We undersigned Mijash Sunar, Sandesh Pahari and Sangam Darlami, hereby declare that the project "Calmcore Recovery" submitted to Faculty of Science and Technology, Tribhuvan University, Kathmandu is our own original work.
+We affirm that the project has been carried out by us as a group under the supervision of Ms. Aiyana Koirala, Soch College of IT, Ranipauwa, Pokhara, and has not been copied or borrowed from any other source.
+All information, data, and materials used in this project are, to the best of our knowledge and belief, accurate and authentic. Any assistance or contribution from external sources has been duly acknowledged and properly referenced.
+
+Team Members:
+Mijash Sunar
+Sandesh Pahari
+Sangam Darlami
+Date: 
+
+ACKNOWLEDGEMENT
+We express our heartfelt gratitude to Soch College of IT, Pokhara, for their invaluable resources and unwavering support throughout our project. The college’s commitment to academic excellence has profoundly shaped our learning experience, and we are truly thankful for the tools, environment, and encouragement provided during this journey. 
+We would like to express our heartfelt gratitude to Ms. Aiyana Koirala, our respected supervisor, for her continuous support, insightful feedback, and thoughtful guidance, which significantly enriched our project. We also extend our sincere thanks to Mr. Raghu Gyawali, who served as our academic mentor for this project. His encouragement, expertise, and timely assistance played a crucial role in the successful completion of our work. 
+We are also grateful to all other faculty members and supervisors who contributed to our progress. Furthermore, we appreciate the encouragement and collaborative spirit of our classmates, which helped foster a supportive and productive environment throughout the project. 
+
+Members: 
+Mijash Sunar 
+Sandesh Pahari 
+Sangam Darlami 
+BSc.CSIT, 7th Semester 
+Soch College of IT, Pokhara 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 	 
+
+ABSTRACT
+
+Mental health and rehabilitation services in Nepal have long relied on manual methods that are slow and difficult to manage. Calmcore Recovery was developed to solve these issues by providing a web-based platform that connects patients and healthcare professionals in one digital space. It simplifies access to care through features like digital health records, appointment scheduling, and personalized treatment plans while ensuring privacy with secure messaging and video consultations.
+
+The platform integrates an AI-powered chatbot that provides instant answers to various queries and includes a panic button for emergency support. It also offers educational materials and self-help resources in multiple languages. From a technical perspective, Calmcore Recovery is built using Laravel and Livewire for the backend, MySQL for database management, and Tailwind CSS with JavaScript for the frontend, ensuring a robust, scalable, and user-friendly experience.
+
+Following Agile development principles, our team worked collaboratively to plan, adapt, and improve the platform through regular discussions and evaluations. By leveraging open-source tools and institutional guidance, we maintained cost efficiency throughout the process. Calmcore Recovery represents our collective effort to make mental health and rehabilitation services more accessible, affordable, and effective through digital innovation.
+
+Keywords: Mental health, AI, Web technologies, Rehabilitation, Laravel, Nepal, Tailwind, CSS (Cascading Style Sheets), Calmcore Recovery
+ 
+ 
+ 
+
+Table of Contents
+Chapter 1: Introduction	1
+1.1. Introduction	1
+1.2. Problem Statement	1
+1.3. Objectives	2
+1.4. Scope and Limitation	2
+Scope	2
+Limitation	2
+1.5. Development Methodology	3
+1.6. Report Organization	3
+Chapter 2: Background Study and Literature Review	4
+2.1 Background Study	4
+2.2 Literature Review	5
+2.2.1 Digital Health in Nepal	5
+2.2.2 AI and Chatbots in Mental Healthcare	5
+2.2.3 Rehabilitation and Centralized Systems	6
+2.2.4 Comparison Between Existing Systems and Calm Core Recovery	6
+Chapter 3: System Analysis	7
+3.1 System Analysis	7
+3.1.1 Requirement Analysis	7
+3.1.2 Feasibility Study	9
+3.1.3. Analysis (Object-Oriented Approach)	11
+Chapter 4: System Design	16
+4.1 Design (Object-Oriented Approach)	17
+CHAPTER 5: IMPLEMENTATION AND TESTING	21
+5.1 Implementation	22
+5.1.1 Tools Used	22
+5.1.2 Implementation Details of Modules	23
+CHAPTER 6: CONCLUSION AND FUTURE RECOMMENDATIONS	25
+6.1 Conclusion	25
+6.2 Future Recommendations	26
+6.3 Final Outlook	26
+
+ 
+ 
+ 
+ 
+ 	 
+
+
+Chapter 1: Introduction 
+
+	•	Introduction 
+This project presents the design and development of Calm Core Recovery which is a digital platform aimed at improving the way mental health and rehabilitation services are delivered in Nepal. It addresses long-standing issues such as scattered patient records, limited communication between patients and professionals, and poor therapy tracking. By replacing manual workflows with a centralized system, Calmcore Recovery enables patients, therapists, and caregivers to manage therapy plans, schedule appointments, and communicate securely through messaging, notifications, or video consultations. It also supports both online and offline modes, ensuring accessibility even in areas with unstable internet connections.
+
+One of the key highlights of the system is its AI-powered chatbot, which provides instant responses to common mental health queries, sends therapy reminders, and offers basic emotional support. In emergencies, users can quickly access help through a built-in panic button. The platform also features progress tracking dashboards and a rich resource library with self-help materials, videos, and articles designed to promote recovery and awareness.
+
+Technically, Calmcore Recovery is developed using Laravel and Livewire for the backend, MySQL for secure data management, and Tailwind CSS with JavaScript for a responsive frontend. The system supports multiple languages, including English and Nepali, and is optimized for low-bandwidth environments. Following Agile principles, our team worked collaboratively to design, build, and refine the platform through iterative development cycles. The project represents our collective effort to make mental health care in Nepal more accessible, affordable, and effective through digital innovation. 
+
+	•	Problem Statement 
+Nepal's mental health and rehabilitation system is hindered by outdated manual processes, which result in fragmented patient records, delayed therapy, and ineffective communication between healthcare providers and patients. These challenges limit the ability to offer timely, personalized, and coordinated care, particularly in rural areas. Although digital tools and telehealth services have shown promise globally in improving care delivery and continuity, their adoption remains limited in Nepal. The absence of a centralized digital platform that supports both offline and online services, along with the lack of integrated systems for real-time communication and data management, exacerbates these issues [4]. To address these gaps, there is an urgent need for a comprehensive, AI-driven platform that can streamline operations, enable remote care, and facilitate better communication between patients and providers. 
+ 
+1.3. Objectives 
+The main objectives are:
+	•	To build a centralized system for patient records and appointments. 
+	•	To improve communication by adding secure messaging, video calls, AI chatbots. 
+	•	To keep patients safe and engaged by including emergency support, educational resources, and strong data protection. 
+ 
+	•	Scope and Limitation 
+I. Scope 
+	•	User registration and authentication for patients and healthcare professionals. 
+	•	Centralized digital patient records management. 
+	•	Appointment scheduling. 
+	•	In-app communication tools, including secure messaging, real-time notifications, and integrated video conferencing 
+	•	AI-powered chatbot for patient assistance and engagement. 
+	•	Emergency support features, such as a panic button, for immediate assistance. 
+	•	Access to a resource library with self-help materials, educational videos, and articles. 
+
+II. Limitation 
+	•	Exclude integration with third-party medical devices or wearables. 
+	•	Do not include insurance claim processing functionalities 
+	•	AI chatbot may have limitations in understanding complex medical queries, necessitating human oversight. 
+ 
+1.5. Development Methodology 
+Our team has adopted the Agile Development Model for system development. Agile is a flexible and people-focused way to build projects. It helps teams work together in small steps, regularly checking in and adjusting based on feedback. The goal is to deliver useful results quickly and improve over time. 
+Here is the detailed breakdown of how Agile Development Methodology is used: 
+	•	Planning: Our team held discussions to identify key features based on research from real rehabilitation and mental health systems. We set clear goals and prioritized features that offer the most value. 
+	•	Understanding Needs: Since we lack external users, we studied real-world rehab centers and created user personas (e.g., patient, therapist, caregiver). These help us simulate feedback and make informed decisions. 
+	•	Design: We will design simple, user-friendly wireframes and mockups. Our team will review and refine them internally based on the best practices. This iterative design phase will help us ensure usability and accessibility. 
+	•	Building: We will work in sprints, building features step-by-step. After each sprint, we’ll review progress and adjust priorities if needed. 
+	•	Testing: After every sprint, we’ll test features internally using our user personas. This helps simulate real-world use and catch issues early. 
+	•	Launching: Once complete, we plan to share the system for feedback and continue improving it, staying true to Agile’s principle of continuous iteration. 
+
+
+
+
+
+1.6. Report Organization 
+This report is organized into six chapters:
+Chapter 1 presents the overall background of the project, defines the problem statement outlines the objectives, scope, limitations, and describes the methodology adopted for system development.
+Chapter 2 explores existing research and technological advancements related to digital health, AI in mental health care, telemedicine, and rehabilitation services in Nepal and globally.
+Chapter 3 includes the analysis of functional and nonfunctional requirements, feasibility study, and the preparation of system models such as data flow diagrams and use case diagrams.
+Chapter 4 outlines the architectural design, database structure, interface designs, and the specifics of the algorithms used. 
+Chapter 5 explains the development tools and technologies used, details module-wise implementation, and outlines the testing methods, test cases, and analysis of results. Chapter 6 summarizes the outcomes of the project, highlights its contributions to the mental health sector, and suggests future enhancements, including broader AI integration and scalability. 
+ 
+ 	 
+
+Chapter 2: Background Study and Literature Review 
+ 
+2.1 Background Study 
+Mental health and rehabilitation represent urgent yet under-addressed areas within Nepal's public health landscape. According to the World Health Organization (WHO), nearly 3.9 million people in Nepal are affected by mental health conditions, including depression, anxiety disorders, and substance use disorders [1]. Despite this alarming figure, only a small fraction of these individuals receives appropriate care due to an acute shortage of professionals less than 1 psychiatrist per 100,000 people as well as social stigma and outdated manual systems [1]. 
+Mental health services are largely concentrated in urban centers like Kathmandu and Pokhara, leaving rural and remote populations severely underserved. Cultural stigma discourages open dialogue, especially in marginalized communities. Traditional rehabilitation centers such as Naba Jivan Nepal and Health Foundation Nepal have played a role in community support, yet they are primarily manual in operation and lack digital integration for effective data handling, appointment scheduling, or progress monitoring [2], [3]. 
+Globally, there has been a profound shift in healthcare delivery, marked by the integration of digital health solutions, AI-powered decision-making, and telemedicine platforms. Countries such as India, Bangladesh, and Sri Lanka are already piloting AI-enabled mental health tools to bridge the service gap, particularly in underserved regions [4], [5]. 
+In Nepal, digital transformation in healthcare is still nascent. However, initiatives like TeleUpachar, Nepal Health Sector Strategy, and projects by MoHP (Ministry of Health and Population) suggest a growing recognition of technology’s role in improving access [6]. S. Thapa (2022) emphasized that centralized digital platforms could resolve inefficiencies through secure data sharing, personalized care paths, and increased outreach [3]. 
+Further, AI-integrated mental health systems provide continuous support through chatbots, risk assessments, and therapy simulations. These tools allow 24/7 availability and reduce the burden on overextended professionals, particularly where traditional therapist-patient ratios are unsustainable [5], [7]. A 2023 study by J. Rajbhandari noted that even semi-automated CBT (Cognitive Behavioral Therapy) chat systems can significantly improve early-stage interventions in rural Nepal [8]. 
+Despite infrastructural constraints, like limited broadband penetration and digital literacy, there is a growing mobile user base and increasing affordability of internet services, presenting a real opportunity for deploying AI-integrated platforms [9]. This project thus seeks to create a centralized AI-powered digital platform tailored for Nepal’s social, technological, and geographic realities. 
+By combining remote monitoring, automated psychological support, and offline-online hybrid services, the platform aims to bring scalability, equity, and continuity to mental health and rehabilitation services in Nepal. 
+ 
+2.2 Literature Review 
+2.2.1 Digital Health in Nepal 
+A study conducted by T. Luitel et al. revealed that primary healthcare workers in Nepal were receptive to a mobile-based clinical decision support app for mental health treatment. They emphasized the importance of offline access, simple interfaces, and language localization [5]. Similarly, a rapid review of Nepal’s digital health ecosystem emphasized challenges such as poor digital literacy and infrastructure but also highlighted significant opportunities to scale mental healthcare via mobile and web platforms [6]. 
+Telemedicine also gained momentum during the COVID-19 pandemic. Services like TeleUpachar demonstrated that remote diagnosis and consultation could reach underserved communities, thus validating the feasibility of integrating telehealth into mental health workflows [4], [7]. 
+
+2.2.2 AI and Chatbots in Mental Healthcare 
+AI-powered chatbots and recommendation systems have emerged globally to support mental health diagnosis, mood tracking, and therapy simulations. Studies have shown that AI systems can reduce workload on professionals, offer 24/7 assistance, and even detect suicidal ideation based on user input patterns [8]. However, research stresses the importance of ethical implementation, data privacy, and context-specific design, especially in regions like South Asia, where cultural nuances greatly influence mental health discourse [9]. 
+One study found that users of AI-supported platforms experienced a reduction of up to 50% in anxiety symptoms, supporting the potential of digital interventions in both developed and developing countries [10]. However, criticisms remain regarding the lack of crisis response mechanisms, non-personalized recommendations, and poor integration with formal mental health services [11]. 
+
+2.2.3 Rehabilitation and Centralized Systems 
+Rehabilitation centers in Nepal are often fragmented and lack coordination with mental health professionals or digital infrastructure. Manual processes make it difficult to track patient progress or deliver timely interventions. A centralized platform could provide these institutions with a unified system for scheduling, reporting, client monitoring, AI-driven counseling, and emergency response, thereby strengthening Nepal’s mental health ecosystem [3], [12]. 
+ 
+ 
+2.2.4 Comparison Between Existing Systems and Calm Core Recovery . MAKE TABLE
+ 
+The addiction treatment landscape in Nepal is evolving, with organizations like Naba Jivan Nepal, Health Foundation Nepal (HFN), and Siyaan Rehabilitation Center providing essential services. However, while these centers offer critical care ranging from detoxification to counseling, their digital infrastructure remains underdeveloped. Let’s explore their current systems and where technology could bridge gaps to enhance patient care. 
+ 
+Naba Jivan Nepal (Pokhara) 
+Naba Jivan Nepal provides essential addiction treatment detox, counseling, and relapse support but still relies on manual record-keeping. Imagine if therapists could swap paperwork for secure digital files, or if patients in remote areas could access care via telehealth. Simple tech upgrades, like electronic health records (EHR) or appointment apps, could free up staff time and reduce errors, letting them focus on what truly matters: healing. 
+Health Foundation Nepal (HFN) 
+HFN’s 25-bed rehab center offers free, compassionate mental health care yet their digital tools remain unclear. With an integrated patient management system, they could track treatments seamlessly, while a mental health app could provide relapse prevention tools and reminders. Remote monitoring could also help patients after discharge, ensuring no one feels alone in recovery. A little tech could go a long way in supporting both patients and overworked staff. 
+Siyan Rehabilitation Center (Recovery.com) 
+Siyan has a digital presence on Recovery.com, but behind the scenes, are they still using paper files? A client management system could streamline intake, treatment, and follow-ups, while outcome-tracking software could measure what’s working best. Secure messaging would also keep patients connected to counselors, offering a lifeline when cravings hit. Tech isn’t a replacement for human care it’s a way to make that care even stronger. 
+ 
+ 
+ 
+ 	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Chapter 3: System Analysis 
+ 
+3.1 System Analysis 
+System analysis for Calm Core Recovery involves a detailed examination of user requirements, the current market landscape, and the proposed system's operational context. This phase aims to comprehensively understand the problem domain and establish a clear foundation for design and development. 
+3.1.1 Requirement Analysis 
+To effectively design and implement a digital mental health and rehabilitation system tailored for Nepal, it is essential to identify and categorize the system requirements into functional and non-functional aspects. 
+	I. Functional Requirement 
+Functional requirements define the specific actions the system must perform to meet user needs: 
+	•	User Registration and Authentication: Secure sign-up/login processes for patients and healthcare providers. 
+	•	Digital Patient Records: Storage and retrieval of health history, diagnosis, therapy sessions, and treatment outcomes. 
+	•	Appointment Scheduling: Calendar integration for real-time booking and rescheduling of sessions. 
+	•	Communication Module: Secure in-app messaging, integrated video conferencing and notifications for real-time interactions. 
+	•	AI Chatbot Support: An intelligent assistant for patient inquiries and emergency help. 
+	•	Emergency Panic Button: Immediate response mechanism to alert providers or emergency contacts. 
+	•	Resource Library: Repository of self-help materials, educational videos, and articles. 
+
+Use Case Diagarm
+
+
+ 
+
+
+
+Fig 1: Use Case Diagrams
+Use case description: 
+
+Actor
+Use Case
+Description
+User (Patient)
+Register / Login
+Create or access an account securely.
+
+Schedule Appointment
+Book therapy sessions with doctors.
+
+Join Video Consultation
+Attend online therapy meetings.
+
+Send / Receive Messages
+Communicate securely with therapists.
+
+Access AI Chatbot
+Get instant help and therapy reminders.
+
+Trigger Panic Button
+Send emergency alerts instantly.
+Doctor (Therapist)
+Manage Patient Records
+View and update patient details.
+
+Provide Therapy Sessions
+Conduct and manage therapy sessions.
+
+Update Treatment Plans
+Modify therapy plans as needed.
+Admin
+Manage Users
+Control user and doctor accounts.
+
+Manage Content
+Maintain resources and chatbot data.
+
+Monitor System
+Supervise platform activity and performance.
+
+
+II. Non-Functional requirement: 
+Non-functional requirements specify the quality attributes of the system: 
+• Usability 
+Simple and intuitive interface for users with low digital literacy 
+Multi-language support (English and Nepali) 
+•  Reliability 
+The system should function smoothly with minimal downtime 
+• Scalability 
+ Should support growth as more patients and centers join 
+•  Security & Privacy 
+Secure patient data storage (encryption, backups) 
+Comply with ethical standards for mental health confidentiality 
+•  Performance 
+Fast load time, even on slower connections (optimize for low bandwidth) 
+ 
+3.1.2 Feasibility Study 
+A feasibility study was conducted to assess the viability of Calm Core Recovery across technical, operational, economic, and schedule dimensions. 
+ 
+I. Technical Feasibility 
+The proposed system will be developed using modern web technologies: 
+Frontend: Tailwind, JavaScript for responsive, accessible interfaces. 
+Backend: Laravel for robust server-side logic. 
+Database: MySQL for secure data storage. 
+AI Integration: Ai chatbot. 
+All required technologies are readily available, and the development team possesses the necessary expertise. 
+II. Operational Feasibility 
+The system aligns with the increasing digitization in Nepal. Minimal training will be required due to the platform’s user-centric design. Pilot testing will ensure usability among therapists, caregivers, and patients. 
+III. Economic Feasibility 
+This project is being developed as a part of our college final year project. Hence, economic feasibility focuses on cost-effectiveness, the use of open-source tools, and in-kind contributions such as academic mentorship. Key Considerations: 
+Open-Source Tools & Frameworks: All developments are carried out using freely available or student-licensed tools such as Laravel (PHP Framework), MySQL (Database), GitHub Student Pack (includes hosting, database, and other dev tools) etc. 
+Similarly, Development and testing will be done using personal laptops avoiding the need for dedicated infrastructure. For Supervision Faculty mentors provide technical guidance at no additional cost and team collaboration and communication use free tools like Google Meet, Trello, and Discord. 
+So, the project is economically feasible due to the reliance on open-source tools, personal devices, and college-provided resources. The overall budget remains minimal, and all essential functionalities can be implemented without requiring any significant external funding. 
+IV. Legal Feasibility 
+The proposed system will comply with relevant legal and regulatory requirements, particularly concerning data privacy and patient confidentiality. Although Nepal currently does not have a strict equivalent to international standards like GDPR (General Data Protection Regulation) or HIPAA (Health Insurance Portability and Accountability Act), the team will follow best practices for data protection. 
+ 
+V. Schedule Feasibility 
+  The project will be completed within 4 months using Agile methodology, with development organized into iterative sprints and regular feedback loops. 
+
+
+
+
+
+
+ 	 
+ 
+
+ 
+Key activities 
+ 
+ 
+Duration (in weeks) Week starts from third week of May 
+
+1st 
+2nd 
+3rd 
+4th 
+5th 
+6th 
+7th 
+8th 
+9th 
+10th 
+11th 
+Requirement Gathering 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Planning and Analysis 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+System Design 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Coding 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Testing 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Evaluation 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Documentation 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Deployment 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Presentation 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Fig 2: Gantt Chart of work schedule 
+ 
+ 
+
+3.1.3. Analysis (Object-Oriented Approach) 
+Following an object-oriented analysis approach, CalmCore Recovery system can be modeled as a collection of interacting objects, each encapsulating data and behavior. This approach facilitates modularity, reusability, and maintainability. 
+ 
+Object Modeling using Class and Object Diagrams: 
+	•	Core Classes: The system is centered around a base class called User, which is extended by three main roles: Patient, Health Professional, and Admin. These roles represent the key users in a mental health and rehabilitation center. 
+Additional supporting classes include Therapy Plan, Appointment, Chatbot, and Emergency, each representing a specific function within the system. 
+	•	Attributes: The User class includes common attributes like id, name, email, and password. The Patient class adds medical History and current Treatment to store personal health details. Health Professional includes specialization, while Therapy Plan holds goals and duration. Appointment contains date and status. The Chatbot and Emergency classes are more functional, primarily offering operations like answer Query () and triggerPanicButton () respectively.  
+	•	Relationships: The system uses inheritance, where Patient, Health Professional, and Admin inherit from User. There are also one-to-many relationships, such as one Health Professional creating multiple Therapy Plans, and one Patient booking several Appointments, triggering multiple Emergencies, and interacting with the Chatbot. These relationships help organize system interactions and ensure a smooth flow of healthcare services. 
+ 
+ 
+ 
+ 
+Fig 3: Class Diagram of CalmCore Recovery 
+ 
+ 
+ 
+ 
+ 
+Fig 4: Object Diagram of CalmCore Recovery 
+ 
+ 
+ 
+ 
+Dynamic Modeling using State and Sequence Diagrams: 
+	•	State Diagrams: State diagrams represent the lifecycle of an object—how it moves through different conditions or "states" during its existence. 
+	•	Sequence Diagrams: Sequence diagrams model the interaction between objects in a time-ordered sequence for a specific use case. 
+ 
+Fig 5: State Diagram of CalmCore Recovery 
+ 
+ 
+ 
+ 
+ 
+Fig 6: Sequence Diagram of CalmCore Recovery 
+ 
+ 
+ 
+ 
+ 
+Process Modeling using Activity Diagrams: 
+• Activity Diagrams: Activity Diagrams are used to model the step-by-step workflow of a system, highlighting the sequence of actions, decisions, and parallel activities. The given diagram represents the User Workflow Process in a mental health system. It starts when a user logs into the platform and selects their role—Patient, Admin, or Health Professional. Depending on the role selected, different activity flows are triggered. 
+ 
+ 
+Fig 7: Activity Diagram of CalmCore Recover 
+ 4.2 Algorithm Details The Calm Core Recovery System is a web-based mental rehabilitation platform that supports essential functions for managing users, appointments, self-assessments, and therapy sessions. Users can register, log in, and manage their profiles with secure authentication. The system checks every input for correctness before saving data. It also allows therapists to view and update session details, while patients can monitor their progress. Notifications are provided for actions such as new registrations, appointment confirmations, and updates to keep users informed. Appointment and Session Management: Patients can schedule online or offline therapy sessions according to therapist availability. Each operation follows these basic steps: Validate appointment details and therapist schedules. Perform the necessary database actions to store or update records. Notify users about appointment status through messages or alerts. Log completed sessions and store therapy notes for progress tracking. Users can also fill out self-assessment forms to record their mental state, which helps generate personal growth reports and assist therapists in treatment planning. AI Chatbot for Mental Health Support: We have integrated an AI-powered chatbot to assist users in identifying their emotional state and providing instant support. The process works as follows: The user inputs feelings, thoughts, or symptoms into the chatbot interface. The AI analyzes the input using a trained model on common mental health patterns. The chatbot provides supportive responses, coping techniques, and suggestions for professional help when needed. This feature adds valuable emotional guidance, especially for users seeking immediate comfort or living in areas with limited access to therapy. The system is also multilingual and user-friendly, ensuring easy access and understanding for users from different backgrounds.
+ 
+
+Chapter 4: System Design 
+ 
+4.1 Design (Object-Oriented Approach) 
+The system design phase elaborates on the logical and physical architecture of Calm Core Recovery translating the analysis models into detailed blueprints for implementation. Adhering to an object-oriented approach, the design focuses on defining modular, reusable, and maintainable components. 
+Refinement of Class, Object, State and Activity Diagrams: Building upon the analysis phase, these diagrams will be refined to include more granular details, such as method signatures, data types, and specific object instances. This ensures a comprehensive representation of the system's static structure and dynamic behavior. 
+ 
+ 
+ 
+Fig 8: Refined Class Diagram of CalmCore Recovery 
+ 
+ 	 
+ 
+ 
+ 
+ 
+ 
+Fig 9: Refined Object Diagram of CalmCore Recovery 
+ 
+ 
+Fig 10: Refined State Diagram of CalmCore Recovery 
+ 
+  	 	 
+ 
+Fig 11: Refined Sequence Diagram of CalmCore Recovery 
+ 
+ 
+ 
+ 
+Fig 12: Refined Activity Diagram of CalmCore Recovery 
+
+
+
+
+
+4.1.2 Component Diagram
+A component diagram shows how the Calmcore Recovery System is divided into different modules. Each component focuses on a specific function such as user authentication, AI chatbot support, video consultations, messaging, and resource management. These modules work together to provide a smooth mental health recovery experience for users, therapists, and administrators.
+
+
+	           Fig 12: Component Diagram
+The diagram clearly displays how the system’s components interact across the frontend, backend, and database. Each layer has a defined role. The major roles and responsibilities are as follows:
+	•	The frontend (built with Tailwind CSS and JavaScript) provides the user interface for login, communication, and accessing recovery tools.
+	•	The backend (built with Laravel and Livewire) manages system logic, user sessions, and data processing.
+	•	The database (MySQL) securely stores all user information, chatbot logs, messages, video sessions, and resources.
+
+
+4.1.3 Deployment Diagram
+
+
+
+
+
+4.2 Algorithm Details
+
+Details The Calm Core Recovery System is a web-based mental rehabilitation platform that supports essential functions for managing users, appointments, self-assessments, and therapy sessions. Users can register, log in, and manage their profiles with secure authentication. The system checks every input for correctness before saving data. It also allows therapists to view and update session details, while patients can monitor their progress. Notifications are provided for actions such as new registrations, appointment confirmations, and updates to keep users informed. Appointment and Session Management: Patients can schedule online or offline therapy sessions according to therapist availability. Each operation follows these basic steps: Validate appointment details and therapist schedules. Perform the necessary database actions to store or update records. Notify users about appointment status through messages or alerts. Log completed sessions and store therapy notes for progress tracking. Users can also fill out self-assessment forms to record their mental state, which helps generate personal growth reports and assist therapists in treatment planning. AI Chatbot for Mental Health Support: We have integrated an AI-powered Chatbot to assist users in identifying their emotional state and providing instant support. The process works as follows: The user inputs feelings, thoughts, or symptoms into the chatbot interface. The AI analyzes the input using a trained model on common mental health patterns. The chatbot provides supportive responses, coping techniques, and suggestions for professional help when needed. This feature adds valuable emotional guidance, especially for users seeking immediate comfort or living in areas with limited access to therapy. The system is also multilingual and user-friendly, ensuring easy access and understanding for users from different backgrounds.
+
+ 
+
+
+
+
+ 5: IMPLEMENTATION AND TESTING 
+ 
+5.1 Implementation 
+The implementation phase focused on building a modular, secure platform for mental health management using modern web technologies and AI integration. 
+5.1.1 Tools Used 
+The following tools and technologies were selected for the implementation of Calm core recovery, based on their suitability for scalable, high-performance web applications with AI capabilities:  
+ Programming Languages:  
+	•	PHP: For Backend (Laravel)  
+	•	JavaScript: For Frontend (Vanilla JS and Alpine JS)  
+Frontend Framework/Libraries:  
+	•	Tailwind CSS: For utility-first CSS styling, enabling rapid and responsive UI    development [1].  
+Backend Framework:  
+	•	Laravel(12x) Framework: For building robust RESTful APIs for the backend. 
+ Database Platform: 
+	•	MySQL: For storing relational data such as patient, Doctor profiles, various sessions and resources. 
+Cloud Services: 
+	•	Cloudinary API: For secure video/image storage, transcoding, and optimized delivery of therapy content [1]. 
+	•	MySQL Database: Relational database for structured storage of user records, appointments, and therapy plans. 
+	•	Laravel Forge/Envoyer: For automated deployment and server management of 
+Laravel application. 
+Version Control System: 
+Git (GitHub/GitLab): For collaborative code management with branch protection rules and 
+CI/CD pipelines. 
+Development Tools: 
+	•	VS Code: Primary IDEs for Laravel/PHP development with Tailwind CSS support. 
+	•	Composer: PHP dependency manager for Laravel packages. 
+	•	npm: For managing JavaScript/CSS dependencies (Tailwind, Alpine.js) \ 
+	•	Postman/Insomnia: For testing REST API endpoints and webhook integration 
+	•	Laravel Sail/Docker: Local development environment with containerized MySQL and Redis. 
+5.1.2 Implementation Details of Modules 
+5.1.2.1 Backend API Development (Laravel) User Module: 
+	•	JWT Authentication (tymon/jwt-auth package) 
+	•	Multi-role system (Patient/Doctor/Admin) with Gates/Policies 
+	•	Profile management with medical history fields  Therapy Module: 
+	•	CRUD APIs for therapy plans/categories 
+	•	Progress tracking system with Eloquent relationships 
+	•	PDF report generation (dompdf)  Appointment Module: 
+	•	Calendar integration (Full Calendar) 
+	•	JItsi API integration for video consult 
+	•	SMS/Email reminders (Nexmo/Mailgun) 
+ 
+ 
+Emergency Module: 
+	•	Panic button  
+	•	Real-time notifications (Pusher) 
+	•	Location tracking API 
+5.1.2.2 Frontend Development Authentication System: 
+	•	Laravel Blade templates for auth flows 
+	•	Tailwind-styled login/register forms 
+	•	Session management with Laravel Sanctum  Patient Dashboard: 
+	•	Interactive therapy calendar (Alpine.js) 
+	•	Video consult interface (WebRTC) 
+	•	Progress visualization (Chart.js)  Therapist Portal: 
+	•	Patient management datatables 
+	•	Treatment plan editor 
+	•	Secure messaging system Admin Panel: 
+	•	User management CRUD 
+	•	System analytics dashboard 
+	•	Audit logs viewer 
+ 
+5.1.2.3 Media Service Integration 
+Cloudinary Implementation: 
+	•	Direct upload from frontend using signed uploads 
+	•	Laravel Media Library integration 
+	•	Adaptive bitrate streaming for videos 
+	•	Automatic thumbnail generation 
+5.1.2.4Payment Integration 
+Payment Gateways: 
+	•	eSewa/Khalti, Stripe Payments API adapters 
+	•	Webhook verification system 
+Key Technical Decisions 
+	•	State Management: Laravel Livewire for reactive components 
+	•	Real-time Features: Reverb and pusher channels for chat/notifications 
+	•	Security: Laravel Sanctum + CORS management 
+	•	Performance: Redis caching for therapy recommendations 
+	•	Monitoring: Laravel Telescope for debugging 
+Testing Strategy 
+	•	PHPUnit: For backend API tests 
+	•	Pest: For feature tests 
+	•	Laravel Dusk: Browser automation 
+	•	Postman Collections: API contract testing 
+ 	 
+
+
+
+
+
+
+
+
+
+CHAPTER 6: CONCLUSION AND FUTURE RECOMMENDATIONS 
+6.1 Conclusion 
+The Calm Core Recovery system helps fill major gaps in Nepal’s mental health services by offering an AI-powered digital platform—something that fits well with the WHO’s focus on low-resource settings [1]. One of its biggest wins is replacing the old-school paper records still used in many Nepali rehab centers [2], making it easier to manage appointments and track therapy progress digitally. Since internet access is spotty, especially in rural areas, the system works both online and offline, which solves a big problem noted in studies [3, 9]. 
+The AI chatbot gives users quick, basic support—similar to what research shows works for mental health globally [10]—though it’s not perfect and still needs human therapists to step in for serious issues [11]. There’s also a panic button for emergencies, which tackles a known weak spot in Nepal’s current rehab system [12]. 
+That said, the system isn’t flawless. It still relies on internet more than we’d like [4], and the chatbot can’t handle complex clinical questions without a real person checking things [11]. 
+ 
+6.2 Future Recommendations 
+To make the system even better, several technical improvements can be made. First, the AI could be upgraded with smarter natural language processing (NLP) to better understand users and reduce misunderstandings [8, 10]. Adding support for both Nepali and English would also help more people access the system easily [3]. For areas with poor internet, turning the app into a Progressive Web App (PWA) would let users sync data more reliably, even offline [4, 6]. Another useful feature could be connecting with low-cost fitness trackers through APIs to monitor physical health data like heart rate or activity levels [5]. 
+Operationally, the system should be tested in 3–5 more health centers, especially in regions where mental health services are lacking [1, 12]. Since not all therapists might be comfortable with tech, training modules should be created to help them use the system effectively [6, 9]. 
+Policy-wise, it’s important to work with Nepal’s Ministry of Health to follow national guidelines. This includes sticking to data privacy rules under the National Mental Health 
+Strategy and making sure telehealth services can be reimbursed, so they’re affordable for users [4, 7]. 
+Finally, more research is needed. Long-term studies comparing this system to traditional therapy in Nepal would show how well it really works [2, 8]. There’s also potential to explore blockchain technology for keeping health records secure and tamper-proof [6]. 
+ 
+6.3 Final Outlook 
+CalmCore Recovery demonstrates how digital solutions can bridge service gaps in Nepal's mental health ecosystem [1], [3]. Strategic improvements can position it as a model for similar low-resource settings. 
+ 	 
+References: 
+	•	WHO, Mental health in Nepal: challenges and priorities, 2020. [Online]. Available: https://www.who.int/nepal/health-topics/mental-health 
+	•	A. Sharma and R. Poudel, “Prevalence of substance use disorders and treatment gaps in Nepal,” Nepal Medical Journal, vol. 45, no. 2, pp. 85–90, 2021. 
+	•	S. Thapa, “Digital health innovation in low-resource settings: Nepal’s roadmap,” Health Informatics Journal, vol. 27, no. 3, pp. 299–312, 2022. 
+	•	M. Bista et al., “Implementing e-health services in Nepal: opportunities and barriers,” Journal of Telemedicine and e-Health, vol. 28, no. 5, pp. 463–470, 2021. 
+	•	T. Luitel et al., “Feasibility of a mobile-based mental health support app in Nepal,” Asian Journal of Psychiatry, vol. 61, 2021. 
+	•	H. Adhikari et al., “Digital health ecosystem in Nepal: Challenges and future directions,” Nepal Health Research Council Bulletin, vol. 19, no. 2, pp. 123–130, 2022. 
+	•	Ministry of Health and Population, “TeleUpachar initiative and lessons from COVID-19,” Government of Nepal Health Bulletin, 2021. 
+	•	J. Rajbhandari, “AI-assisted cognitive behavioral therapy in rural Nepal: A pilot study,” Asian Journal of Mental Health Tech, vol. 4, no. 1, pp. 14–21, 2023. 
+	•	K. Singh and P. Gurung, “Internet growth and digital literacy trends in Nepal,” ICT Development Reports Nepal, vol. 10, no. 3, 2022. 
+	•	S. Das et al., “Effectiveness of AI chatbots in reducing anxiety and depression symptoms: A global meta-study,” Journal of Mental Health AI, vol. 6, no. 2, pp. 101–110, 2021. 
+	•	D. Chhetri, “Risks of AI in unregulated mental health applications,” AI Ethics and Society in Asia, vol. 5, 2023. 
+	•	S. Neupane, “Assessment of mental health rehabilitation centers in Nepal,” Nepal Journal of Community Medicine, vol. 17, no. 1, pp. 56–62, 2023. 

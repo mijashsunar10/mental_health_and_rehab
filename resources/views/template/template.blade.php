@@ -71,6 +71,14 @@
     </section>
     @include('components.panic-button')
 
+    {{-- 📅 Book Appointment Button --}}
+    <a href="{{ route('doctor.profile') }}"
+       class="fixed bottom-5 left-5 z-50 bg-green-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-700 transition transform hover:scale-105 flex items-center gap-2 sm:bottom-3 sm:left-3"
+       title="Book an appointment">
+        <i class="fa-solid fa-calendar-check text-lg"></i>
+        <span class="font-semibold">Book Appointment</span>
+    </a>
+
     {{-- 💬 Floating Chatbot --}}
     <div x-data="chatBot()" class="fixed bottom-5 right-5 z-50 sm:bottom-3 sm:right-3">
         <!-- Chat icon -->
