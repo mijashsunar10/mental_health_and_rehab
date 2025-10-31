@@ -281,6 +281,32 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/appointment/receipt/{appointment}', [KhaltiController::class, 'receipt'])->name('appointment.receipt');
 });
 
+// User Records Routes
+use App\Http\Controllers\UserRecordController;
+use App\Http\Controllers\DoctorRecordController;
+use App\Http\Controllers\DoctorNoteController;
+
+Route::middleware(['auth'])->group(function () {
+    // Patient Records Dashboard
+    Route::get('/my-records', [UserRecordController::class, 'index'])->name('records.index');
+    Route::get('/my-records/export-pdf', [UserRecordController::class, 'exportPdf'])->name('records.export-pdf');
+});
+
+// Doctor Patient Records Routes
+Route::middleware(['auth', 'doctor'])->prefix('doctor')->name('doctor.')->group(function () {
+    // Patient Records Management
+    Route::get('/patients', [DoctorRecordController::class, 'index'])->name('patients.index');
+    Route::get('/patients/{patient}', [DoctorRecordController::class, 'show'])->name('patients.show');
+
+    // Doctor Notes Management
+    Route::post('/notes', [DoctorNoteController::class, 'store'])->name('notes.store');
+    Route::get('/notes/{note}', [DoctorNoteController::class, 'show'])->name('notes.show');
+    Route::get('/notes/{note}/edit', [DoctorNoteController::class, 'edit'])->name('notes.edit');
+    Route::put('/notes/{note}', [DoctorNoteController::class, 'update'])->name('notes.update');
+    Route::delete('/notes/{note}', [DoctorNoteController::class, 'destroy'])->name('notes.destroy');
+    Route::get('/notes/{note}/download', [DoctorNoteController::class, 'downloadPdf'])->name('notes.download');
+});
+
 require __DIR__.'/auth.php';
 
 

@@ -137,4 +137,20 @@ public function purchases()
         return $this->hasMany(Appointment::class, 'patient_id');
     }
 
+    /**
+     * Get notes created by this doctor.
+     */
+    public function doctorNotes()
+    {
+        return $this->hasMany(DoctorNote::class, 'doctor_id');
+    }
+
+    /**
+     * Get notes for this patient.
+     */
+    public function patientNotes()
+    {
+        return $this->hasMany(DoctorNote::class, 'user_id');
+    }
+
 }
