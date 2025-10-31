@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Package;
 use App\Models\Faq;
+use App\Models\DoctorAvailability;
 use App\Enums\UserRole;
 use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
 
 class OllamaController extends Controller
 {
@@ -146,6 +148,40 @@ class OllamaController extends Controller
     }
 
     /**
+     * Get doctor availability for next 7 days
+     */
+    protected function getDoctorAvailability()
+    {
+        return Cache::remember('chatbot_doctor_availability', 1800, function () {
+            $today = Carbon::today();
+            $nextWeek = Carbon::today()->addDays(7);
+
+            return DoctorAvailability::with('doctor:id,name,designation')
+                ->where('is_available', true)
+                ->whereBetween('availability_date', [$today, $nextWeek])
+                ->orderBy('availability_date')
+                ->orderBy('start_time')
+                ->take(20)
+                ->get()
+                ->groupBy('doctor_id')
+                ->map(function ($slots, $doctorId) {
+                    $firstSlot = $slots->first();
+                    return [
+                        'doctor_name' => $firstSlot->doctor->name ?? 'Unknown',
+                        'designation' => $firstSlot->doctor->designation ?? 'Doctor',
+                        'upcoming_slots' => $slots->take(3)->map(function ($slot) {
+                            return [
+                                'date' => Carbon::parse($slot->availability_date)->format('M d, Y'),
+                                'day' => Carbon::parse($slot->availability_date)->format('l'),
+                                'time' => Carbon::parse($slot->start_time)->format('g:i A') . ' - ' . Carbon::parse($slot->end_time)->format('g:i A'),
+                            ];
+                        })->toArray()
+                    ];
+                });
+        });
+    }
+
+    /**
      * Get platform context information
      */
     protected function getPlatformContext()
@@ -153,6 +189,7 @@ class OllamaController extends Controller
         $doctors = $this->getActiveDoctors();
         $packages = $this->getActivePackages();
         $faqs = $this->getCommonFaqs();
+        $availability = $this->getDoctorAvailability();
 
         $context = "\n\n=== 📋 PLATFORM KNOWLEDGE - USE THIS TO ANSWER QUESTIONS ===\n\n";
 
@@ -178,6 +215,20 @@ class OllamaController extends Controller
             $context .= "• Multiple qualified doctors available. Encourage users to visit the Doctors page.\n";
         }
 
+        // Doctor Availability & Appointment Slots
+        $context .= "\n📅 DOCTOR AVAILABILITY (Next 7 Days - Use these when asked about appointments):\n";
+        if ($availability->count() > 0) {
+            foreach ($availability as $doctorId => $data) {
+                $context .= "• Dr. {$data['doctor_name']} ({$data['designation']}):\n";
+                foreach ($data['upcoming_slots'] as $slot) {
+                    $context .= "  - {$slot['day']}, {$slot['date']} at {$slot['time']}\n";
+                }
+            }
+            $context .= "\nNote: More slots may be available. Users can book by visiting /doctors page.\n";
+        } else {
+            $context .= "• No upcoming availability found. Encourage users to check the Doctors page or contact us.\n";
+        }
+
         // Platform features
         $context .= "\nPlatform Features You Can Help Users With:\n";
         $context .= "• Book Appointments: Users can schedule online appointments with preferred doctors\n";
@@ -190,9 +241,12 @@ class OllamaController extends Controller
 
         // Navigation guidance
         $context .= "\nWhen Users Ask About:\n";
-        $context .= "• Booking appointments → Guide to /doctors or /appointments page\n";
-        $context .= "• Available doctors → List the doctors above with their specializations\n";
-        $context .= "• Packages/pricing → Explain the packages listed above\n";
+        $context .= "• \"When can I see a doctor?\" → List the specific availability slots above\n";
+        $context .= "• \"Which doctor is available?\" → Show doctor names with their available times from the availability section\n";
+        $context .= "• \"Appointment times\" → Give actual dates and times from the availability section above\n";
+        $context .= "• Booking appointments → Guide to /doctors page and mention available slots\n";
+        $context .= "• Available doctors → List doctors with specializations AND mention their upcoming availability\n";
+        $context .= "• Packages/pricing → Explain the packages listed above with exact prices\n";
         $context .= "• Medical records → Mention they can view in My Records section\n";
         $context .= "• Video consultation → Explain it's built-in via Jitsi (no external app needed)\n";
         $context .= "• Payments → Mention Khalti for Nepal users, Stripe for international\n";
@@ -208,11 +262,13 @@ class OllamaController extends Controller
         }
 
         $context .= "\n=== END PLATFORM KNOWLEDGE ===\n\n";
-        $context .= "⚠️ REMINDER: When users ask about packages/doctors/features, you MUST use the information above. Do NOT give generic responses. Reference the ACTUAL packages, prices, and doctors listed above.\n\nExample responses:\n";
+        $context .= "⚠️ REMINDER: When users ask about packages/doctors/appointments, you MUST use the information above. Do NOT give generic responses. Reference the ACTUAL data listed above.\n\nExample responses:\n";
         $context .= "Q: What packages do you offer?\n";
         $context .= "A: We have 5 packages: Basic Therapy (NPR 5,000), Standard Counseling (NPR 9,000), Premium Wellness (NPR 15,000), In-Person Therapy (NPR 8,000), and Intensive Offline Support (NPR 14,000). Which interests you?\n\n";
-        $context .= "Q: Who are the doctors?\n";
-        $context .= "A: We have Dr. Ramesh who specializes in General Practice. Would you like to book an appointment?\n";
+        $context .= "Q: When can I see a doctor?\n";
+        $context .= "A: [Check availability section above and list actual dates/times]. For example: Dr. Ramesh is available on Monday, Dec 25 at 9:00 AM and Tuesday, Dec 26 at 2:00 PM. Would you like to book?\n\n";
+        $context .= "Q: Which doctor is available this week?\n";
+        $context .= "A: [List doctors from availability section with their upcoming slots]. You can book by visiting the Doctors page.\n";
 
         return $context;
     }
@@ -242,10 +298,12 @@ You are Dr. AI, a compassionate virtual therapist for our Mental Health and Reha
 5. DO NOT say "I can help with various things" - BE SPECIFIC about OUR platform
 
 WHEN USERS ASK ABOUT:
+- Appointments/Availability → Show ACTUAL dates and times from the availability section
+- "When can I see a doctor?" → List specific available slots with dates/times
 - Packages → List the EXACT packages from platform knowledge with prices
-- Doctors → Mention the ACTUAL doctors listed below
+- Doctors → Mention the ACTUAL doctors listed below with their availability
 - Features → Reference the SPECIFIC features from our platform
-- Booking → Direct to our booking system
+- Booking → Direct to /doctors page and mention available time slots
 
 RESPONSE RULES:
 ✓ Use platform knowledge below
