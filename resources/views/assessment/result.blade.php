@@ -33,14 +33,14 @@
                     <!-- Progress circle -->
                     @php
                         $strokeColor = match($level) {
-                            'Low' => 'text-green-500',
+                            'Minimal', 'Low' => 'text-green-500',
                             'Mild' => 'text-blue-500',
                             'Moderate' => 'text-yellow-500',
-                            'High' => 'text-red-500',
+                            'Severe', 'High' => 'text-red-500',
                             default => 'text-blue-500'
                         };
                         $circumference = 2 * 3.1416 * 40;
-                        $strokeDashoffset = $circumference - ($normalizedScore / 20 * $circumference);
+                        $strokeDashoffset = $circumference - ($totalScore / $maxScore * $circumference);
                     @endphp
                     <circle
                         class="{{ $strokeColor }}"
@@ -57,20 +57,24 @@
                     />
                 </svg>
                 <div class="absolute inset-0 flex items-center justify-center flex-col">
-                    <span class="text-3xl font-bold text-gray-800">{{ $normalizedScore }}/20</span>
+                    <span class="text-3xl font-bold text-gray-800">{{ $totalScore }}/{{ $maxScore }}</span>
                     <span class="text-lg font-medium {{ $strokeColor }}">{{ $level }}</span>
                 </div>
             </div>
 
             <h2 class="text-xl font-semibold text-gray-800 mb-2">
-                @if($level == 'Low')
+                @if($level == 'Minimal')
                     Minimal Symptoms
+                @elseif($level == 'Low')
+                    Low Level
                 @elseif($level == 'Mild')
                     Mild Symptoms
                 @elseif($level == 'Moderate')
-                    Significant Symptoms
-                @else
+                    Moderate Symptoms
+                @elseif($level == 'Severe')
                     Severe Symptoms
+                @else
+                    High Level
                 @endif
             </h2>
             <p class="text-gray-600 text-center">

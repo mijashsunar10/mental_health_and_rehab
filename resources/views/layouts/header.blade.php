@@ -277,7 +277,7 @@
 
               
 
-                <li class="relative cursor-pointer  group">
+                {{-- <li class="relative cursor-pointer  group">
                     <a href="{{ route('team.index') }}">
                         <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
                             Team
@@ -294,6 +294,15 @@
                             </a>
                     
                     </ul>
+                </li> --}}
+
+                <li class="relative cursor-pointer group">
+                    <a href="{{route('doctor.profile')}}">
+                        <button
+                            class="flex items-center font-semibold cursor-pointer semibold px-3 py-1 mb-2 focus:outline-none transition-colors duration-300">
+                            Doctors
+                        </button>
+                    </a>
                 </li>
                 <li class="relative cursor-pointer group">
                     <a href="{{route('admin.packages.index')}}">

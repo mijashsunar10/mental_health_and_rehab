@@ -9,7 +9,7 @@ class AssessmentController extends Controller
 {
     public function show($category)
     {
-        if (!in_array($category, ['anxiety', 'depression', 'stress'])) {
+        if (!in_array($category, ['anxiety', 'depression', 'stress', 'ptsd'])) {
             abort(404);
         }
 
@@ -22,7 +22,7 @@ class AssessmentController extends Controller
 
     public function index()
     {
-        $categories = ['anxiety', 'depression', 'stress'];
+        $categories = ['anxiety', 'depression', 'stress', 'ptsd'];
         return view('assessment.index', compact('categories'));
     }
 }
