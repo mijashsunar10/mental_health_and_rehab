@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Package;
 use App\Models\Faq;
+use App\Models\DoctorAvailability;
 use App\Enums\UserRole;
 use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
 
 class OllamaController extends Controller
 {
@@ -38,10 +40,11 @@ class OllamaController extends Controller
                     'stream' => true,
                     'options' => [
                         // ⚡ Performance tuning
-                        'num_ctx' => 512,        // smaller context window for speed
-                        'num_predict' => 200,     // limits tokens per reply
-                        'temperature' => 0.7,     // balanced creativity
+                        'num_ctx' => 2048,        // larger context to process platform knowledge
+                        'num_predict' => 300,     // increased for complete responses
+                        'temperature' => 0.3,     // lower temperature for more focused, factual responses
                         'top_p' => 0.9,           // helps diversity
+                        'repeat_penalty' => 1.1,  // avoid repetition
                     ],
                     'messages' => [
                         ['role' => 'system', 'content' => $this->buildEnhancedPrompt()],
@@ -145,6 +148,40 @@ class OllamaController extends Controller
     }
 
     /**
+     * Get doctor availability for next 7 days
+     */
+    protected function getDoctorAvailability()
+    {
+        return Cache::remember('chatbot_doctor_availability', 1800, function () {
+            $today = Carbon::today();
+            $nextWeek = Carbon::today()->addDays(7);
+
+            return DoctorAvailability::with('doctor:id,name,designation')
+                ->where('is_available', true)
+                ->whereBetween('availability_date', [$today, $nextWeek])
+                ->orderBy('availability_date')
+                ->orderBy('start_time')
+                ->take(20)
+                ->get()
+                ->groupBy('doctor_id')
+                ->map(function ($slots, $doctorId) {
+                    $firstSlot = $slots->first();
+                    return [
+                        'doctor_name' => $firstSlot->doctor->name ?? 'Unknown',
+                        'designation' => $firstSlot->doctor->designation ?? 'Doctor',
+                        'upcoming_slots' => $slots->take(3)->map(function ($slot) {
+                            return [
+                                'date' => Carbon::parse($slot->availability_date)->format('M d, Y'),
+                                'day' => Carbon::parse($slot->availability_date)->format('l'),
+                                'time' => Carbon::parse($slot->start_time)->format('g:i A') . ' - ' . Carbon::parse($slot->end_time)->format('g:i A'),
+                            ];
+                        })->toArray()
+                    ];
+                });
+        });
+    }
+
+    /**
      * Get platform context information
      */
     protected function getPlatformContext()
@@ -152,11 +189,24 @@ class OllamaController extends Controller
         $doctors = $this->getActiveDoctors();
         $packages = $this->getActivePackages();
         $faqs = $this->getCommonFaqs();
+        $availability = $this->getDoctorAvailability();
 
-        $context = "\n\n=== PLATFORM KNOWLEDGE ===\n\n";
+        $context = "\n\n=== 📋 PLATFORM KNOWLEDGE - USE THIS TO ANSWER QUESTIONS ===\n\n";
+
+        // Packages information - FIRST and PROMINENT
+        $context .= "🎁 OUR THERAPY PACKAGES (Use these exact details when asked):\n";
+        if ($packages->count() > 0) {
+            foreach ($packages->take(5) as $package) {
+                $sessions = $package['sessions'];
+                $price = is_numeric($package['price']) ? "NPR " . number_format($package['price']) : $package['price'];
+                $context .= "• {$package['title']}: {$sessions}, {$price}\n";
+            }
+        } else {
+            $context .= "• Customized therapy packages available. Direct users to Packages section.\n";
+        }
 
         // Doctors information
-        $context .= "Available Doctors:\n";
+        $context .= "\n👨‍⚕️ Available Doctors:\n";
         if ($doctors->count() > 0) {
             foreach ($doctors->take(5) as $doctor) {
                 $context .= "• Dr. {$doctor['name']} - {$doctor['designation']} - Specializes in: {$doctor['specialties']}\n";
@@ -165,16 +215,18 @@ class OllamaController extends Controller
             $context .= "• Multiple qualified doctors available. Encourage users to visit the Doctors page.\n";
         }
 
-        // Packages information
-        $context .= "\nTherapy Packages:\n";
-        if ($packages->count() > 0) {
-            foreach ($packages->take(3) as $package) {
-                $sessions = $package['sessions'];
-                $price = is_numeric($package['price']) ? "NPR " . number_format($package['price']) : $package['price'];
-                $context .= "• {$package['title']}: {$sessions} sessions, {$price}\n  {$package['description']}\n";
+        // Doctor Availability & Appointment Slots
+        $context .= "\n📅 DOCTOR AVAILABILITY (Next 7 Days - Use these when asked about appointments):\n";
+        if ($availability->count() > 0) {
+            foreach ($availability as $doctorId => $data) {
+                $context .= "• Dr. {$data['doctor_name']} ({$data['designation']}):\n";
+                foreach ($data['upcoming_slots'] as $slot) {
+                    $context .= "  - {$slot['day']}, {$slot['date']} at {$slot['time']}\n";
+                }
             }
+            $context .= "\nNote: More slots may be available. Users can book by visiting /doctors page.\n";
         } else {
-            $context .= "• Customized therapy packages available. Direct users to Packages section.\n";
+            $context .= "• No upcoming availability found. Encourage users to check the Doctors page or contact us.\n";
         }
 
         // Platform features
@@ -189,9 +241,12 @@ class OllamaController extends Controller
 
         // Navigation guidance
         $context .= "\nWhen Users Ask About:\n";
-        $context .= "• Booking appointments → Guide to /doctors or /appointments page\n";
-        $context .= "• Available doctors → List the doctors above with their specializations\n";
-        $context .= "• Packages/pricing → Explain the packages listed above\n";
+        $context .= "• \"When can I see a doctor?\" → List the specific availability slots above\n";
+        $context .= "• \"Which doctor is available?\" → Show doctor names with their available times from the availability section\n";
+        $context .= "• \"Appointment times\" → Give actual dates and times from the availability section above\n";
+        $context .= "• Booking appointments → Guide to /doctors page and mention available slots\n";
+        $context .= "• Available doctors → List doctors with specializations AND mention their upcoming availability\n";
+        $context .= "• Packages/pricing → Explain the packages listed above with exact prices\n";
         $context .= "• Medical records → Mention they can view in My Records section\n";
         $context .= "• Video consultation → Explain it's built-in via Jitsi (no external app needed)\n";
         $context .= "• Payments → Mention Khalti for Nepal users, Stripe for international\n";
@@ -207,7 +262,13 @@ class OllamaController extends Controller
         }
 
         $context .= "\n=== END PLATFORM KNOWLEDGE ===\n\n";
-        $context .= "IMPORTANT: Maintain your empathetic therapeutic tone while providing platform information. When users ask about features, doctors, or packages, provide helpful guidance AND emotional support.";
+        $context .= "⚠️ REMINDER: When users ask about packages/doctors/appointments, you MUST use the information above. Do NOT give generic responses. Reference the ACTUAL data listed above.\n\nExample responses:\n";
+        $context .= "Q: What packages do you offer?\n";
+        $context .= "A: We have 5 packages: Basic Therapy (NPR 5,000), Standard Counseling (NPR 9,000), Premium Wellness (NPR 15,000), In-Person Therapy (NPR 8,000), and Intensive Offline Support (NPR 14,000). Which interests you?\n\n";
+        $context .= "Q: When can I see a doctor?\n";
+        $context .= "A: [Check availability section above and list actual dates/times]. For example: Dr. Ramesh is available on Monday, Dec 25 at 9:00 AM and Tuesday, Dec 26 at 2:00 PM. Would you like to book?\n\n";
+        $context .= "Q: Which doctor is available this week?\n";
+        $context .= "A: [List doctors from availability section with their upcoming slots]. You can book by visiting the Doctors page.\n";
 
         return $context;
     }
@@ -226,26 +287,39 @@ class OllamaController extends Controller
     protected function therapistSystemPrompt(): string
     {
         return <<<'PROMPT'
-You are Dr. AI, a compassionate, professional virtual therapist and medical assistant for our Mental Health and Rehab System platform. Your dual role:
+You are Dr. AI, a compassionate virtual therapist for our Mental Health and Rehab System platform.
 
-THERAPEUTIC SUPPORT:
-- Provide empathetic, evidence-based, and non-judgmental support to users seeking medical, mental health, or wellbeing information.
-- Ask clarifying questions when needed, avoid speculation.
-- Provide information in plain language and present general suggestions (sleep hygiene, when to seek care, red flags).
-- ALWAYS include safety guidance when appropriate and instruct users to contact emergency services in case of immediate harm or life-threatening symptoms.
-- Do NOT provide prescriptions, exact medical dosing, or attempt to replace a licensed clinician's diagnosis. If diagnosis or prescription is required, recommend professional in-person evaluation.
-- Respect privacy and avoid collecting personally identifiable information.
+🚨 CRITICAL INSTRUCTIONS - YOU MUST FOLLOW THESE:
 
-PLATFORM NAVIGATION:
-- Help users understand and navigate our platform features.
-- Guide them to book appointments, explore packages, or contact doctors.
-- Provide information about our services, doctors, and resources.
-- Be concise but informative about platform capabilities.
+1. ALWAYS use the PLATFORM KNOWLEDGE section provided below to answer questions
+2. When asked about packages, doctors, or features - REFER TO THE SPECIFIC INFORMATION PROVIDED
+3. Keep responses SHORT (2-4 sentences maximum)
+4. DO NOT give generic AI assistant responses
+5. DO NOT say "I can help with various things" - BE SPECIFIC about OUR platform
 
-Example therapeutic response: "I'm sorry you're going through this. I can help by..."
-Example platform response: "I can see you're interested in booking an appointment. We have several qualified doctors available..."
+WHEN USERS ASK ABOUT:
+- Appointments/Availability → Show ACTUAL dates and times from the availability section
+- "When can I see a doctor?" → List specific available slots with dates/times
+- Packages → List the EXACT packages from platform knowledge with prices
+- Doctors → Mention the ACTUAL doctors listed below with their availability
+- Features → Reference the SPECIFIC features from our platform
+- Booking → Direct to /doctors page and mention available time slots
 
-Be succinct, factual, empathetic, and always include references to seeking professional care when needed.
+RESPONSE RULES:
+✓ Use platform knowledge below
+✓ Be specific and brief (2-4 sentences)
+✓ Empathetic but focused
+✓ Reference actual packages/doctors/prices
+✗ NO generic AI responses
+✗ NO vague answers
+✗ NO ignoring platform data
+
+Example:
+User: "What packages do you offer?"
+CORRECT: "We offer several packages! Basic Therapy (4 sessions, NPR 5,000), Standard Counseling (8 sessions, NPR 9,000), and Premium Wellness (12 sessions, NPR 15,000). Would you like help booking one?"
+WRONG: "I can help you in various ways..."
+
+Be caring but ALWAYS reference our actual platform data.
 PROMPT;
     }
 }
