@@ -14,13 +14,14 @@ class ResponseController extends Controller
         $validated = $request->validate([
             'responses' => 'required|array',
             'responses.*.question_id' => 'required|exists:assessment_questions,id',
-            'responses.*.response' => 'required|in:never,rarely,sometimes,often',
+            'responses.*.response' => 'required|in:0,1,2,3,4',
         ]);
 
         $user = Auth::user();
-        
+
         $firstResponse = reset($validated['responses']);
-        $category = AssessmentQuestion::find($firstResponse['question_id'])->category;
+        $question = AssessmentQuestion::find($firstResponse['question_id']);
+        $category = $question->category;
 
         UserResponse::where('user_id', $user->id)
             ->whereHas('question', function($query) use ($category) {
@@ -29,8 +30,9 @@ class ResponseController extends Controller
             ->delete();
 
         foreach ($validated['responses'] as $response) {
-            $score = $this->getScoreForResponse($response['response']);
-            
+            $question = AssessmentQuestion::find($response['question_id']);
+            $score = $this->getScoreForResponse($response['response'], $question);
+
             UserResponse::create([
                 'user_id' => $user->id,
                 'question_id' => $response['question_id'],
@@ -45,49 +47,73 @@ class ResponseController extends Controller
     public function result($category)
     {
         $user = Auth::user();
-        
+
         $totalScore = UserResponse::where('user_id', $user->id)
             ->whereHas('question', function($query) use ($category) {
                 $query->where('category', $category);
             })
             ->sum('score');
 
-        $maxScore = AssessmentQuestion::where('category', $category)->count() * 3;
-        $normalizedScore = round(($totalScore / $maxScore) * 20);
+        // Use raw scores based on clinical standards
+        // Anxiety/Depression: 0-21 scale (7 questions × 0-3 points)
+        // Stress/PTSD: 0-28 scale (7 questions × 0-4 points)
+        $maxScore = in_array($category, ['stress', 'ptsd']) ? 28 : 21;
 
-        $level = $this->getLevel($normalizedScore);
+        $level = $this->getLevel($totalScore, $category);
         $suggestions = $this->getSuggestions($category, $level);
 
-        return view('assessment.result', compact('category', 'normalizedScore', 'level', 'suggestions'));
+        return view('assessment.result', compact('category', 'totalScore', 'maxScore', 'level', 'suggestions'));
     }
 
-    private function getScoreForResponse($response)
+    private function getScoreForResponse($response, $question)
     {
-        return match($response) {
-            'never' => 0,
-            'rarely' => 1,
-            'sometimes' => 2,
-            'often' => 3,
-            default => 0,
-        };
+        $score = (int) $response;
+
+        // Reverse scoring for positive stress items (questions 4 and 6)
+        if ($question->category === 'stress' && in_array($question->order, [4, 6])) {
+            $score = 4 - $score; // Reverse: 0→4, 1→3, 2→2, 3→1, 4→0
+        }
+
+        return $score;
     }
 
-    private function getLevel($score)
+    private function getLevel($score, $category)
     {
-        if ($score <= 5) return 'Low';
-        if ($score <= 10) return 'Mild';
-        if ($score <= 15) return 'Moderate';
-        return 'High';
+        // Clinical thresholds based on validated scales
+        if ($category === 'stress') {
+            // PSS-10 adapted thresholds (0-28 for 7 questions)
+            if ($score <= 9) return 'Low';
+            if ($score <= 18) return 'Moderate';
+            return 'High';
+        } elseif ($category === 'ptsd') {
+            // PCL-5 thresholds (0-28 for 7 questions)
+            // Adapted from full PCL-5 cutoff of 31-33 out of 80
+            if ($score <= 7) return 'Minimal';
+            if ($score <= 14) return 'Mild';
+            if ($score <= 21) return 'Moderate';
+            return 'Severe';
+        } else {
+            // GAD-7 and PHQ-9 thresholds (0-21 for 7 questions)
+            if ($score <= 4) return 'Minimal';
+            if ($score <= 9) return 'Mild';
+            if ($score <= 14) return 'Moderate';
+            return 'Severe';
+        }
     }
 
     private function getSuggestions($category, $level)
     {
         $suggestions = [
             'general' => [
-                'Low' => [
+                'Minimal' => [
                     'Your results indicate minimal symptoms. Maintain your healthy habits!',
                     'Consider practicing mindfulness to maintain your good mental health.',
                     'Regular exercise can help continue your positive mental state.'
+                ],
+                'Low' => [
+                    'Your results indicate low stress levels. Keep up your healthy coping strategies!',
+                    'Continue to maintain work-life balance and healthy boundaries.',
+                    'Regular self-care practices can help you stay resilient.'
                 ],
                 'Mild' => [
                     'You may be experiencing some symptoms. Monitoring your mood may be helpful.',
@@ -99,14 +125,19 @@ class ResponseController extends Controller
                     'Consider talking to a trusted friend or family member about how you\'re feeling.',
                     'Professional counseling might help you develop coping strategies.'
                 ],
-                'High' => [
+                'Severe' => [
                     'Your results indicate severe symptoms that would benefit from professional support.',
                     'Please consider reaching out to a mental health professional.',
                     'Crisis support is available if you need immediate help.'
+                ],
+                'High' => [
+                    'Your results indicate high stress levels that need attention.',
+                    'Please consider reaching out to a mental health professional for stress management.',
+                    'Identifying and addressing major stressors is important for your wellbeing.'
                 ]
             ],
             'anxiety' => [
-                'Low' => [
+                'Minimal' => [
                     'Your anxiety levels appear to be well managed. Keep up any relaxation practices you\'re using!',
                     'Continue to engage in activities that help you maintain low stress levels.'
                 ],
@@ -118,13 +149,13 @@ class ResponseController extends Controller
                     'Consider cognitive behavioral techniques to manage anxious thoughts.',
                     'Limit caffeine and alcohol as these can worsen anxiety symptoms.'
                 ],
-                'High' => [
+                'Severe' => [
                     'Please consult with a mental health professional about your anxiety symptoms.',
                     'Consider contacting a crisis line if your anxiety feels overwhelming.'
                 ]
             ],
             'depression' => [
-                'Low' => [
+                'Minimal' => [
                     'Your mood appears stable. Continue engaging in activities you enjoy.',
                     'Maintaining social connections can help prevent depressive symptoms.'
                 ],
@@ -136,7 +167,7 @@ class ResponseController extends Controller
                     'Depression at this level may benefit from professional support.',
                     'Try to maintain basic self-care even when you don\'t feel like it.'
                 ],
-                'High' => [
+                'Severe' => [
                     'Please reach out for professional help - depression is treatable.',
                     'If you have thoughts of self-harm, contact emergency services immediately.'
                 ]
@@ -157,6 +188,27 @@ class ResponseController extends Controller
                 'High' => [
                     'Chronic high stress can impact physical health - please seek support.',
                     'Consider professional help to develop a stress management plan.'
+                ]
+            ],
+            'ptsd' => [
+                'Minimal' => [
+                    'You are showing minimal PTSD symptoms. Continue using healthy coping mechanisms.',
+                    'Staying connected with supportive people can help maintain resilience.'
+                ],
+                'Mild' => [
+                    'Some trauma-related symptoms are present. Consider talking to someone you trust.',
+                    'Grounding techniques and mindfulness can help manage intrusive thoughts.'
+                ],
+                'Moderate' => [
+                    'Your symptoms suggest you may benefit from professional trauma-informed therapy.',
+                    'Evidence-based treatments like CPT or EMDR are effective for PTSD symptoms.',
+                    'Consider reaching out to a trauma specialist or mental health professional.'
+                ],
+                'Severe' => [
+                    'Your results indicate significant PTSD symptoms that require professional support.',
+                    'Please seek help from a mental health professional experienced in trauma treatment.',
+                    'If you are in crisis or having thoughts of self-harm, call 988 (Suicide & Crisis Lifeline) immediately.',
+                    'PTSD is treatable - specialized therapy can help you recover.'
                 ]
             ]
         ];

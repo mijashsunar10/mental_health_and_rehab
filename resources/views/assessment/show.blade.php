@@ -9,11 +9,20 @@
         <div class="flex justify-between items-start">
             <div>
                 <h1 class="text-2xl font-bold text-white">
-                    @if($category == 'anxiety') Anxiety Assessment
-                    @elseif($category == 'depression') Depression Assessment
-                    @else Stress Assessment @endif
+                    @if($category == 'anxiety') Anxiety Assessment (GAD-7)
+                    @elseif($category == 'depression') Depression Assessment (PHQ-9)
+                    @elseif($category == 'stress') Stress Assessment (PSS)
+                    @else PTSD Assessment (PCL-5) @endif
                 </h1>
-                <p class="text-blue-100 mt-1">Based on your mental health experiences in the last month</p>
+                <p class="text-blue-100 mt-1">
+                    @if($category == 'stress')
+                        Over the last month, how often have you experienced the following?
+                    @elseif($category == 'ptsd')
+                        Over the last month, how much were you bothered by:
+                    @else
+                        Over the last 2 weeks, how often have you been bothered by the following?
+                    @endif
+                </p>
             </div>
             
             @if(count($questions) > 0)
@@ -116,19 +125,28 @@
                         <p class="text-lg font-medium text-gray-800 mb-4">{{ $question->question }}</p>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            @foreach(['never' => 'Never', 'rarely' => 'Rarely', 'sometimes' => 'Sometimes', 'often' => 'Often'] as $value => $label)
+                            @php
+                                if ($category === 'stress') {
+                                    $responseOptions = ['0' => 'Never', '1' => 'Almost never', '2' => 'Sometimes', '3' => 'Fairly often', '4' => 'Very often'];
+                                } elseif ($category === 'ptsd') {
+                                    $responseOptions = ['0' => 'Not at all', '1' => 'A little bit', '2' => 'Moderately', '3' => 'Quite a bit', '4' => 'Extremely'];
+                                } else {
+                                    $responseOptions = ['0' => 'Not at all', '1' => 'Several days', '2' => 'More than half the days', '3' => 'Nearly every day'];
+                                }
+                            @endphp
+                            @foreach($responseOptions as $value => $label)
                             <label class="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 cursor-pointer transition-colors duration-200"
                                    :class="{ 'border-blue-400 bg-blue-50': responses[{{ $question->id }}] === '{{ $value }}' }">
-                                <input 
-                                    type="radio" 
-                                    name="responses[{{ $question->id }}][response]" 
+                                <input
+                                    type="radio"
+                                    name="responses[{{ $question->id }}][response]"
                                     value="{{ $value }}"
                                     class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300"
                                     x-model="responses[{{ $question->id }}]"
                                     @change="onAnswerChange({{ $index }})"
                                     required
                                 >
-                                <span class="text-gray-700">{{ $label }}</span>
+                                <span class="text-gray-700 text-sm">{{ $label }}</span>
                             </label>
                             @endforeach
                         </div>
