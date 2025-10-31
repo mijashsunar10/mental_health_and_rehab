@@ -12,7 +12,6 @@ use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DoctorProfileController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripeController;
 use App\Livewire\AdminRegister;
 use App\Livewire\Chat;

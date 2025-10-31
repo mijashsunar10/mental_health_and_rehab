@@ -29,7 +29,7 @@
                             Link to Appointment (Optional)
                         </label>
                         <select name="appointment_id" id="appointment_id"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                class="w-full text-gray-900 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">-- No appointment link --</option>
                             @foreach($appointments as $appointment)
                                 <option value="{{ $appointment->id }}">
@@ -46,7 +46,7 @@
                             Title (Optional)
                         </label>
                         <input type="text" name="title" id="title"
-                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                               class="w-full text-gray-900 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                placeholder="Brief title for this note">
                     </div>
 
@@ -56,7 +56,7 @@
                             Category (Optional)
                         </label>
                         <select name="category" id="category"
-                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                class="w-full text-gray-900 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">-- Select category --</option>
                             <option value="Assessment">Assessment</option>
                             <option value="Treatment">Treatment</option>
@@ -74,7 +74,7 @@
                             Note Content <span class="text-red-500">*</span>
                         </label>
                         <textarea name="content" id="content" rows="8" required
-                                  class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                  class="w-full text-gray-900 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                   placeholder="Enter detailed note content..."></textarea>
                     </div>
 

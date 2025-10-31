@@ -30,17 +30,17 @@
                 <div>
                     <label for="date_from" class="block text-sm font-medium text-gray-700 mb-2">From Date</label>
                     <input type="date" name="date_from" id="date_from" value="{{ request('date_from') }}"
-                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="w-full text-gray-900 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
                     <label for="date_to" class="block text-sm font-medium text-gray-700 mb-2">To Date</label>
                     <input type="date" name="date_to" id="date_to" value="{{ request('date_to') }}"
-                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                           class="w-full text-gray-900 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                 </div>
                 <div>
                     <label for="doctor_id" class="block text-sm font-medium text-gray-700 mb-2">Doctor</label>
                     <select name="doctor_id" id="doctor_id"
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            class="w-full text-gray-900 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">All Doctors</option>
                         @foreach($doctors as $doctor)
                             <option value="{{ $doctor->id }}" {{ request('doctor_id') == $doctor->id ? 'selected' : '' }}>
@@ -52,7 +52,7 @@
                 <div>
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                     <select name="status" id="status"
-                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            class="w-full text-gray-900 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">All Status</option>
                         <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                         <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
@@ -74,42 +74,30 @@
         </div>
 
         <!-- Tabs -->
-        <div class="mb-6">
-            <div class="border-b border-gray-200">
-                <nav class="-mb-px flex space-x-8" x-data="{ tab: 'appointments' }">
-                    <button @click="tab = 'appointments'"
-                            :class="tab === 'appointments' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Appointments ({{ $appointments->total() }})
-                    </button>
-                    <button @click="tab = 'packages'"
-                            :class="tab === 'packages' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Packages ({{ $purchases->count() }})
-                    </button>
-                    <button @click="tab = 'notes'"
-                            :class="tab === 'notes' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                        Doctor Notes ({{ $notes->total() }})
-                    </button>
-
-                    <div x-show="tab === 'appointments'">
-                        @include('records.partials.appointments', ['appointments' => $appointments])
-                    </div>
-
-                    <div x-show="tab === 'packages'" style="display: none;">
-                        @include('records.partials.packages', ['purchases' => $purchases])
-                    </div>
-
-                    <div x-show="tab === 'notes'" style="display: none;">
-                        @include('records.partials.notes', ['notes' => $notes])
-                    </div>
-                </nav>
-            </div>
-        </div>
-
-        <!-- Tab Content -->
         <div x-data="{ tab: 'appointments' }">
+            <div class="mb-6">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8">
+                        <button @click="tab = 'appointments'"
+                                :class="tab === 'appointments' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Appointments ({{ $appointments->total() }})
+                        </button>
+                        <button @click="tab = 'packages'"
+                                :class="tab === 'packages' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Packages ({{ $purchases->count() }})
+                        </button>
+                        <button @click="tab = 'notes'"
+                                :class="tab === 'notes' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Doctor Notes ({{ $notes->total() }})
+                        </button>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
             <div x-show="tab === 'appointments'">
                 @include('records.partials.appointments', ['appointments' => $appointments])
             </div>
