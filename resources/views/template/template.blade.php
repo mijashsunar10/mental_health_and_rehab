@@ -135,32 +135,37 @@
                 </div>
 
                 <form id="chatForm" class="flex flex-col p-3 border-t space-y-2" @submit.prevent="sendMessage">
-                    <div class="flex items-center space-x-2">
-                        <input x-ref="messageInput" type="text" placeholder="Type a message..." class="flex-1 border border-gray-300 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <!-- Input field row -->
+                    <div class="w-full">
+                        <input x-ref="messageInput" type="text" placeholder="Type a message..." class="w-full border border-gray-300 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
 
-                        <!-- Language selector -->
-                        <select x-ref="voiceLang" class="border border-gray-300 text-gray-900 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="en-US">🇺🇸 English</option>
-                            <option value="ne-NP">🇳🇵 नेपाली (Beta)</option>
-                            <option value="hi-IN">🇮🇳 हिन्दी</option>
-                        </select>
+                    <!-- Controls row -->
+                    <div class="flex items-center justify-between space-x-2">
+                        <div class="flex items-center space-x-2">
+                            <!-- Language selector -->
+                            <select x-ref="voiceLang" class="border border-gray-300 text-gray-900 rounded-lg px-2 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="en-US">🇺🇸 EN</option>
+                                <option value="ne-NP">🇳🇵 नेपाली</option>
+                            </select>
 
-                        <!-- Voice button -->
-                        <button type="button" @click="toggleVoice()"
-                                :title="!isOnline ? 'Voice input requires internet connection' : 'Click to speak (Voice input)'"
-                                :disabled="!isOnline"
-                                class="text-white px-3 py-2 rounded-lg text-sm transition shadow-md"
-                                :class="!isOnline ? 'bg-gray-400 cursor-not-allowed' : (isRecording ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-green-600 hover:bg-green-700')">
-                            <i :class="!isOnline ? 'fas fa-microphone-slash' : (isRecording ? 'fas fa-stop' : 'fas fa-microphone')"></i>
-                        </button>
+                            <!-- Voice button -->
+                            <button type="button" @click="toggleVoice()"
+                                    :title="!isOnline ? 'Voice input requires internet connection' : 'Click to speak (Voice input)'"
+                                    :disabled="!isOnline"
+                                    class="text-white px-3 py-2 rounded-lg text-sm transition shadow-md"
+                                    :class="!isOnline ? 'bg-gray-400 cursor-not-allowed' : (isRecording ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-green-600 hover:bg-green-700')">
+                                <i :class="!isOnline ? 'fas fa-microphone-slash' : (isRecording ? 'fas fa-stop' : 'fas fa-microphone')"></i>
+                            </button>
+                        </div>
 
                         <!-- Send button - always visible with better styling -->
                         <button type="submit"
-                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm transition-all flex items-center justify-center shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed min-w-[60px]"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm transition-all flex items-center justify-center shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                 :disabled="isProcessing"
                                 title="Send message">
                             <i class="fas fa-paper-plane" :class="isProcessing ? 'animate-pulse' : ''"></i>
-                            <span class="ml-2 hidden sm:inline">Send</span>
+                            <span class="ml-2">Send</span>
                         </button>
                     </div>
 
@@ -263,13 +268,11 @@
                             } else if (event.error === 'audio-capture') {
                                 errorMsg = 'Microphone not found. Please check your device has a working microphone.';
                             } else if (event.error === 'network') {
-                                errorMsg = 'Network error. Voice input requires internet connection. Please check your connection and try again.';
-                                // Auto-retry once after network error
-                                setTimeout(() => {
-                                    if (!this.isRecording) {
-                                        console.log('Auto-retrying voice recognition...');
-                                    }
-                                }, 1000);
+                                errorMsg = '🌐 Network Error: Voice recognition needs an active internet connection to work. Please:\n1. Check your WiFi/mobile data is ON\n2. Make sure you can access other websites\n3. Try typing your message instead';
+                                this.isOnline = false; // Update online status
+                            } else if (event.error === 'service-not-allowed') {
+                                errorMsg = '🌐 Voice service unavailable. This usually means no internet connection. Please check your network and try again.';
+                                this.isOnline = false;
                             } else if (event.error === 'aborted') {
                                 return; // Don't show error for manual abort
                             } else {
