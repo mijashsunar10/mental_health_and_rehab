@@ -266,7 +266,7 @@
   <div class="content-wrapper">
     <!-- Heading -->
     <h1 class="hero-heading handwriting">
-      Calm Core Recovery
+      Recovery and Rehab 
     </h1>
 
     <!-- Floating Elements -->

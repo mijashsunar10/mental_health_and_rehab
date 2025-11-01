@@ -188,7 +188,7 @@
                 </li>
 
                   <li class="relative cursor-pointer  group">
-                    <a href="{{route('admin.illness-categories.index')}}">
+                    <a href="#">
                         <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
                             What we Treat
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -217,7 +217,7 @@
                 </li>
 
                   <li class="relative cursor-pointer  group">
-                    <a href="{{route('admin.illness-categories.index')}}">
+                    <a href="#">
                         <button class="flex items-center font-semibold py-1 cursor-pointer  px-3 focus:outline-none transition-colors duration-300">
                             Resources
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
