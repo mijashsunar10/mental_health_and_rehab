@@ -105,9 +105,9 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4">
-                                            @foreach($package->options as $option)
+                                            @foreach($package->options as $index => $option)
                                                 <div class="text-sm text-gray-600 mb-1">
-                                                    <span class="font-medium">{{ $option['name'] }}</span> - 
+                                                    <span class="font-medium">{{ $option['name'] ?? 'Option ' . ($index + 1) }}</span> -
                                                     ${{ number_format($option['price'], 2) }} ({{ $option['duration'] }})
                                                 </div>
                                             @endforeach
@@ -186,9 +186,9 @@
                             <div class="space-y-3 mb-5">
                                 @foreach($package->options as $option)
                                     <div class="bg-gray-50 rounded-lg p-4 border border-gray-100 text-sm space-y-1">
-                                        <p><span class="font-semibold text-gray-900">👨‍⚕ Doctor:</span> {{ $option['name'] }}</p>
+                                        {{-- <p><span class="font-semibold text-gray-900">👨‍⚕ Doctor:</span> {{ $option['name'] }}</p>
                                         <p><span class="font-semibold text-gray-900">💲 Price:</span> <span class="text-green-600 font-medium">${{ number_format($option['price'], 2) }}</span></p>
-                                        <p><span class="font-semibold text-gray-900">⏳ Duration:</span> {{ $option['duration'] }}</p>
+                                        <p><span class="font-semibold text-gray-900">⏳ Duration:</span> {{ $option['duration'] }}</p> --}}
                                     </div>
                                 @endforeach
                             </div>

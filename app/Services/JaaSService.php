@@ -13,7 +13,16 @@ class JaaSService
         $kid = env('JAAS_KID');
         $privateKey = env('JAAS_PRIVATE_KEY');
 
-            $payload = [
+        // Ensure private key is properly formatted with newlines
+        // Replace literal \n with actual newlines if they exist
+        $privateKey = str_replace('\\n', "\n", $privateKey);
+
+        // Validate that required environment variables are set
+        if (!$appId || !$tenantId || !$kid || !$privateKey) {
+            throw new \Exception('JaaS configuration is incomplete. Please check your .env file for JAAS_APP_ID, JAAS_TENANT_ID, JAAS_KID, and JAAS_PRIVATE_KEY.');
+        }
+
+        $payload = [
             'aud' => 'jitsi',
             'iss' => $appId,
             'sub' => $tenantId,
@@ -28,7 +37,6 @@ class JaaSService
                 ],
             ],
         ];
-
 
         $headers = [
             'kid' => $kid,

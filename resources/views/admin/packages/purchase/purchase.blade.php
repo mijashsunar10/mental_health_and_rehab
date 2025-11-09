@@ -68,7 +68,7 @@
                            required
                            class="h-4 w-4 text-blue-600 focus:ring-blue-500">
                     <label for="option_{{ $index }}" class="ml-3 block">
-                        <span class="font-medium">{{ $option['name'] }}</span>
+                        <span class="font-medium">{{ $option['name'] ?? 'Package Option ' . ($index + 1) }}</span>
                         <span class="text-gray-600 ml-2">${{ number_format($option['price'], 2) }} ({{ $option['duration'] }})</span>
                         <p class="text-sm text-gray-500 mt-1">{{ $option['description'] ?? 'Includes full treatment program' }}</p>
                     </label>
@@ -93,7 +93,7 @@
                 
                 <div class="flex justify-between mb-2">
                     <span class="font-medium">Selected Option:</span>
-                    <span>{{ $selectedOption['name'] }} (${{ number_format($selectedOption['price'], 2) }})</span>
+                    <span>{{ $selectedOption['name'] ?? 'Treatment Package' }} (${{ number_format($selectedOption['price'], 2) }})</span>
                 </div>
                 <div class="flex justify-between mb-2">
                     <span class="font-medium">Duration:</span>

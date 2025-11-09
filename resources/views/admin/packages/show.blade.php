@@ -33,9 +33,9 @@
                     <h3 class="text-lg font-semibold text-blue-800 mb-4">Package Options</h3>
                     
                     <div class="space-y-4">
-                        @foreach($package->options as $option)
+                        @foreach($package->options as $index => $option)
                             <div class="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
-                                <h4 class="font-medium text-blue-700">{{ $option['name'] }}</h4>
+                                <h4 class="font-medium text-blue-700">{{ $option['name'] ?? 'Option ' . ($index + 1) }}</h4>
                                 <div class="mt-2 flex justify-between items-center">
                                     <span class="text-blue-600 font-medium">${{ number_format($option['price'], 2) }}</span>
                                     <span class="text-sm text-blue-500">{{ $option['duration'] }}</span>

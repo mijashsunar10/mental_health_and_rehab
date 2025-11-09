@@ -78,13 +78,16 @@ class Chat extends Component
             // If user has an active purchase, get the doctor from the package
             if ($this->activePurchase) {
                 // Extract doctor name from package options
-                $doctorName = $this->activePurchase->package->options[$this->activePurchase->selected_option]['name'];
-                
+                $doctorName = $this->activePurchase->package->options[$this->activePurchase->selected_option]['name'] ?? null;
+
                 // Find doctor by name
-                $doctor = User::where('role', UserRole::Doctor)
-                             ->where('name', $doctorName)
-                             ->first();
-                             
+                $doctor = null;
+                if ($doctorName) {
+                    $doctor = User::where('role', UserRole::Doctor)
+                                 ->where('name', $doctorName)
+                                 ->first();
+                }
+
                 if ($doctor) {
                     $this->selectedUser = $doctor;
                 } else {
@@ -113,10 +116,16 @@ class Chat extends Component
             // Users can only chat with their assigned doctor from purchased package
             if ($this->activePurchase) {
                 // Extract doctor name from package options
-                $doctorName = $this->activePurchase->package->options[$this->activePurchase->selected_option]['name'];
-                
-                $this->doctors = User::where('role', UserRole::Doctor)
-                    ->where('name', $doctorName) // Filter by doctor name from package
+                $doctorName = $this->activePurchase->package->options[$this->activePurchase->selected_option]['name'] ?? null;
+
+                $query = User::where('role', UserRole::Doctor);
+
+                // Only filter by doctor name if it exists
+                if ($doctorName) {
+                    $query->where('name', $doctorName);
+                }
+
+                $this->doctors = $query
                     ->withCount(['unreadMessages' => function($query) {
                         $query->where('receiver_id', $this->authId)
                             ->whereNull('read_at');
@@ -322,9 +331,17 @@ class Chat extends Component
             $this->newMessage = '';
             $this->image = null;
             $this->replyingTo = null;
-            
+
             $this->loadUsersWithUnreadCounts();
-            broadcast(new MessageSent($message));
+
+            // Broadcast message (wrapped in try-catch to prevent errors if Reverb is not running)
+            try {
+                broadcast(new MessageSent($message));
+            } catch (\Exception $e) {
+                // Log the error but don't stop the message from being sent
+                logger()->error('Broadcasting failed: ' . $e->getMessage());
+            }
+
             $this->dispatch('scrollToBottom');
         }
 
@@ -396,9 +413,14 @@ class Chat extends Component
                     'message' => $newContent,
                     'edited_at' => now()
                 ]);
-                
+
                 // Broadcast to both sender and receiver channels
-                broadcast(new MessageUpdated($message))->toOthers();
+                try {
+                    broadcast(new MessageUpdated($message))->toOthers();
+                } catch (\Exception $e) {
+                    logger()->error('Broadcasting message update failed: ' . $e->getMessage());
+                }
+
                 $this->dispatch('scrollToBottom');
             }
         }
@@ -412,16 +434,28 @@ class Chat extends Component
                 if ($forEveryone) {
                     $message->delete();
                     // Broadcast to both sender and receiver channels
-                    broadcast(new MessageDeleted($message))->toOthers();
+                    try {
+                        broadcast(new MessageDeleted($message))->toOthers();
+                    } catch (\Exception $e) {
+                        logger()->error('Broadcasting message deletion failed: ' . $e->getMessage());
+                    }
                 } else {
                     $message->update(['deleted_for_sender' => true]);
                     // Still broadcast but with different handling
-                    broadcast(new MessageDeleted($message))->toOthers();
+                    try {
+                        broadcast(new MessageDeleted($message))->toOthers();
+                    } catch (\Exception $e) {
+                        logger()->error('Broadcasting message deletion failed: ' . $e->getMessage());
+                    }
                 }
             } else {
                 $message->update(['deleted_for_receiver' => true]);
                 // Broadcast to both sender and receiver channels
-                broadcast(new MessageDeleted($message))->toOthers();
+                try {
+                    broadcast(new MessageDeleted($message))->toOthers();
+                } catch (\Exception $e) {
+                    logger()->error('Broadcasting message deletion failed: ' . $e->getMessage());
+                }
             }
             
             $this->loadMessages();
@@ -527,9 +561,13 @@ public function saveEdit()
             'message' => $this->editingMessageContent,
             'edited_at' => now()
         ]);
-        
-        broadcast(new MessageUpdated($message))->toOthers();
-        
+
+        try {
+            broadcast(new MessageUpdated($message))->toOthers();
+        } catch (\Exception $e) {
+            logger()->error('Broadcasting message update failed: ' . $e->getMessage());
+        }
+
         // Reset all relevant properties
         $this->editingMessageId = null;
         $this->editingMessageContent = '';

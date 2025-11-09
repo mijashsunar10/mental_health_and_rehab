@@ -259,7 +259,7 @@ public function purchaseSuccess(Purchase $purchase)
 
             public function purchaseCancel()
             {
-                return view('purchase.cancel')->with([
+                return view('admin.packages.purchase.cancel')->with([
                     'message' => 'Your purchase was cancelled. Please try again if you want to access the dashboard.'
                 ]);
             }

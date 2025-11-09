@@ -51,7 +51,7 @@ class StripeController extends Controller
                 'amount' => $amount * 100, // Convert to cents
                 'currency' => 'usd',
                 'source' => $request->stripeToken,
-                'description' => 'Purchase of ' . $package->title . ' - ' . $selectedOption['name'],
+                'description' => 'Purchase of ' . $package->title . ' - ' . ($selectedOption['name'] ?? 'Package'),
             ]);
             
             Log::info('Stripe charge created', ['charge_id' => $charge->id]);

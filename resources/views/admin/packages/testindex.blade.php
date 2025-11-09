@@ -64,9 +64,9 @@
                             </span>
                         </td>
                         <td class="py-3 px-4">
-                            @foreach($package->options as $option)
+                            @foreach($package->options as $index => $option)
                                 <div class="text-sm mb-1">
-                                    <span class="font-medium">{{ $option['name'] }}</span> - 
+                                    <span class="font-medium">{{ $option['name'] ?? 'Option ' . ($index + 1) }}</span> -
                                     ${{ number_format($option['price'], 2) }} ({{ $option['duration'] }})
                                 </div>
                             @endforeach
@@ -95,9 +95,9 @@
                 <div class="p-4">
                     <h3 class="font-bold text-lg text-blue-800 mb-2">{{ $package->title }}</h3>
                     <div class="mb-4">
-                        @foreach($package->options as $option)
+                        @foreach($package->options as $index => $option)
                             <div class="text-sm mb-2">
-                                <div class="font-medium">{{ $option['name'] }}</div>
+                                <div class="font-medium">{{ $option['name'] ?? 'Option ' . ($index + 1) }}</div>
                                 <div class="text-gray-600">${{ number_format($option['price'], 2) }} • {{ $option['duration'] }}</div>
                             </div>
                         @endforeach

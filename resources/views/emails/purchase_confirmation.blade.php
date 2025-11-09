@@ -71,7 +71,7 @@
         <h2>Order Details:</h2>
         <ul>
             <li><strong>Package:</strong> {{ $order->package->title }}</li>
-            <li><strong>Option:</strong> {{ $order->package->options[$order->option_index]['name'] }}</li>
+            <li><strong>Option:</strong> {{ $order->package->options[$order->option_index]['name'] ?? 'Treatment Package' }}</li>
             <li><strong>Amount:</strong> ${{ number_format($order->amount, 2) }}</li>
             <li><strong>Payment Reference:</strong> {{ $order->payment_reference }}</li>
             <li><strong>Date:</strong> {{ $order->created_at->format('F j, Y') }}</li>
